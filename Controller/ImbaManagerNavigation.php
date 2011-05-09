@@ -102,7 +102,7 @@ class ImbaManagerNavigation extends ImbaManagerBase {
         $return .= "<a id='imbaMenuImbAdmin' href='javascript:void(0)' onclick='javascript: loadImbaAdminDefaultModule();' title='";
         $return .= ImbaConstants::$WEB_IMBADMIN_BUTTON_COMMENT . "'>" . ImbaConstants::$WEB_IMBADMIN_BUTTON_NAME . "</a>";
         $return .= "<ul class='subnav'>";
-        $contentNav = new ImbaContentNavigation();
+        $contentNav = new ImbaContentManager();
 
         foreach ($navigations as $navigation) {
             if (ImbaUserContext::getUserRole() >= $navigation->getMinUserRole()) {
@@ -130,7 +130,7 @@ class ImbaManagerNavigation extends ImbaManagerBase {
           $return .= "<a id='imbaMenuImbaGame' href='javascript:void(0)' onclick='javascript: loadImbaGameDefaultGame();' title='";
           $return .= ImbaConstants::$WEB_IMBAGAME_BUTTON_COMMENT . "'>" . ImbaConstants::$WEB_IMBAGAME_BUTTON_NAME . "</a>";
           $return .= "<ul class='subnav'>";
-          $contentNav = new ImbaContentNavigation();
+          $contentNav = new ImbaContentManager();
           if ($handle = opendir('View/Ajax/IMBAdminGames/')) {
           $identifiers = array();
           while (false !== ($file = readdir($handle))) {

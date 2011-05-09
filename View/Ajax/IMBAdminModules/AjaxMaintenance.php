@@ -13,7 +13,7 @@ class AjaxMaintenance extends AjaxBase {
         /**
          * Define Navigation
          */
-        $navigation = new ImbaContentNavigation();
+        $navigation = new ImbaContentManager();
 
         /**
          * Set module name

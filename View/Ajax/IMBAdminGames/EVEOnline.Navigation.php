@@ -13,7 +13,7 @@ require_once 'Model/ImbaNavigation.php';
 /**
  * Define Navigation
  */
-$Navigation = new ImbaContentNavigation();
+$Navigation = new ImbaContentManager();
 
 /**
  * Set module name

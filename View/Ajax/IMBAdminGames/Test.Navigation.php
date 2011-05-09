@@ -7,13 +7,13 @@ require_once 'ImbaConstants.php';
 require_once 'Controller/ImbaManagerDatabase.php';
 require_once 'Shared/ImbaUserContext.php';
 
-require_once 'Model/ImbaContentNavigation.php';
+require_once 'Model/ImbaContentManager.php';
 
 
 /**
  * Define Navigation
  */
-$Navigation = new ImbaContentNavigation();
+$Navigation = new ImbaContentManager();
 
 /**
  * Set module name

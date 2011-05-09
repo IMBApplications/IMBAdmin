@@ -7,7 +7,7 @@
 /**
  * Base class for all navigations
  */
-class ImbaContentNavigation {
+class ImbaContentManager {
 
     private $Name = null;
     private $Options = array();
@@ -70,7 +70,7 @@ class ImbaContentNavigation {
     }
 
     public function addElement($Identifier, $Name, $Comment) {
-        $newElement = new ImbaContentNavigationOption();
+        $newElement = new ImbaContentManagerOption();
         $newElement->setName($Name);
         $newElement->setComment($Comment);
         $newElement->setIdentifier($Identifier);
@@ -114,10 +114,10 @@ class ImbaContentNavigation {
 /**
  * Class for navigation options
  */
-class ImbaContentNavigationOption {
+class ImbaContentManagerOption {
 
     /**
-     * Fields for class ImbaContentNavigationOption
+     * Fields for class ImbaContentManagerOption
      */
     protected $Identifier = null;
     protected $Name = null;

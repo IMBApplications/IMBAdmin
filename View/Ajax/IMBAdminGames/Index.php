@@ -24,7 +24,7 @@ if (ImbaUserContext::getLoggedIn()) {
     $managerUser = ImbaManagerUser::getInstance();
 
 
-    $contentNav = new ImbaContentNavigation();
+    $contentNav = new ImbaContentManager();
 
     switch ($_POST["request"]) {
 
