@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Model/ImbaBase.php';
-
 /**
  * Category for all Games managed by the IMBAdmin
  */

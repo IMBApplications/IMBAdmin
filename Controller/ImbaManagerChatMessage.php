@@ -1,12 +1,5 @@
 <?php
 
-require_once 'Controller/ImbaManagerBase.php';
-require_once 'Controller/ImbaManagerUser.php';
-require_once 'Model/ImbaChatMessage.php';
-
-// $DATABASE_TABLES_CHAT_CHATCHANNELS
-// $DATABASE_TABLES_CHAT_CHATMESSAGES
-
 /**
  *  Controller / Manager for Chat Messages
  *  - insert, delete, select

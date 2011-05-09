@@ -1,8 +1,5 @@
 <?php
 
-require_once 'Controller/ImbaManagerBase.php';
-require_once 'Model/ImbaGameCategory.php';
-
 /**
  *  Controller / Manager for Categories
  *  - insert, update, delete Categories

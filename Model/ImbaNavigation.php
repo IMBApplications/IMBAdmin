@@ -15,6 +15,7 @@ class ImbaContentNavigation {
     private $ShowLoggedOff = false;
     private $MinUserRole = 99;
     private $Comment = null;
+    private $classname = null;
 
     public function getName() {
         return $this->Name;
@@ -50,6 +51,10 @@ class ImbaContentNavigation {
 
     public function getComment() {
         return $this->Comment;
+    }
+
+    public function getOptions() {
+        return $this->Options;
     }
 
     public function setComment($Comment) {
@@ -94,6 +99,14 @@ class ImbaContentNavigation {
                 return $Option->get();
             }
         }
+    }
+
+    public function getClassname() {
+        return $this->classname;
+    }
+
+    public function setClassname($classname) {
+        $this->classname = $classname;
     }
 
 }
@@ -212,13 +225,13 @@ class ImbaTopNavigation Extends ImbaContentNavigation {
     /*
      * this is probably not needed ... lol
      *
-    public function getElementIdentifier($Identifier) {
-        foreach ($this->Options as $Option) {
-            if ($Option->getIdentifier() == $Identifier) {
-                return $Option->getIdentifier();
-            }
-        }
-    }
+      public function getElementIdentifier($Identifier) {
+      foreach ($this->Options as $Option) {
+      if ($Option->getIdentifier() == $Identifier) {
+      return $Option->getIdentifier();
+      }
+      }
+      }
      * 
      */
 

@@ -1,13 +1,5 @@
 <?php
 
-require_once 'Model/ImbaUser.php';
-require_once 'Controller/ImbaManagerBase.php';
-require_once 'Controller/ImbaManagerUserRole.php';
-require_once 'Controller/ImbaUserContext.php';
-require_once 'Controller/ImbaManagerGame.php';
-require_once 'Controller/ImbaManagerGameProperty.php';
-require_once 'Controller/ImbaSharedFunctions.php';
-
 /**
  *  Controller / Manager for User
  *  - insert, update, delete Users 

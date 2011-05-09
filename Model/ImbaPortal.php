@@ -1,9 +1,5 @@
 <?php
 
-require_once 'Model/ImbaBase.php';
-require_once 'Controller/ImbaUserContext.php';
-require_once 'Controller/ImbaSharedFunctions.php';
-
 /**
  * Description of ImbaPortal
  */

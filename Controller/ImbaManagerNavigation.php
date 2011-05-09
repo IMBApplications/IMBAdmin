@@ -1,10 +1,5 @@
 <?php
 
-require_once 'Controller/ImbaManagerBase.php';
-require_once 'Controller/ImbaManagerPortal.php';
-require_once 'Model/ImbaNavigation.php';
-require_once 'Controller/ImbaUserContext.php';
-
 /**
  *  Controller / Manager for Top Navigation
  *  - insert, update, delete navigation entries
@@ -77,6 +72,11 @@ class ImbaManagerNavigation extends ImbaManagerBase {
          * Set up the portal navigation
          */
         $portal = $this->managerPortal->selectById($portalId);
+        
+        if ($portal == null){
+            throw new Exception("Portal not found");
+        }
+        
         foreach ($portal->getPortalEntries() as $portalEntry) {
             $showMe = false;
             if (ImbaUserContext::getUserRole() >= $portalEntry->getRole()) {
@@ -93,34 +93,30 @@ class ImbaManagerNavigation extends ImbaManagerBase {
     }
 
     public function renderImbaAdminNavigation() {
+        $moduleName = "IMBAdminModules";
+        
+        require_once ("View/Ajax/AjaxBase.php");
+        $navigations = AjaxBase::getModulesNavigation($moduleName);
+
         $return = "<li>";
         $return .= "<a id='imbaMenuImbAdmin' href='javascript:void(0)' onclick='javascript: loadImbaAdminDefaultModule();' title='";
         $return .= ImbaConstants::$WEB_IMBADMIN_BUTTON_COMMENT . "'>" . ImbaConstants::$WEB_IMBADMIN_BUTTON_NAME . "</a>";
         $return .= "<ul class='subnav'>";
         $contentNav = new ImbaContentNavigation();
-        if ($handle = opendir('Ajax/IMBAdminModules/')) {
-            $identifiers = array();
-            while (false !== ($file = readdir($handle))) {
-                if (strrpos($file, ".Navigation.php") > 0) {
-                    include 'Ajax/IMBAdminModules/' . $file;
-                    if (ImbaUserContext::getUserRole() >= $Navigation->getMinUserRole()) {
-                        $showMe = false;
-                        if (ImbaUserContext::getLoggedIn() && $Navigation->getShowLoggedIn()) {
-                            $showMe = true;
-                        } elseif ((!ImbaUserContext::getLoggedIn()) && $Navigation->getShowLoggedOff()) {
-                            $showMe = true;
-                        }
 
-                        if ($showMe) {
-                            $modIdentifier = trim(str_replace(".Navigation.php", "", $file));
-                            $return .= "<li><a href='javascript:void(0)' onclick='javascript: loadImbaAdminModule(\\\"" . $modIdentifier . "\\\");' title='" . $Navigation->getComment($nav) . "'>" . $Navigation->getName($nav) . "</a></li>";
-                            array_push($identifiers, $modIdentifier);
-                            $Navigation = null;
-                        }
-                    }
+        foreach ($navigations as $navigation) {
+            if (ImbaUserContext::getUserRole() >= $navigation->getMinUserRole()) {
+                $showMe = false;
+                if (ImbaUserContext::getLoggedIn() && $navigation->getShowLoggedIn()) {
+                    $showMe = true;
+                } elseif ((!ImbaUserContext::getLoggedIn()) && $navigation->getShowLoggedOff()) {
+                    $showMe = true;
+                }
+
+                if ($showMe) {
+                    $return .= "<li><a href='javascript:void(0)' onclick='javascript: loadImbaAdminModule(\\\"" . $navigation->getClassname() . "\\\");' title='" . $navigation->getComment($nav) . "'>" . $navigation->getName($nav) . "</a></li>";
                 }
             }
-            closedir($handle);
         }
         $return .= "</ul>";
         $return .= "</li>";
@@ -128,39 +124,42 @@ class ImbaManagerNavigation extends ImbaManagerBase {
     }
 
     public function renderImbaGameNavigation() {
-        $return = "<li>";
-        $return .= "<a id='imbaMenuImbaGame' href='javascript:void(0)' onclick='javascript: loadImbaGameDefaultGame();' title='";
-        $return .= ImbaConstants::$WEB_IMBAGAME_BUTTON_COMMENT . "'>" . ImbaConstants::$WEB_IMBAGAME_BUTTON_NAME . "</a>";
-        $return .= "<ul class='subnav'>";
-        $contentNav = new ImbaContentNavigation();
-        if ($handle = opendir('Ajax/IMBAdminGames/')) {
-            $identifiers = array();
-            while (false !== ($file = readdir($handle))) {
-                if (strrpos($file, ".Navigation.php") > 0) {
-                    include 'Ajax/IMBAdminGames/' . $file;
-                    if (ImbaUserContext::getUserRole() >= $Navigation->getMinUserRole()) {
-                        $showMe = false;
-                        if (ImbaUserContext::getLoggedIn() && $Navigation->getShowLoggedIn()) {
-                            $showMe = true;
-                        } elseif ((!ImbaUserContext::getLoggedIn()) && $Navigation->getShowLoggedOff()) {
-                            $showMe = true;
-                        }
+        throw new Exception("See renderImbaAdminNavigation to know how i should work!");
+        /*
+          $return = "<li>";
+          $return .= "<a id='imbaMenuImbaGame' href='javascript:void(0)' onclick='javascript: loadImbaGameDefaultGame();' title='";
+          $return .= ImbaConstants::$WEB_IMBAGAME_BUTTON_COMMENT . "'>" . ImbaConstants::$WEB_IMBAGAME_BUTTON_NAME . "</a>";
+          $return .= "<ul class='subnav'>";
+          $contentNav = new ImbaContentNavigation();
+          if ($handle = opendir('View/Ajax/IMBAdminGames/')) {
+          $identifiers = array();
+          while (false !== ($file = readdir($handle))) {
+          if (strrpos($file, ".Navigation.php") > 0) {
+          include 'View/Ajax/IMBAdminGames/' . $file;
+          if (ImbaUserContext::getUserRole() >= $Navigation->getMinUserRole()) {
+          $showMe = false;
+          if (ImbaUserContext::getLoggedIn() && $Navigation->getShowLoggedIn()) {
+          $showMe = true;
+          } elseif ((!ImbaUserContext::getLoggedIn()) && $Navigation->getShowLoggedOff()) {
+          $showMe = true;
+          }
 
-                        if ($showMe) {
-                            $modIdentifier = trim(str_replace(".Navigation.php", "", $file));
-                            $return .= "<li><a href='javascript:void(0)' onclick='javascript: loadImbaGame(\\\"" . $modIdentifier . "\\\");' title='" . $Navigation->getComment($nav) . "'>" . $Navigation->getName($nav) . "</a></li>";
-                            array_push($identifiers, $modIdentifier);
-                            $Navigation = null;
-                        }
-                    }
-                }
-            }
-            closedir($handle);
-        }
+          if ($showMe) {
+          $modIdentifier = trim(str_replace(".Navigation.php", "", $file));
+          $return .= "<li><a href='javascript:void(0)' onclick='javascript: loadImbaGame(\\\"" . $modIdentifier . "\\\");' title='" . $Navigation->getComment($nav) . "'>" . $Navigation->getName($nav) . "</a></li>";
+          array_push($identifiers, $modIdentifier);
+          $Navigation = null;
+          }
+          }
+          }
+          }
+          closedir($handle);
+          }
 
-        $return .= "</ul>";
-        $return .= "</li>";
-        return "<div id='imbaNavigationImbaGame'>" . $return . "</div>";
+          $return .= "</ul>";
+          $return .= "</li>";
+          return "<div id='imbaNavigationImbaGame'>" . $return . "</div>";
+         */
     }
 
     /**

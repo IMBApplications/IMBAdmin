@@ -7,7 +7,9 @@ session_start();
 
 
 require_once 'ImbaConstants.php';
-require_once 'Controller/ImbaSharedFunctions.php';
+require_once 'Shared/Include.php';
+require_once 'Model/Include.php';
+require_once 'Controller/Include.php';
 
 $smarty = ImbaSharedFunctions::newSmarty();
 $smarty->assign("thrustRoot", ImbaSharedFunctions::getTrustRoot());
@@ -16,13 +18,6 @@ $smarty->assign("phpSessionID", session_id());
 switch ($_GET["load"]) {
     case "js":
         header('Content-Type: application/javascript');
-
-        require_once 'Model/ImbaUser.php';
-        require_once 'Model/ImbaNavigation.php';
-        require_once 'Controller/ImbaManagerDatabase.php';
-        require_once 'Controller/ImbaManagerNavigation.php';
-        require_once 'Controller/ImbaManagerUser.php';
-        require_once 'Controller/ImbaUserContext.php';
         ImbaUserContext::setRedirectUrl(ImbaSharedFunctions::getTrustRoot());
 
         $managerNavigation = ImbaManagerNavigation::getInstance();
@@ -51,7 +46,7 @@ switch ($_GET["load"]) {
 
         $smarty->assign("PortalNavigation", $managerNavigation->displayLoaderPortalNavigation());
         $smarty->assign("ImbaAdminNavigation", $managerNavigation->renderImbaAdminNavigation());
-        $smarty->assign("ImbaGameNavigation", $managerNavigation->renderImbaGameNavigation());
+        //$smarty->assign("ImbaGameNavigation", $managerNavigation->renderImbaGameNavigation());
         $smarty->assign("PortalChooser", $managerNavigation->renderPortalChooser());
 
         /**

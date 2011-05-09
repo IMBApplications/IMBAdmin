@@ -1,8 +1,5 @@
 <?php
 
-require_once 'Controller/ImbaManagerBase.php';
-require_once 'Model/ImbaUserRole.php';
-
 /**
  *  Controller / Manager for Role
  *  - insert, update, delete Roles

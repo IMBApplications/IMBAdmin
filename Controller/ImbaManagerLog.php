@@ -1,8 +1,5 @@
 <?php
 
-require_once 'Model/ImbaLog.php';
-require_once 'Controller/ImbaManagerBase.php';
-
 /**
  * Description of ImbaManagerLog
  */

@@ -1,8 +1,5 @@
 <?php
 
-require_once 'Model/ImbaBase.php';
-require_once 'Controller/ImbaUserContext.php';
-
 /**
  * Description of ImbaLog
  */

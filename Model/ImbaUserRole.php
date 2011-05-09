@@ -1,9 +1,5 @@
 <?php
 
-require_once 'ImbaConstants.php';
-require_once 'Model/ImbaBase.php';
-require_once 'Controller/ImbaSharedFunctions.php';
-
 /**
  *  Class for Userroles
  */
@@ -73,14 +69,6 @@ class ImbaUserRole extends ImbaBase {
 
     public function setIcon($icon) {
         $this->icon = $icon;
-    }
-
-    public function getId() {
-        return $this->id;
-    }
-
-    public function setId($id) {
-        $this->id = $id;
     }
 
 }

@@ -1,11 +1,6 @@
 <?php
 
 /**
- * Load dependencies
- */
-require_once "ImbaConstants.php";
-
-/**
  * Controller / Manager Database
  * Handling:
  * - Connection

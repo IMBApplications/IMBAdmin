@@ -1,8 +1,5 @@
 <?php
 
-require_once 'Controller/ImbaManagerBase.php';
-require_once 'Model/ImbaGameProperty.php';
-
 /**
  *  Controller / Manager for Properties
  *  - insert, update, delete Properties
@@ -40,6 +37,9 @@ class ImbaManagerGameProperty extends ImbaManagerBase {
      * Inserts a property into the Database
      */
     public function insert(ImbaGameProperty $property) {
+        if ($property->getProperty() == null || $property->getProperty() == ""){
+            throw new Exception("Bitte Property angeben!");
+        }
         $query = "INSERT INTO %s (game_id, property) VALUES ('%s', '%s');";
         $this->database->query($query, array(
             ImbaConstants::$DATABASE_TABLES_SYS_MULTIGAMING_GAMES_PROPERTIES,

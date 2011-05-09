@@ -1,9 +1,5 @@
 <?php
 
-require_once 'Model/ImbaBase.php';
-require_once 'ImbaConstants.php';
-require_once 'Controller/ImbaSharedFunctions.php';
-
 /**
  * Class for all Games managed by the IMBAdmin
  */

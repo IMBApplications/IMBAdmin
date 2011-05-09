@@ -1,10 +1,5 @@
 <?php
 
-require_once 'ImbaConstants.php';
-require_once 'Controller/ImbaManagerBase.php';
-require_once 'Model/ImbaGame.php';
-require_once 'Model/ImbaGameCategory.php';
-
 /**
  * Description of ImbaManagerGame
  * SQL:

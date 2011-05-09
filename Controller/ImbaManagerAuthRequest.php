@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Model/ImbaAuthRequest.php';
-require_once 'Controller/ImbaManagerBase.php';
 
 /**
  * Description of ImbaManagerAuthRequest
@@ -30,7 +28,7 @@ class ImbaManagerAuthRequest extends ImbaManagerBase {
             self::$instance = new self();
         return self::$instance;
     }
-
+    
     public function getNew() {
         return new ImbaAuthRequest();
     }

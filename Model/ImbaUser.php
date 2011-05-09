@@ -1,10 +1,5 @@
 <?php
 
-require_once 'ImbaConstants.php';
-require_once 'Model/ImbaBase.php';
-require_once 'Model/ImbaGame.php';
-require_once 'Model/ImbaGamePropertyValue.php';
-
 /**
  *  Class for all Users
  */

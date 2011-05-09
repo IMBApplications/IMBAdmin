@@ -1,10 +1,7 @@
 <?php
 
-require_once 'Model/ImbaBase.php';
-
 /**
  * Class for all messages
- *
  */
 class ImbaMessage extends ImbaBase {
 
@@ -19,6 +16,9 @@ class ImbaMessage extends ImbaBase {
     protected $new = null;
     protected $xmpp = null;
 
+    /**
+     * Properties
+     */
     public function getSender() {
         return $this->sender;
     }

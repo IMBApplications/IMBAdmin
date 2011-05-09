@@ -1,10 +1,5 @@
 <?php
 
-require_once 'Controller/ImbaManagerBase.php';
-require_once 'Controller/ImbaManagerUser.php';
-require_once 'Model/ImbaMessage.php';
-require_once 'Model/ImbaUser.php';
-
 /**
  * Description of ImbaManagerMessage
  */

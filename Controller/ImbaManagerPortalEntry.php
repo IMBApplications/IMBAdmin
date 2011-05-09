@@ -1,8 +1,5 @@
 <?php
 
-require_once 'Controller/ImbaManagerBase.php';
-require_once 'Model/ImbaPortal.php';
-
 /**
  *  Controller / Manager for Portal Entries
  *  - insert, update, delete Portal Entry

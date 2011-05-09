@@ -1,9 +1,7 @@
 <?php
 
-require_once 'Model/ImbaBase.php';
-
 /**
- * Chat Message
+ * Class describing a Chatmessage
  */
 class ImbaChatMessage extends ImbaBase {
 

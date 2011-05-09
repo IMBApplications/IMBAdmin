@@ -1,10 +1,5 @@
 <?php
 
-require_once 'Controller/ImbaManagerBase.php';
-require_once 'Controller/ImbaManagerGameCategory.php';
-require_once 'Controller/ImbaManagerGameProperty.php';
-require_once 'Model/ImbaGame.php';
-
 /**
  *  Controller / Manager for Game
  *  - insert, update, delete Games

@@ -16,16 +16,10 @@ session_start();
 /**
  * Load dependencies
  */
-require_once "ImbaConstants.php";
-require_once 'Controller/ImbaManagerLog.php';
-require_once 'Controller/ImbaManagerOpenID.php';
-require_once 'Controller/ImbaManagerOauth.php';
-require_once 'Controller/ImbaManagerUser.php';
-require_once 'Controller/ImbaManagerAuthRequest.php';
-require_once 'Controller/ImbaUserContext.php';
-require_once 'Controller/ImbaSharedFunctions.php';
-require_once 'Model/ImbaUser.php';
-require_once 'Model/ImbaUserRole.php';
+require_once 'ImbaConstants.php';
+require_once 'Shared/Include.php';
+require_once 'Model/Include.php';
+require_once 'Controller/Include.php';
 
 /**
  * Load Auth Managers

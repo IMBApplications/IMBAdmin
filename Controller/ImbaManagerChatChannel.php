@@ -1,22 +1,8 @@
 <?php
 
-require_once 'Controller/ImbaManagerBase.php';
-require_once 'Model/ImbaChatChannel.php';
-
-// $DATABASE_TABLES_CHAT_CHATCHANNELS
-// $DATABASE_TABLES_CHAT_CHATMESSAGES
-
 /**
  *  Controller / Manager for Chat Channels
  *  - insert, update, delete, join, leave
- * 
- * CREATE TABLE IF NOT EXISTS `oom_openid_chat_int_chatchannels_user` (
-  `user` int(11) NOT NULL,
-  `channel` int(11) NOT NULL,
-  `timestamp` int(11) NOT NULL,
-  KEY `channel` (`channel`),
-  KEY `user` (`user`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
  */
 class ImbaManagerChatChannel extends ImbaManagerBase {
 

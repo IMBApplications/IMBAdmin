@@ -1,9 +1,5 @@
 <?php
 
-require_once 'Model/ImbaUser.php';
-require_once 'Model/ImbaGameProperty.php';
-require_once 'Model/ImbaBase.php';
-
 /**
  * Class for an value of a ImbaGameProerty
  */
