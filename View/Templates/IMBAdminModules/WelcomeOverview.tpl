@@ -96,7 +96,7 @@
             <div class="imbaPortlet-header">Navigation</div>
             <div class="imbaPortlet-content">
                 {foreach $navs as $nav}
-                <a href="javascript:void();"  onclick="javascript: loadImbaAdminModule('{$nav.identifier}');" title="{$nav.comment}">{$nav.name}</a><br />
+                <a href="javascript:void();"  onclick="javascript: loadImbaAdminModule('{$nav.module}');" title="{$nav.comment}">{$nav.name}</a><br />
                 {/foreach}
             </div>
         </div>
