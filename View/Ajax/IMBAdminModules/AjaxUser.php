@@ -10,35 +10,33 @@ class AjaxUser extends AjaxBase {
     }
 
     public function getContentManager() {
-        /**
-         * Define Navigation
-         */
+        // create the contentManager to be filled with informations about this module
         $contentManager = new ImbaContentManager();
 
-        /**
-         * Set module name
-         */
+        // set required informations: name, classname and the comment for the module
         $contentManager->setName("Mitglieder");
         $contentManager->setClassname(get_class($this));
         $contentManager->setComment("Hier kannst du dich &uuml;ber Mitglieder informieren sowie das eigene Profil editiert werden.");
 
-        /**
-         * Set when the module should be displayed (logged in 1/0)
-         */
+        // set access conditions
+        // users logged in must be able to access this module
         $contentManager->setShowLoggedIn(true);
+        // users not logged in must not be able to access this module
         $contentManager->setShowLoggedOff(false);
-
-        /**
-         * Set the minimal user role needed to display the module
-         */
+        
+        // set required user role level to get access
+        // nearly all users are able to access this module
         $contentManager->setMinUserRole(1);
 
-        /**
-         * Set tabs
-         */
+        
+        // add elements
+        // element for user overview 
         $contentManager->addElement("viewUsers", "Mitglieder &Uuml;bersicht", "Hier kannst du alles &uuml;ber unsere anderen Mitglieder erfahren.");
+        // element for editing user's profile
         $contentManager->addElement("viewEditMyProfile", "Mein Profil Editieren", "Hier kannst du dein Profil editieren.");
+        // element for editing user's game participations
         $contentManager->addElement("viewMyGames", "Meine Spiele Editieren", "Hier kannst du deine Spiele editieren.");
+        // element to view user's profile
         $contentManager->addElement("viewmyprofile", "Mein Profil Ansehen", "Hier kannst du dein Profil so ancheuen.");
 
         return $contentManager;
@@ -161,12 +159,15 @@ class AjaxUser extends AjaxBase {
     }
 
     /**
-     * Views all users
+     * Generate visual representation to view all users.
      */
     public function viewUsers() {
+        // get all users (without the actual user itself)
         $users = $this->managerUser->selectAllUserButme(ImbaUserContext::getOpenIdUrl());
 
         $this->smarty_users = array();
+        
+        // copy and convert the user object into the smarty formatation
         foreach ($users as $user) {
             array_push($this->smarty_users, array(
                 'id' => $user->getId(),
