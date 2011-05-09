@@ -35,14 +35,14 @@ abstract class AjaxBase {
         $this->managerNavigation = ImbaManagerNavigation::getInstance();
     }
 
-    abstract public function getNavigation();
+    abstract public function getContentManager();
 
     /**
      * Gets Data from the Navigation
      * @param type $params ({"datarequest":"abc"})
      */
     public function getNavigationData($params) {
-        $nav = $this->getNavigation();
+        $nav = $this->getContentManager();
 
         switch ($params->datarequest) {
             case "nav":

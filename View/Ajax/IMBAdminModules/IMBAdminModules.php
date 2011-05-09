@@ -12,22 +12,22 @@ class IMBAdminModules {
         $result = array();
 
         $tmp = new AjaxAdministration();
-        array_push($result, $tmp->getNavigation());
+        array_push($result, $tmp->getContentManager());
 
         $tmp = new AjaxMaintenance();
-        array_push($result, $tmp->getNavigation());
+        array_push($result, $tmp->getContentManager());
 
         $tmp = new AjaxMessenger();
-        array_push($result, $tmp->getNavigation());
+        array_push($result, $tmp->getContentManager());
 
         $tmp = new AjaxRegistration();
-        array_push($result, $tmp->getNavigation());
+        array_push($result, $tmp->getContentManager());
 
         $tmp = new AjaxUser();
-        array_push($result, $tmp->getNavigation());
+        array_push($result, $tmp->getContentManager());
 
         $tmp = new AjaxWelcome();
-        array_push($result, $tmp->getNavigation());
+        array_push($result, $tmp->getContentManager());
 
         return $result;
     }

@@ -1,15 +1,18 @@
 <?php
 
 /**
- * Handling the ajax Callbacks for the ImbaAdmin module Administration
+ * Handling the ajax callbacks for the ImbaAdmin module 'Administration'.
  */
 class AjaxAdministration extends AjaxBase {
 
+    /**
+     * Default constructor for AjaxAdministration.
+     */
     public function __construct() {
         parent::__construct();
     }
 
-    public function getNavigation() {
+    public function getContentManager() {
         /**
          * Define Navigation
          */

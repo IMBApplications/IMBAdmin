@@ -9,7 +9,7 @@ class AjaxPortal extends AjaxBase {
         parent::__construct();
     }
 
-    public function getNavigation() {
+    public function getContentManager() {
         throw new Exception("AjaxPortal got no Navigation.");
     }
 

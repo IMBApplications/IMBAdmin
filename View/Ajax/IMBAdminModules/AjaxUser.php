@@ -9,39 +9,39 @@ class AjaxUser extends AjaxBase {
         parent::__construct();
     }
 
-    public function getNavigation() {
+    public function getContentManager() {
         /**
          * Define Navigation
          */
-        $navigation = new ImbaContentManager();
+        $contentManager = new ImbaContentManager();
 
         /**
          * Set module name
          */
-        $navigation->setName("Mitglieder");
-        $navigation->setClassname(get_class($this));
-        $navigation->setComment("Hier kannst du dich &uuml;ber Mitglieder informieren sowie das eigene Profil editiert werden.");
+        $contentManager->setName("Mitglieder");
+        $contentManager->setClassname(get_class($this));
+        $contentManager->setComment("Hier kannst du dich &uuml;ber Mitglieder informieren sowie das eigene Profil editiert werden.");
 
         /**
          * Set when the module should be displayed (logged in 1/0)
          */
-        $navigation->setShowLoggedIn(true);
-        $navigation->setShowLoggedOff(false);
+        $contentManager->setShowLoggedIn(true);
+        $contentManager->setShowLoggedOff(false);
 
         /**
          * Set the minimal user role needed to display the module
          */
-        $navigation->setMinUserRole(1);
+        $contentManager->setMinUserRole(1);
 
         /**
          * Set tabs
          */
-        $navigation->addElement("viewUsers", "Mitglieder &Uuml;bersicht", "Hier kannst du alles &uuml;ber unsere anderen Mitglieder erfahren.");
-        $navigation->addElement("viewEditMyProfile", "Mein Profil Editieren", "Hier kannst du dein Profil editieren.");
-        $navigation->addElement("viewMyGames", "Meine Spiele Editieren", "Hier kannst du deine Spiele editieren.");
-        $navigation->addElement("viewmyprofile", "Mein Profil Ansehen", "Hier kannst du dein Profil so ancheuen.");
+        $contentManager->addElement("viewUsers", "Mitglieder &Uuml;bersicht", "Hier kannst du alles &uuml;ber unsere anderen Mitglieder erfahren.");
+        $contentManager->addElement("viewEditMyProfile", "Mein Profil Editieren", "Hier kannst du dein Profil editieren.");
+        $contentManager->addElement("viewMyGames", "Meine Spiele Editieren", "Hier kannst du deine Spiele editieren.");
+        $contentManager->addElement("viewmyprofile", "Mein Profil Ansehen", "Hier kannst du dein Profil so ancheuen.");
 
-        return $navigation;
+        return $contentManager;
     }
 
     /**
