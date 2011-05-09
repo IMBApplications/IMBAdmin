@@ -44,16 +44,16 @@ class AjaxWelcome extends AjaxBase {
     public function viewWelcome() {
         $myself = $this->managerUser->selectMyself();
         $allUsers = $this->managerUser->selectAllUser();
+        $smartyPortlets = array();
         $this->smarty->assign('nickname', $myself->getNickname());
         $this->smarty->assign("today", date("d") . "." . date("m") . " " . date("Y"));
         $this->smarty->assign("thrustRoot", urlencode(ImbaSharedFunctions::getSiteDomainUrl()));
         /*
-         * ToDo:
+         * TODO: Portlets to be done:
          * $events
          * $todo
-         * $today
-         * $myName
-         * 
+         * $paypal
+         * picoftheday
          */
         /*
          * Fill Navigation $navs
@@ -111,7 +111,9 @@ class AjaxWelcome extends AjaxBase {
                 }
             }
         }
-        $this->smarty->assign("birthdays", $return);
+        if (!empty($return)) {
+            array_push($smartyPortlets, array("name" => "N&auml;chste Geburtstage", "content" => $return));
+        }
 
         /**
          * Fill $newMembers
@@ -131,8 +133,11 @@ class AjaxWelcome extends AjaxBase {
                 $count++;
             }
         }
-        $this->smarty->assign("newMembers", $return);
+        if (!empty($return)) {
+            array_push($smartyPortlets, array("name" => "Neue Mitglieder", "content" => $return));
+        }
 
+        $this->smarty->assign("portlets", $smartyPortlets);
         /**
          * Display the site
          */

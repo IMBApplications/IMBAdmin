@@ -55,42 +55,14 @@
 </div>
 <div style="clear: both;"></div>
 <div>
+    {foreach $portlets as $portlet}
     <div class="imbaPortletColumn">
         <div class="imbaPortlet">
-            <div class="imbaPortlet-header">N&auml;chste Geburtstage</div>
-            <div class="imbaPortlet-content">{$birthdays}</div>
+            <div class="imbaPortlet-header">{$portlet.name}</div>
+            <div class="imbaPortlet-content">{$portlet.content}</div>
         </div>
     </div>
-    <div class="imbaPortletColumn">
-        <div class="imbaPortlet">
-            <div class="imbaPortlet-header">Events</div>
-            <div class="imbaPortlet-content">{$events}</div>
-        </div>
-    </div>
-    <div class="imbaPortletColumn">
-        <div class="imbaPortlet">
-            <div class="imbaPortlet-header">Neue Mitglieder</div>
-            <div class="imbaPortlet-content">{$newMembers}</div>
-        </div>
-    </div>
-    <div class="imbaPortletColumn">
-        <div class="imbaPortlet">
-            <div class="imbaPortlet-header">Aufgaben</div>
-            <div class="imbaPortlet-content">{$todo}</div>
-        </div>
-    </div>
-    <div class="imbaPortletColumn">
-        <div class="imbaPortlet">
-            <div class="imbaPortlet-header">Spenden</div>
-            <div class="imbaPortlet-content"></div>
-        </div>
-    </div>
-    <div class="imbaPortletColumn">
-        <div class="imbaPortlet">
-            <div class="imbaPortlet-header">Pic of the Moment</div>
-            <div class="imbaPortlet-content"></div>
-        </div>
-    </div>
+    {/foreach}
     <div class="imbaPortletColumn">
         <div class="imbaPortlet">
             <div class="imbaPortlet-header">Navigation</div>
