@@ -9,7 +9,7 @@ class AjaxRegistration extends AjaxBase {
         parent::__construct();
     }
 
-    public function getNavigation() {
+    public function getContentManager() {
         /**
          * Define Navigation
          */
