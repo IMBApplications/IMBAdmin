@@ -36,7 +36,7 @@ class AjaxRegistration extends AjaxBase {
         /**
          * Set tabs
          */
-        $navigation->addElement("reg", "Registration", "Hier kannst du dich registrieren.");
+        $navigation->addElement("viewRegisterStartPage", "Registration", "Hier kannst du dich registrieren.");
         return $navigation;
     }
 
@@ -47,19 +47,19 @@ class AjaxRegistration extends AjaxBase {
         if (ImbaUserContext::getNeedToRegister()) {
             // Registration step 1 done
             ImbaConstants::loadSettings();
-            $smarty->assign('openid', ImbaUserContext::getOpenIdUrl());
+            $this->smarty->assign('openid', ImbaUserContext::getOpenIdUrl());
 
 
             $_SESSION["IUC_captchaState"] = "unchecked";
 
-            $smarty->assign('authPath', ImbaConstants::$WEB_AUTH_PROXY_PATH);
-            $smarty->assign('indexPath', ImbaConstants::$WEB_ENTRY_INDEX_FILE);
-            $smarty->assign('publicKey', ImbaConstants::$SETTINGS["CAPTCHA_PUBLIC_KEY"]);
-            $smarty->display('IMBAdminModules/RegisterForm.tpl');
+            $this->smarty->assign('authPath', ImbaConstants::$WEB_AUTH_PROXY_PATH);
+            $this->smarty->assign('indexPath', ImbaConstants::$WEB_ENTRY_INDEX_FILE);
+            $this->smarty->assign('publicKey', ImbaConstants::$SETTINGS["CAPTCHA_PUBLIC_KEY"]);
+            $this->smarty->display('IMBAdminModules/RegisterForm.tpl');
         } else {
             // User gets the welcome screen with the openid input field
-            $smarty->assign('registerurl', ImbaConstants::$WEB_AUTH_PROXY_PATH);
-            $smarty->display('IMBAdminModules/RegisterWelcome.tpl');
+            $this->smarty->assign('registerurl', ImbaConstants::$WEB_AUTH_PROXY_PATH);
+            $this->smarty->display('IMBAdminModules/RegisterWelcome.tpl');
         }
     }
 
@@ -146,7 +146,7 @@ class AjaxRegistration extends AjaxBase {
         if ($_SESSION["IUC_captchaState"] == "ok") {
             $_SESSION["IUC_captchaState"] = "";
             ImbaUserContext::getNeedToRegister(false);
-            $smarty->display('IMBAdminModules/RegisterSuccess.tpl');
+            $this->smarty->display('IMBAdminModules/RegisterSuccess.tpl');
         } else {
             header("location: " . ImbaConstants::$WEB_AUTH_PROXY_PATH . "?logout=true");
         }
