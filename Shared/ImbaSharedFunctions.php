@@ -9,6 +9,23 @@ class ImbaSharedFunctions {
         return preg_match('|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url);
     }
 
+    /**
+     * Calculates the time elapsed since the given parameter and returns it in a
+     * human readable format. It only shows the next highest measurement unit.
+     * Text is defined as followed: 
+     * <ul>
+     * <li>time < 60 seconds are returned as: " 30 sec(s)"</li>
+     * <li>time > 60 seconds but smaller 60 minutes as: " 30 min(s)</li>
+     * <li>time > 60 minutes but smaller 24 hours as: " 5 hr(s)</li>
+     * <li>time > 24 hours but smaller 7 day as: " 5 day(s)</li>
+     * <li>time > 7 day but smaller  52 weeks as: " 25 week(s)</li>
+     * <li>everything above one year will be counted in year(s)</li>
+     * </ul>
+     * 
+     * @param type $timestamp timestamp to calculate the time difference.
+     * @return string string representation of the time elapsed since the given 
+     * paramater interpreted as timestamp.
+     */
     public static function getAge($timestamp) {
         $ageOfMsg = time() - $timestamp;
         if ($timestamp == 0) {
@@ -34,6 +51,15 @@ class ImbaSharedFunctions {
         return $ageOfMsgReturn;
     }
 
+    /**
+     * Calculates the time elapsed since the given parameter and returns it in a
+     * pretty human readable format. It tries to phrase the returned string at 
+     * it would be spoken in real words.
+     * 
+     * @param type $timestamp timestamp to calculate the time difference.
+     * @return string string representation of the time elapsed since the given 
+     * paramater interpreted as timestamp.
+     */
     public static function getNiceAge($timestamp) {
         $ageOfMsg = time() - $timestamp;
         if ($timestamp == 0) {
