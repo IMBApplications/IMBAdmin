@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Handling the ajax Callbacks for Users
+ * Handling the ajax callbacks for 'Users'.
  */
 class AjaxUser extends AjaxBase {
 
@@ -165,11 +165,10 @@ class AjaxUser extends AjaxBase {
         // get all users (without the actual user itself)
         $users = $this->managerUser->selectAllUserButme(ImbaUserContext::getOpenIdUrl());
 
-        $this->smarty_users = array();
-        
-        // copy and convert the user object into the smarty formatation
+        $smarty_users = array();
+        // copy and convert the user object into the smarty formattation
         foreach ($users as $user) {
-            array_push($this->smarty_users, array(
+            array_push($smarty_users, array(
                 'id' => $user->getId(),
                 'nickname' => $user->getNickname(),
                 'openid' => $user->getOpenID(),
@@ -178,7 +177,7 @@ class AjaxUser extends AjaxBase {
                 'games' => $user->getGamesStr()
             ));
         }
-        $this->smarty->assign('susers', $this->smarty_users);
+        $this->smarty->assign('susers', $smarty_users);
         $this->smarty->display('IMBAdminModules/UserOverview.tpl');
     }
 
