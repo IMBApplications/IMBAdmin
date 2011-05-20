@@ -59,6 +59,7 @@ class ImbaManagerChatChannel extends ImbaManagerBase {
             $query = "SELECT * FROM %s ORDER BY name ASC;";
 
             $this->database->query($query, array(ImbaConstants::$DATABASE_TABLES_CHAT_CHATCHANNELS));
+
             while ($row = $this->database->fetchRow()) {
                 $channel = new ImbaChatChannel();
                 $channel->setId($row["id"]);
@@ -68,7 +69,7 @@ class ImbaManagerChatChannel extends ImbaManagerBase {
 
                 // Check if my Role is allowed:
                 $allowed = json_decode($channel->getAllowed(), true);
-
+                
                 $amIallowed = false;
                 foreach ($allowed as $a) {
                     if ($a["allowed"] == true && $a["role"] == ImbaUserContext::getUserRole()) {
@@ -163,7 +164,7 @@ class ImbaManagerChatChannel extends ImbaManagerBase {
         while ($row = $this->database->fetchRow()) {
             array_push($result, $row["Nickname"]);
         }
-        
+
         return $result;
     }
 

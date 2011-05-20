@@ -44,6 +44,72 @@ class AjaxMessenger extends AjaxBase {
     }
 
     /**
+     * This method creats a complete refresh JSON, with
+     * - new messages
+     * - current users in open chats
+     * - new messages in open chats
+     * - ping open chats
+     * @param type $params ({"channelids":["1","2","3","4"], "sinces":["1","2","3","4"]})
+     */
+    public function getAllNewsForMe($params) {
+        // load new messages
+        $resultConversations = array();
+        foreach ($this->managerMessage->selectMyNewMessages() as $conversations) {
+            $conversation = $this->managerMessage->selectAllByOpponentId($conversations["id"]);
+
+            $newMessages = array();
+
+            foreach ($conversation as $message) {
+                $time = date("d.m.y H:i:s", $message->getTimestamp());
+                $sender = $message->getSender()->getNickname();
+                $msg = $message->getMessage();
+
+                array_push($newMessages, array("time" => $time, "sender" => $sender, "message" => $msg));
+            }
+
+            $resultConversations[$this->managerUser->selectById($conversations["id"])->getNickname()] = $newMessages;
+        }
+        
+        // ping chats first so users are not listed, if they are toooo long away
+        $this->managerChatChannel->channelPing($params->channelids);
+
+        // do things for chatting
+        $resultUsersInChannel = array();
+        $resultMessagesInChannel = array();
+        for ($i = 0; $i < count($params->channelids); $i++) {
+            $channelId = $params->channelids[$i];
+            $channelSince = $params->sinces[$i];
+            $channel = $this->managerChatChannel->selectById($channelId);
+            $channelName = $channel->getName();
+
+            // load current users in open chats
+            $usersInChannel = $this->managerChatChannel->channelUsers($channelId);
+            $resultUsersInChannel[$channelName] = $usersInChannel;
+
+            // load new messages in open chats
+            $newMessages = array();
+            foreach ($this->managerChatMessage->selectAllByChannel($channel, $channelSince) as $message) {
+                array_push($newMessages, array(
+                    "id" => $message->getId(),
+                    "time" => date("d.m.y H:i:s", $message->getTimestamp()),
+                    "nickname" => $message->getSender()->getNickname(),
+                    "message" => $message->getMessage()
+                ));
+            }
+            $resultMessagesInChannel[$channelName] = $newMessages;
+        }
+
+        $result = array("newmessages" => $resultConversations, "usersinchannel" => $resultUsersInChannel, "newchatmessages" => $resultMessagesInChannel);
+
+        /*
+          echo "<pre>";
+          print_r($result);
+          echo "</pre>";
+          // */
+        echo json_encode($result);
+    }
+
+    /**
      * Got something new for user?
      */
     public function gotNewMessages() {
@@ -160,7 +226,7 @@ class AjaxMessenger extends AjaxBase {
             ));
         }
         $result = array_reverse($result);
-        echo json_encode($result);
+        echo json_encode(array("users" => $this->managerChatChannel->channelUsers($channelid), "messages" => $result));
     }
 
     /**

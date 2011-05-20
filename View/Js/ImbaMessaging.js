@@ -1,505 +1,88 @@
-/*
+/**
  * The ImbaManagerMessenger is the Controller Javascript for the Frontend for
  * Messenging and chatting
  */
-// Stores how many tabs have already been opend
+
+/**
+ * Storage, what we store:
+ * Tabs:
+ * - tabCount           => how many tabs have been opened, since site was loaded
+ * - countOpenTabs      => how many tabs are opend right now
+ * - tabMessageCache    => caches all messages in Array[n] = channelid / userid
+ * - tabUsers           => stores the users in Tab in Array[n] = users
+ * - tabMessageSinceId  => what was the last chat message ID in Array[n] = last msg id
+ */
 var tabCount = 0;
 var countOpenTabs = 0;
-var chatSinceIds = new Array();
-var chatCache = new Array();
-
-
-// Reload Chats every 2000 ms
-setInterval('refreshChat()', 2000);
-setInterval('pingChats()', 10000);
+var tabMessageCache = new Array();
+var tabUsers = new Array();
+var tabMessageSinceId = new Array();
 
 /**
- * Refreshs the current chatwindow
+ * Types of the Tabs
  */
-function refreshChat() {
-    if (isUserLoggedIn){
-        $.post(ajaxEntry, {
-            secSession: phpSessionID,
-            module: "AjaxMessenger",
-            submodule: "IMBAdminModules",
-            ajaxmethod: "gotNewMessages"
-        },  function(response) {
-            // reset gotNewMessages
-            var gotNewMessages = 0;
-            var selectedTab = getSelectedTabIndex();
-
-            $.each($.parseJSON(response), function(key, newMessageFrom) {
-                // look in Chats if there is an open window with val
-                var foundTab = false;
-                $.each($("#imbaMessages a"), function (tabIndex, tabString) {
-                    // FIXME: das problem ist wenn ein tab offen ist, der dialog
-                    // zugemacht wird, dann eine nachricht kommt blinkt
-                    // der message dings nur einmal :/
-                    if (tabIndex == selectedTab && ($("#imbaMessagesDialog")
-                        .is(':hidden')) == false) {
-                        loadChatWindowContent(tabIndex);
-                    } else {
-                        var tmp = tabString.toString().split("#");
-                        tmp = "#" + tmp[1];
-                        var tabData = $(tmp).data("tabdata");
-                        if (tabData == newMessageFrom.id){
-                            showStarChatWindowTitle(tmp, true);
-                            foundTab = true;
-                        }
-                    }
-                });
-
-                // show got new messages
-                if (!foundTab){
-                    gotNewMessages++;
-                }
-            });
-
-            // show icon for new message
-            if (gotNewMessages > 0){
-                $("#imbaGotMessage").effect("pulsate", {
-                    times:3
-                }, 2000);
-            } else {
-                $("#imbaGotMessage").hide();
-            }
-        });
-
-        // Refresh if current tab is chat
-        var selectedTab = getSelectedTabIndex();
-        var tabData = getTabDataFromTabIndex(selectedTab);
-
-        // Check if its a chat
-        if (tabData.substr(0, 1) == "#" && ($("#imbaMessagesDialog").is(':hidden')) == false){
-            loadChatWindowContent(selectedTab);
-        }
-    }
-}
+var tab_type_info = "0";
+var tab_type_message = "1";
+var tab_type_chat = "2";
 
 /**
- * Sends a ping to say that im still in Channel
+ * A Tab can store the following informations
  */
-function pingChats() {
-    var chats = new Array();
-    
-    // Walk through all the open tabs    
-    $.each($("#imbaMessages a"), function (k, v) {
-        // leave out info tab
-        if (k > 0){
-            var tabData = getTabDataFromTabIndex(k);
-            
-            // Check if its a chat
-            if (tabData.substr(0, 1) == "#"){
-                chats.push(tabData.substring(1));
-            }
-        }
-    });
-
-    // send ping
-    $.post(ajaxEntry, {
-        secSession: phpSessionID,
-        module: "AjaxMessenger",
-        submodule: "IMBAdminModules",
-        ajaxmethod: "pingChats",
-        params: JSON.stringify({
-            "channelids": chats
-        })
-    });
-}
+var tab_data_type = "tab_data_type";
+var tab_data_name = "tab_data_type";
+var tab_data_id = "tab_data_type";
 
 /**
- * create the info tab
+ * When Browser is closed => disconnect from all chat channels
  */
-function createInfoTab(){
-    // Create new Window
-    $("#imbaMessages").tabs("add", "#imbaMessagesTab_" + tabCount, "Info");
-
-    $("#imbaMessagesTab_" + tabCount).data("tabdata", "Info");
-    $("#imbaMessagesTab_" + tabCount).data("tabname", "Info");
-    $('#imbaMessages').tabs("select", countOpenTabs);
-    loadChatWindowContent(countOpenTabs);
-    tabCount++;
-}
-
-/**
- * Creats a chatwindow
- */
-function createChatWindow(name, data) {
-    // Run through open chats and check if its not already opend,
-    // if so => select that
-    var found = false;
-    countOpenTabs = 0;
-
-    // Open Dialog, just to be save here
-    $("#imbaMessagesDialog").dialog("open");
-
-    // Walk through all the open tabs
-    $.each($("#imbaMessages a"), function (k, v) {
-        var tmpId = v.toString().split("#");
-        var tmpOpenId = $("#" + tmpId[1]).data("tabdata");
-
-        if (tmpOpenId == data) {
-            // Select the clicked window
-            $('#imbaMessages').tabs("select", k);
-            found = true;
-        }
-
-        countOpenTabs++;
-    });
-
-    if (!found){
-        // Create new Window
-        $("#imbaMessages").tabs("add", "#imbaMessagesTab_" + tabCount, name);
-
-        $("#imbaMessagesTab_" + tabCount).data("tabdata", data);
-        $("#imbaMessagesTab_" + tabCount).data("tabname", name);
-        $('#imbaMessages').tabs("select", countOpenTabs);
-        loadChatWindowContent(countOpenTabs);
-
-        tabCount++;
-    }
-}
-
-/**
- * Returns the current selected tab index
- */
-function getSelectedTabIndex(){
-    return $('#imbaMessages').tabs('option', 'selected');
-}
-
-/**
- * Return the Id of a tab from a tabIndex
- */
-function getTabIdFromTabIndex(tabIndex){
-    var result = "";
-    $.each($("#imbaMessages a"), function (k, v) {
-        if (k == tabIndex){
-            var tmp = v.toString().split("#");
-            result = "#" + tmp[1];
-        }
-    });
-
-    return result;
-}
-
-/**
- * Return the data of a tab from a tabIndex
- */
-function getTabDataFromTabIndex(tabIndex){
-    var result = "";
-    $.each($("#imbaMessages a"), function (k, v) {
-        if (k == tabIndex){
-            var tmp = v.toString().split("#");
-            result = $("#" + tmp[1]).data("tabdata");
-        }
-    });
-
-    return result;
-}
-
-/**
- * Return the name of a tab from a tabIndex
- */
-function getTabNameFromTabIndex(tabIndex){
-    var result = "";
-    $.each($("#imbaMessages a"), function (k, v) {
-        if (k == tabIndex){
-            var tmp = v.toString().split("#");
-            result = $("#" + tmp[1]).data("tabname");
-        }
-    });
-
-    return result;
-}
-
-/**
- * Changes the Title of the ChatWindow
- */
-function showStarChatWindowTitle(id, showStar){
-    var tab = ($('#imbaMessages a[href|="'+id+'"]'));
-    var tabLabel = tab.html();
-    if (id != null && tabLabel != null){
-        if (showStar){
-            if (tabLabel.substr(tabLabel.length-1, 1) != "*"){
-                tab.html(tabLabel + "*");
-            }
-        } else {
-            if (tabLabel.substr(tabLabel.length-1, 1) == "*"){
-                tab.html(tabLabel.substr(0, tabLabel.length-1));
-            }
-        }
-    }
-}
-
-/**
- * Refreshs a special chatwindow
- */
-function loadChatWindowContent(tabIndex) {
-    if (tabIndex == 0){
-        // Load Info Tab
-        $("#imbaChatConversation").html("\
-        <div style='margin-left: 10px'>\
-            <p><b>/w</b> &lt;Username&gt; zum Chatten mit einem User</p>\
-            <p><b>/j</b> zum Chatten in einem Channel</p>\
-        </div>");
-        $("#imbaChatConversationUserlist").html("");
-    }else {
-        var tabData = getTabDataFromTabIndex(tabIndex);
-
-        // am i a chat or am i a messenger?
-        if (tabData.substr(0, 1) == "#"){
-            var channelId = tabData.substring(1);
-
-            // update chat users
-            $.post(ajaxEntry, {
-                secSession: phpSessionID,
-                module: "AjaxMessenger",
-                submodule: "IMBAdminModules",
-                ajaxmethod: "getChannelUsers",
-                params: JSON.stringify({
-                    "channelid": channelId
-                })
-            },
-            function(response) {
-                var htmlUserList = "";
-
-                $.each($.parseJSON(response), function(key, val) {
-                    htmlUserList += val + "<br />";
-                });
-                    
-                $("#imbaChatConversationUserlist").html(htmlUserList);
-            });
-
-            if (chatSinceIds[channelId] == -1){
-                // init chat
-                $.post(ajaxEntry, {
-                    secSession: phpSessionID,
-                    module: "AjaxMessenger",
-                    submodule: "IMBAdminModules",
-                    ajaxmethod: "initChat",
-                    params: JSON.stringify({
-                        "channelid": channelId
-                    })
-                },
-                function(response) {
-                    var htmlConversation = "";
-
-                    $.each($.parseJSON(response), function(key, val) {
-                        htmlConversation += "<div>"
-                        + val.time + " "
-                        + val.nickname + ": "
-                        + val.message + "</div>";
-
-                        chatSinceIds[channelId] = val.id;
-                    });
-
-                    $("#imbaChatConversation").html(htmlConversation);
-                    chatCache[channelId] = htmlConversation;
-
-                    $("#imbaChatConversation").attr({
-                        scrollTop: $("#imbaChatConversation").attr("scrollHeight")
-                    });
-                });
-            } else {         
-                // update chat messages
-                $.post(ajaxEntry, {
-                    secSession: phpSessionID,
-                    module: "AjaxMessenger",
-                    submodule: "IMBAdminModules",
-                    ajaxmethod: "loadChat",
-                    params: JSON.stringify({
-                        "channelid": channelId,
-                        "since": chatSinceIds[channelId]
-                    })
-                },
-                function(response) {
-                    var htmlConversation = chatCache[channelId];
-
-                    $.each($.parseJSON(response), function(key, val) {
-                        htmlConversation += "<div>"
-                        + val.time + " "
-                        + val.nickname + ": "
-                        + val.message + "</div>";
-
-                        chatSinceIds[channelId] = val.id;
-                    });
-
-                    $("#imbaChatConversation").html(htmlConversation);
-                    chatCache[channelId] = htmlConversation;
-
-                    $("#imbaChatConversation").attr({
-                        scrollTop: $("#imbaChatConversation").attr("scrollHeight")
-                    });
-                });                
-            }
-        } else {
-            // load messenger
-            $.post(ajaxEntry, {
-                secSession: phpSessionID,
-                module: "AjaxMessenger",
-                submodule: "IMBAdminModules",
-                ajaxmethod: "loadMessages",
-                params: JSON.stringify({
-                    "reciever": tabData
-                })
-            },
-            function(response) {
-                var htmlConversation = "";
-
-                $.each($.parseJSON(response), function(key, val) {
-                    htmlConversation += "<div>"
-                    + val.time + " "
-                    + val.sender + ": "
-                    + val.message + "</div>";
-                });
-
-                $("#imbaChatConversation").html(htmlConversation);
-                $("#imbaChatConversation").attr({
-                    scrollTop: $("#imbaChatConversation").attr("scrollHeight")
-                });
-                var tabname = getTabNameFromTabIndex(tabIndex);
-                $("#imbaChatConversationUserlist").html("You<br />" + tabname);
-            });
-
-            // mark as read
-            $.post(ajaxEntry, {
-                secSession: phpSessionID,
-                module: "AjaxMessenger",
-                submodule: "IMBAdminModules",
-                ajaxmethod: "setReadByReciever",
-                params: JSON.stringify({
-                    "reciever": tabData
-                })
-            },
-            function(response) {
-                // nothing to do here
-                });
-        }
-    }
-}
-
-/**
- * Sends a message 
- */
-function sendChatWindowMessage(msgText, tabIndex) {
-    if (tabIndex == 0) return;
-    
-    var tabData = getTabDataFromTabIndex(tabIndex);
-    var httpPostData = null
-
-    $.ajaxSetup({
-        async: false
-    });
-
-    if (tabData.substr(0, 1) == "#"){
-        httpPostData = {
-            secSession: phpSessionID,
-            module: "AjaxMessenger",
-            submodule: "IMBAdminModules",
-            ajaxmethod: "sendChatMessage",
-            params: JSON.stringify({
-                "channelid": tabData.substring(1),
-                "message": msgText
-            })
-        };
-    } else {
-        httpPostData = {
-            secSession: phpSessionID,
-            module: "AjaxMessenger",
-            submodule: "IMBAdminModules",
-            ajaxmethod: "sendMessage",
-            params: JSON.stringify({
-                "reciever": tabData,
-                "message": msgText
-            })
-        };
-    }
-
-    // Send post
-    $.post(ajaxEntry, httpPostData , function(response) {
-        if (response != "Message sent"){
-            alert(response);
-        }
-    });
-
-    loadChatWindowContent(tabIndex);
-
-    $.ajaxSetup({
-        async: true
-    });
-}
-
-/**
- * Creates all tabs with new Messages
- */
-function showTabsWithNewMessage(){
-    $.post(ajaxEntry, {
-        secSession: phpSessionID,
-        module: "AjaxMessenger",
-        submodule: "IMBAdminModules",
-        ajaxmethod: "gotNewMessages"
-    },  function(response) {
-        $.each($.parseJSON(response), function(key, newMessageFrom) {
-            // look in Chats if there is an open window with val
-            var foundTab = false;
-            $.each($("#imbaMessages a"), function (k, v) {
-                if (k == getSelectedTabIndex()) {
-                // do nothing here
-                } else {
-                    var tmp = v.toString().split("#");
-                    tmp = "#" + tmp[1];
-                    var tabData = $(tmp).data("tabdata");
-                    if (tabData == newMessageFrom.id){
-                        foundTab = true;
-                    }
-                }
-            });
-
-            // show got new messages
-            if (!foundTab){
-                createChatWindow(newMessageFrom.name, newMessageFrom.id);
-            }
-        });
-    });
-}
-
 $(window).bind('beforeunload', function() {
-    //alert("ByeBye");
+    //alert("ByeBye");    
     });
-
+    
 /**
  * jQuery DOM-Document has been loaded
  */
 $(document).ready(function() {
+    // Creats the Dialog around the tabs
+    $("#imbaMessagesDialog").dialog({
+        position:  ['left','bottom'] ,
+        autoOpen: false,
+        resizable: false,
+        height: 270,
+        width: 600
+    });
+    
+    // Setting the hights of the chatcontent and userlist
+    $("#imbaChatConversation").height(140);
+    $("#imbaChatConversationUserlist").height(140);
+
+    // open messaging on click
+    $("#imbaOpenMessaging").click(function(){
+        $("#imbaMessagesDialog").dialog("open");
+    });
+    
     // Load the Tabs an inits the Variable for them and create info tab
     $msgTabs = $('#imbaMessages').tabs();
     createInfoTab();
-
+    
     // Setting a Template for the tabs, making them closeable
     $msgTabs.tabs({
         tabTemplate: "<li><a href='#{href}'>#{label}</a><div class='ui-icon ui-icon-info' style='cursor: pointer; float: left;'>Info</div><div class='ui-icon ui-icon-close'>Remove Tab</div></li>"
     });
+    
+    // Tab selected change Event (Reload content of that chat window
+    $msgTabs.bind("tabsselect", function(event, ui) {
+        // Load the Content
+        loadChatWindowContent(ui.index);
 
-    // close icon: removing the tab on click
+    // Hide the Star
+    // showStarChatWindowTitle(getTabIdFromTabIndex(ui.index), false);
+    });
+
+    // Close icon: removing the tab on click
     $("#imbaMessages div.ui-icon-close").live("click", function() {
         var index = $("li", $msgTabs).index($(this).parent());
-        
-        var tabData = getTabDataFromTabIndex(index);
-            
-        // Check if its a chat
-        if (tabData.substr(0, 1) == "#"){
-            // send close
-            $.post(ajaxEntry, {
-                secSession: phpSessionID,
-                module: "AjaxMessenger",
-                submodule: "IMBAdminModules",
-                ajaxmethod: "closeChat",
-                params: JSON.stringify({
-                    "channelid": tabData.substring(1)
-                })
-            });
-        }
-        
+                
         $msgTabs.tabs("remove", index);
         if (countOpenTabs > 0) {
             countOpenTabs--;
@@ -508,7 +91,7 @@ $(document).ready(function() {
         // load content of new selected Tab
         loadChatWindowContent(getSelectedTabIndex());
     });
-
+    
     // info icon: showing the ImbAdmin module
     $("#imbaMessages div.ui-icon-info").live("click", function() {
         alert("Chat is not yet implemented.");
@@ -521,50 +104,18 @@ $(document).ready(function() {
         }*/
     });
     
-    // Hide new Message Icon and create Click
-    $("#imbaGotMessage").hide().click(function(){
-        showTabsWithNewMessage();
-        $("#imbaGotMessage").hide();
-    });
-
-    // Creats the Dialog around the chattabs
-    $("#imbaMessagesDialog").dialog({
-        position:  ['left','bottom'] ,
-        autoOpen: false,
-        resizable: false,
-        height: 270,
-        width: 600
-    });
-
-    // Setting the hights of the chatcontent and userlist
-    $("#imbaChatConversation").height(140);
-    $("#imbaChatConversationUserlist").height(140);
-
-    // open messaging on click
-    $("#imbaOpenMessaging").click(function(){
-        $("#imbaMessagesDialog").dialog("open");
-    });
-
-    // Tab selected change Event (Reload content of that chat window
-    $msgTabs.bind("tabsselect", function(event, ui) {
-        // Load the Content
-        loadChatWindowContent(ui.index);
-
-        // Hide the Star
-        showStarChatWindowTitle(getTabIdFromTabIndex(ui.index), false);
-    });
-
     // User submits the textbox
     $("#imbaMessageTextSubmit").click(function(){
         var tabIndex = getSelectedTabIndex();
         var msgText = $("#imbaMessageText").val();
 
-        sendChatWindowMessage(msgText, tabIndex);
+        //sendChatWindowMessage(msgText, tabIndex);
+        alert("Nothing was sent!");
 
         $("#imbaMessageText").attr("value", "");
         return false;
     });
-
+    
     // autocomplete for Chat
     $("#imbaMessageText").autocomplete({
         source: function( request, response ) {
@@ -624,10 +175,9 @@ $(document).ready(function() {
         minLength: 0,
         select: function( event, ui ) {
             if (ui.item.user == true){
-                createChatWindow(ui.item.label, ui.item.data);
+                createTab(ui.item.label, ui.item.data, tab_type_message);
             } else if (ui.item.user == false){
-                chatSinceIds[ui.item.data2] = -1;
-                createChatWindow("#" + ui.item.data, "#"+ui.item.data2);
+                createTab(ui.item.data, ui.item.data2, tab_type_chat);
             }
         },
         close: function() {
@@ -635,3 +185,171 @@ $(document).ready(function() {
         }
     });
 });
+    
+/**
+ * create the info tab
+ */
+function createInfoTab(){
+    // Create new Window
+    $("#imbaMessages").tabs("add", "#imbaMessagesTab_" + tabCount, "Info");
+
+    $("#imbaMessagesTab_" + tabCount).data(tab_data_type, tab_type_info);
+    $("#imbaMessagesTab_" + tabCount).data(tab_data_name, "Info");
+    $('#imbaMessages').tabs("select", countOpenTabs);
+    
+    // Set the content of the info tab
+    tabMessageCache.push("\
+        <div style='margin-left: 10px'>\
+            <p><b>/w</b> &lt;Username&gt; zum Chatten mit einem User</p>\
+            <p><b>/j</b> zum Chatten in einem Channel</p>\
+        </div>");
+    
+    // for sync reasons
+    tabMessageSinceId.push(-1);    
+    tabUsers.push("");
+    
+    loadChatWindowContent(tabCount);
+    
+    tabCount++;
+}
+
+/**
+ * Creats a chatwindow
+ */
+function createTab(name, data, type) {
+    // Run through open chats and check if its not already opend,
+    // if so => select that
+    var found = false;
+    countOpenTabs = 0;
+
+    // Open Dialog, just to be save here
+    $("#imbaMessagesDialog").dialog("open");
+
+    // Walk through all the open tabs
+    $.each($("#imbaMessages a"), function (k, v) {
+        var tmpId = v.toString().split("#");
+        var tabData = $("#" + tmpId[1]).data(tab_data_id);
+
+        if (tabData == data) {
+            // Select the clicked window
+            $('#imbaMessages').tabs("select", k);
+            found = true;
+        }
+
+        countOpenTabs++;
+    });
+
+    if (!found){
+        // Create new Window
+        $("#imbaMessages").tabs("add", "#imbaMessagesTab_" + tabCount, name);
+
+        $("#imbaMessagesTab_" + tabCount).data(tab_data_id, data);
+        $("#imbaMessagesTab_" + tabCount).data(tab_data_name, name);
+        $("#imbaMessagesTab_" + tabCount).data(tab_data_type, type);
+        
+        // load initial
+        if (type == tab_type_chat) {
+            $.post(ajaxEntry, {
+                secSession: phpSessionID,
+                module: "AjaxMessenger",
+                submodule: "IMBAdminModules",
+                ajaxmethod: "initChat",
+                params: JSON.stringify({
+                    "channelid": data
+                })
+            },
+            function(response) {
+                var htmlConversation = "";
+                var htmlUsers = "You";
+                var responsJSON = $.parseJSON(response);
+                    
+                $.each(responsJSON.messages, function(key, val) {
+                    htmlConversation += "<div>"
+                    + val.time + " "
+                    + val.nickname + ": "
+                    + val.message + "</div>";
+
+                    tabMessageSinceId[countOpenTabs] = val.id;
+                });
+                
+                $.each(responsJSON.users, function(key, val) {
+                    htmlUsers += "<br/>" + val;
+                });
+                
+                // Set the content of the info tab
+                tabMessageCache[countOpenTabs] = htmlConversation;
+                tabUsers.push(htmlUsers); 
+
+                $("#imbaChatConversation").attr({
+                    scrollTop: $("#imbaChatConversation").attr("scrollHeight")
+                });
+                    
+                $('#imbaMessages').tabs("select", countOpenTabs);
+            });
+        } else if (type == tab_type_message) {
+            // load messenger
+            $.post(ajaxEntry, {
+                secSession: phpSessionID,
+                module: "AjaxMessenger",
+                submodule: "IMBAdminModules",
+                ajaxmethod: "loadMessages",
+                params: JSON.stringify({
+                    "reciever": data
+                })
+            },
+            function(response) {
+                var htmlConversation = "";
+
+                $.each($.parseJSON(response), function(key, val) {
+                    htmlConversation += "<div>"
+                    + val.time + " "
+                    + val.sender + ": "
+                    + val.message + "</div>";
+                });
+                
+                // Set the content of the info tab
+                tabMessageCache.push(htmlConversation);
+                tabMessageSinceId.push(-1);    
+                tabUsers.push("You<br />" + name);                
+
+                $("#imbaChatConversation").attr({
+                    scrollTop: $("#imbaChatConversation").attr("scrollHeight")
+                });
+                
+                $('#imbaMessages').tabs("select", countOpenTabs);
+            });
+
+            // Mark conversation as read
+            $.post(ajaxEntry, {
+                secSession: phpSessionID,
+                module: "AjaxMessenger",
+                submodule: "IMBAdminModules",
+                ajaxmethod: "setReadByReciever",
+                params: JSON.stringify({
+                    "reciever": data
+                })
+            });
+        }
+                
+        tabCount++;
+    }
+}
+
+/**
+ * Refreshs a special chatwindow
+ */
+function loadChatWindowContent(tabIndex) {
+    /*$.jGrowl("Ausm Cache: " + tabMessageCache[tabIndex], {
+        header: 'Lade Tab: ' + tabIndex
+    });*/
+    
+    $("#imbaChatConversation").html(tabMessageCache[tabIndex]);
+    $("#imbaChatConversationUserlist").html(tabUsers[tabIndex]);
+}
+
+/**
+ * Returns the current selected tab index
+ */
+function getSelectedTabIndex(){
+    return $('#imbaMessages').tabs('option', 'selected');
+}
