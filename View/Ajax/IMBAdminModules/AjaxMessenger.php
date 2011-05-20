@@ -67,9 +67,9 @@ class AjaxMessenger extends AjaxBase {
                 array_push($newMessages, array("time" => $time, "sender" => $sender, "message" => $msg));
             }
 
-            $resultConversations[$this->managerUser->selectById($conversations["id"])->getNickname()] = $newMessages;
+            $resultConversations[$this->managerUser->selectById($conversations["id"])->getId()] = $newMessages;
         }
-        
+
         // ping chats first so users are not listed, if they are toooo long away
         $this->managerChatChannel->channelPing($params->channelids);
 
@@ -80,11 +80,10 @@ class AjaxMessenger extends AjaxBase {
             $channelId = $params->channelids[$i];
             $channelSince = $params->sinces[$i];
             $channel = $this->managerChatChannel->selectById($channelId);
-            $channelName = $channel->getName();
 
             // load current users in open chats
             $usersInChannel = $this->managerChatChannel->channelUsers($channelId);
-            $resultUsersInChannel[$channelName] = $usersInChannel;
+            $resultUsersInChannel[$channelId] = $usersInChannel;
 
             // load new messages in open chats
             $newMessages = array();
@@ -92,11 +91,11 @@ class AjaxMessenger extends AjaxBase {
                 array_push($newMessages, array(
                     "id" => $message->getId(),
                     "time" => date("d.m.y H:i:s", $message->getTimestamp()),
-                    "nickname" => $message->getSender()->getNickname(),
+                    "sender" => $message->getSender()->getNickname(),
                     "message" => $message->getMessage()
                 ));
             }
-            $resultMessagesInChannel[$channelName] = $newMessages;
+            $resultMessagesInChannel[$channelId] = $newMessages;
         }
 
         $result = array("newmessages" => $resultConversations, "usersinchannel" => $resultUsersInChannel, "newchatmessages" => $resultMessagesInChannel);

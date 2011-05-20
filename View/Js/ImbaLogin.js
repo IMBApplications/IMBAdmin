@@ -227,7 +227,8 @@ function refreshUsersOnline(){
                 li.attr("title", "Start Chat with " + value.name);
             
                 li.click(function (){
-                    createChatWindow(value.name, value.id);
+                    //createChatWindow(value.name, value.id);
+                    createTab(value.name, value.id, "1");
                 });
 
             });
