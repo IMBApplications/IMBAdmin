@@ -3,16 +3,87 @@
     <head>
         <link type="text/css" href="/IMBAdmin/ImbaLoader.php?load=css" rel="Stylesheet" />
         <script type="text/javascript" src="/IMBAdmin/ImbaLoader.php?load=js"></script>
-
         <style type="text/css">
             body {
                 font: 12px Verdana, sans-serif;
             }
         </style>
+
+        <!-- styles for this example page only -->
+        <style type="text/css">
+            #menuLog { font-size:1.4em; margin:20px; }
+            .hidden { position:absolute; top:0; left:-9999px; width:1px; height:1px; overflow:hidden; }
+            .fg-button { clear:left; margin:0 4px 40px 20px; padding: .4em 1em; text-decoration:none !important; cursor:pointer; position: relative; text-align: center; zoom: 1; }
+            .fg-button .ui-icon { position: absolute; top: 50%; margin-top: -8px; left: 50%; margin-left: -8px; }
+            a.fg-button { float:left;  }
+            button.fg-button { width:auto; overflow:visible; } /* removes extra button width in IE */
+
+            .fg-button-icon-left { padding-left: 2.1em; }
+            .fg-button-icon-right { padding-right: 2.1em; }
+            .fg-button-icon-left .ui-icon { right: auto; left: .2em; margin-left: 0; }
+            .fg-button-icon-right .ui-icon { left: auto; right: .2em; margin-left: 0; }
+            .fg-button-icon-solo { display:block; width:8px; text-indent: -9999px; }	 /* solo icon buttons must have block properties for the text-indent to work */	
+
+            .fg-button.ui-state-loading .ui-icon { background: url(/IMBAdmin/Images/spinner_bar.gif) no-repeat 0 0; }
+        </style>
+
+        <!-- style exceptions for IE 6 -->
+        <!--[if IE 6]>
+	<style type="text/css">
+		.fg-menu-ipod .fg-menu li { width: 95%; }
+		.fg-menu-ipod .ui-widget-content { border:0; }
+	</style>
+	<![endif]-->        
     </head>
 
     <body>
-        <div id="sitecontent">
+        <a tabindex="0" href="#news-items" class="fg-button fg-button-icon-right ui-widget ui-state-default ui-corner-all" id="ImbaMenu2">
+            <span class="ui-icon ui-icon-triangle-1-s"></span>
+            Menu
+        </a>
+        <div id="news-items" class="hidden">
+            <ul>
+                <li><a href="#">News</a></li>
+                <li><a href="#">Forum</a></li>
+                <li><a href="#">IMBAdmin</a>
+                    <ul>
+                        <li><a href="#">Administration</a>
+                            <ul>
+                                <li><a href="#">A1</a></li>
+                                <li><a href="#">A2</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Maintenance</a>
+                            <ul>
+                                <li><a href="#">M1</a></li>
+                                <li><a href="#">M2</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Nachrichten</a>
+                            <ul>
+                                <li><a href="#">N1</a></li>
+                                <li><a href="#">N2</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Mitglieder</a>
+                            <ul>
+                                <li><a href="#">M1</a></li>
+                                <li><a href="#">M2</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="#">Portal</a>
+                    <ul>
+                        <li><a href="#">Alptr&ouml;im</a></li>
+                        <li><a href="#">OOM Comunity</a></li>
+                        <li><a href="#">The Dudez</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div id="sitecontent">         
             <br /><br /><br />
             <h3>Website Content</h3>
             <p>

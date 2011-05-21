@@ -21,6 +21,7 @@ include library javascript files
 {fetch file='Libs/jgrowl/jquery.jgrowl_compressed.js'}
 {fetch file='Libs/jquery_jqclock/format_date.js'}
 {fetch file='Libs/jquery_jqclock/jqclock_2.2.0.js'}
+{fetch file='Libs/fg.menu/Js/fg.menu.js'}
 {* 
 
 include imba javascript files

@@ -20,6 +20,20 @@ $(document).ready(function() {
     $.ajaxSetup({
         async: true
     });
+    
+    // new menu stuff
+    $('.fg-button').hover(
+        function(){
+            $(this).removeClass('ui-state-default').addClass('ui-state-focus');
+        },
+        function(){
+            $(this).removeClass('ui-state-focus').addClass('ui-state-default');
+        }
+        );
+    $('#ImbaMenu2').menu({
+        content: $('#ImbaMenu2').next().html(),
+        flyOut: true                        
+    });
  
     $("#imbaSsoOpenIdSubmit").button();
     $("#imbaSsoOpenIdSubmit").click(function () {
@@ -341,7 +355,9 @@ function loadImbaPortal(portalId) {
         secSession: phpSessionID,
         module: "AjaxPortal",
         ajaxmethod: "getPortal",
-        params: JSON.stringify({"id": portalId})
+        params: JSON.stringify({
+            "id": portalId
+        })
     }, function (response){        
         if (checkReturn(response) == false) {            
             var currentPortal = $.parseJSON(response);
