@@ -54,7 +54,7 @@ class ImbaManagerChatMessage extends ImbaManagerBase {
             $tmpLimit = "";
         }
 
-        $query = "SELECT * FROM %s WHERE channel = '%s' " . $tmpIdSince . " ORDER BY timestamp DESC, id DESC " . $tmpLimit . ";";
+        $query = "SELECT * FROM %s WHERE channel = '%s' " . $tmpIdSince . " ORDER BY id DESC " . $tmpLimit . ";";
 
         // init all user
         ImbaManagerUser::getInstance()->selectAll();
@@ -86,6 +86,8 @@ class ImbaManagerChatMessage extends ImbaManagerBase {
             date("U"),
             htmlspecialchars($message->getMessage())
         ));
+        
+        return $this->database->getLastInsertedId();
     }
 
 }

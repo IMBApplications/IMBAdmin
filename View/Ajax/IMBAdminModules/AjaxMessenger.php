@@ -132,9 +132,9 @@ class AjaxMessenger extends AjaxBase {
         $message->setNew(1);
         $message->setSubject("AJAX GUI");
 
-        $this->managerMessage->insert($message);
+        $id = $this->managerMessage->insert($message);
         $this->managerUser->setMeOnline();
-        echo "Message sent";
+        echo "Ok" . $id;
     }
 
     /**
@@ -161,28 +161,6 @@ class AjaxMessenger extends AjaxBase {
             $msg = $message->getMessage();
 
             array_push($result, array("time" => $time, "sender" => $sender, "message" => $msg));
-        }
-        $result = array_reverse($result);
-        echo json_encode($result);
-    }
-
-    /**
-     * Load the ChatMessages
-     * @param type $param ({"channelid":"1", "since":"1"})
-     */
-    public function loadChat($params) {
-        $channelid = $params->channelid;
-        $since = $params->since;
-
-        $result = array();
-        $channel = $this->managerChatChannel->selectById($channelid);
-        foreach ($this->managerChatMessage->selectAllByChannel($channel, $since) as $message) {
-            array_push($result, array(
-                "id" => $message->getId(),
-                "time" => date("d.m.y H:i:s", $message->getTimestamp()),
-                "nickname" => $message->getSender()->getNickname(),
-                "message" => $message->getMessage()
-            ));
         }
         $result = array_reverse($result);
         echo json_encode($result);
@@ -242,8 +220,8 @@ class AjaxMessenger extends AjaxBase {
             $message->setChannel($channel);
             $message->setMessage($messageTxt);
 
-            $this->managerChatMessage->insert($message);
-            echo "Message sent";
+            $id = $this->managerChatMessage->insert($message);
+            echo "Ok" . $id;
         } else {
             echo "No Message";
         }

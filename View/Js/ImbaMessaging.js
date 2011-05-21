@@ -32,8 +32,8 @@ var tab_data_type = "tab_data_type";
 var tab_data_name = "tab_data_name";
 var tab_data_id = "tab_data_id";
 
-// Reload Chats every 2000 ms
-setInterval('refreshMessaging()', 5000);
+// Reload Tabs every 2000 ms
+setInterval('refreshMessaging()', 2000);
    
 /**
  * Check for news and update the tabs
@@ -74,7 +74,9 @@ function refreshMessaging() {
             var responseData = $.parseJSON(response);
             var gotNewMessages = false;
             
-            // Got new messages
+            /**
+             * Got new messages
+             */
             $.each(responseData.newmessages, function(key, val) {                                
                 // check if there is a open window with key as id and type is message                
                 var tabIndex = getTabIndexFromId(key, tab_type_message);
@@ -83,15 +85,23 @@ function refreshMessaging() {
                     var htmlConversation = "";
                     
                     $.each(val, function(k, v) {
-                        htmlConversation += "<div>"
-                        + v.time + " "
-                        + v.sender + ": "
-                        + v.message + "</div>";
+                        htmlConversation += createMessage(v.time, v.sender, v.message);
                     });
                 
                     // Set the content of the tab
                     tabMessageCache[tabIndex] = htmlConversation;
                     reloadCurrentTab = true;
+                                        
+                    // Mark conversation as read
+                    $.post(ajaxEntry, {
+                        secSession: phpSessionID,
+                        module: "AjaxMessenger",
+                        submodule: "IMBAdminModules",
+                        ajaxmethod: "setReadByReciever",
+                        params: JSON.stringify({
+                            "reciever": key
+                        })
+                    });
                 }
                 
                 gotNewMessages = true;
@@ -106,7 +116,9 @@ function refreshMessaging() {
                 $("#imbaGotMessage").hide();
             }
             
-            // Update Users in Channel            
+            /**
+             * Update Users in Channel
+             */
             $.each(responseData.usersinchannel, function(key, val) {          
                 // check if there is a open window with key as id and type is chat
                 var tabIndex = getTabIndexFromId(key, tab_type_chat);
@@ -124,7 +136,9 @@ function refreshMessaging() {
                 }
             });
             
-            // Update Messages in Channels
+            /**
+             * Update Messages in Channels
+             */
             $.each(responseData.newchatmessages, function(key, val) { 
                 // check if there is a open window with key as id and type is chat
                 var tabIndex = getTabIndexFromId(key, tab_type_chat);
@@ -133,12 +147,8 @@ function refreshMessaging() {
                 if (tabIndex != null) {
                     var htmlConversation = tabMessageCache[tabIndex];
                                         
-                    $.each(val, function(k, v) {
-                        htmlConversation += "<div>"
-                        + v.time + " "
-                        + v.sender + ": "
-                        + v.message + "</div>";
-                    
+                    $.each(val, function(k, v) {                        
+                        htmlConversation += createMessage(v.time, v.sender, v.message);                    
                         tabMessageSinceId[tabIndex] = v.id;
                     });
                 
@@ -153,6 +163,37 @@ function refreshMessaging() {
             }
         });
     }
+}
+
+/**
+ * Creates a Message
+ */
+function createMessage(time, sender, message){
+    if (time == null){
+        var tmp = new Date();
+        //time = tmp.getDate() + "." + tmp.getMonth() + "." + tmp.getFullYear().substr(2, 2) + " " + tmp.getHours() + ":" + tmp.getMinutes() + ":" + tmp.getSeconds();
+        time = (tmp.getDate() < 9) ? "0" + tmp.getDate() : tmp.getDate();
+        time += "."
+        var month = tmp.getMonth()+1;
+        time += (month < 9) ? "0" + month : month;
+        time += "."
+        time += tmp.getFullYear().toString().substr(2, 2);
+        time += " "
+        time += (tmp.getHours() < 9) ? "0" + tmp.getHours() : tmp.getHours();
+        time += ":"
+        time += (tmp.getMinutes() < 9) ? "0" + tmp.getMinutes() : tmp.getMinutes();
+        time += ":"
+        time += (tmp.getSeconds() < 9) ? "0" + tmp.getSeconds() : tmp.getSeconds();
+    }
+    
+    if (sender == null) {
+        sender = currentUserName;
+    }
+    
+    return "<div>"
+    + time + " "
+    + sender + ": "
+    + message + "</div>";
 }
    
 /**
@@ -288,8 +329,8 @@ function createTab(name, data, type) {
                 $('#imbaMessages').tabs("select", countOpenTabs);
             });
 
-        // Mark conversation as read
-        /*$.post(ajaxEntry, {
+            // Mark conversation as read
+            $.post(ajaxEntry, {
                 secSession: phpSessionID,
                 module: "AjaxMessenger",
                 submodule: "IMBAdminModules",
@@ -297,7 +338,7 @@ function createTab(name, data, type) {
                 params: JSON.stringify({
                     "reciever": data
                 })
-            });*/
+            });
         }
                 
         tabCount++;
@@ -358,7 +399,7 @@ function getTabIndexFromId(tab_data, tab_type){
 /**
  * Sends a message 
  */
-function sendChatWindowMessage(msgText, tabIndex) {
+function sendMessage(msgText, tabIndex) {
     if (tabIndex == 0) return;
     
     // Get data from the tab
@@ -396,8 +437,14 @@ function sendChatWindowMessage(msgText, tabIndex) {
     
     // Send post
     $.post(ajaxEntry, httpPostData , function(response) {
-        if (response != "Message sent"){
-            alert(response);
+        if (response.substr(0, 2) == "Ok"){
+            tabMessageSinceId[tabIndex] = response.substring(2);
+            tabMessageCache[tabIndex] += createMessage(null, null, msgText);
+            loadChatWindowContent(tabIndex);
+        } else {
+            $.jGrowl(response, {
+                header: "Fehler beim Senden"
+            });
         }
     });
 
@@ -415,6 +462,9 @@ $(window).bind('beforeunload', function() {
  * jQuery DOM-Document has been loaded
  */
 $(document).ready(function() {
+    // Load user
+    loadMyImbaUser();
+    
     // Creats the Dialog around the tabs
     $("#imbaMessagesDialog").dialog({
         position:  ['left','bottom'] ,
@@ -454,19 +504,26 @@ $(document).ready(function() {
     // Close icon: removing the tab on click
     $("#imbaMessages div.ui-icon-close").live("click", function() {
         var index = $("li", $msgTabs).index($(this).parent());
-                
+        
+        // reorganize the tabs cache        
+        for (var i = index; i < countOpenTabs; i++) {
+            tabMessageCache[i] = tabMessageCache[i+1];
+            tabUsers[i] = tabUsers[i+1];
+            tabMessageSinceId[i] = tabMessageSinceId[i+1];
+        }
+
         $msgTabs.tabs("remove", index);
         if (countOpenTabs > 0) {
             countOpenTabs--;
         }
-
+        
         // load content of new selected Tab
         loadChatWindowContent(getSelectedTabIndex());
     });
     
     // info icon: showing the ImbAdmin module
     $("#imbaMessages div.ui-icon-info").live("click", function() {
-        alert("Chat is not yet implemented.");
+        $.jGrowl("User info / Chat history.");
     /*var index = $("li", $msgTabs).index($(this).parent());
         var tabData = getTabDataFromTabIndex(index);
         if (tabData.substr(0, 1) == "#"){
@@ -481,7 +538,7 @@ $(document).ready(function() {
         var tabIndex = getSelectedTabIndex();
         var msgText = $("#imbaMessageText").val();
 
-        sendChatWindowMessage(msgText, tabIndex);
+        sendMessage(msgText, tabIndex);
         
         $("#imbaMessageText").attr("value", "");
         return false;

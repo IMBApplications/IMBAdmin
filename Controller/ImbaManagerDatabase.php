@@ -99,6 +99,9 @@ class ImbaManagerDatabase {
         return $this->counter;
     }
 
+    public function getLastInsertedId() {
+        return mysql_insert_id();
+    }    
 }
 
 ?>
