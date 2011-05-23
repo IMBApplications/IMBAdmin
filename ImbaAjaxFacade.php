@@ -4,8 +4,8 @@
  * Single point of Ajax entry
  *
  */
-header('Access-Control-Allow-Origin: *');
 session_start();
+header('Access-Control-Allow-Origin: *');
 
 require_once ("Controller/Include.php");
 require_once ("Shared/Include.php");
