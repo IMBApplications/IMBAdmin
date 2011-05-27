@@ -9,6 +9,7 @@ class ImbaPortal extends ImbaBase {
     protected $icon = null;
     protected $aliases = array();
     protected $portalEntries = array();
+    protected $portalModules = array();
     protected $comment = null;
 
     public function getName() {
@@ -38,7 +39,7 @@ class ImbaPortal extends ImbaBase {
     public function setAliases($aliases) {
         $this->aliases = $aliases;
     }
-    
+
     public function addAlias($alias){
         array_push($this->aliases, $alias);
     }
@@ -53,6 +54,18 @@ class ImbaPortal extends ImbaBase {
 
     public function addEntry($entry) {
         array_push($this->portalEntries, $entry);
+    }
+
+    public function getPortalModules() {
+        return $this->portalModules;
+    }
+
+    public function setPortalModules($portalModules) {
+        $this->portalModules = $portalModules;
+    }
+
+    public function addModule($module) {
+        array_push($this->portalModules, $module);
     }
 
     public function getComment() {

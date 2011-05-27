@@ -25,8 +25,8 @@
             });
             return false;
         });
-    } );   
-    
+    } );
+
     function backToPortalOverview(){
         var data = {
             secSession: phpSessionID,
@@ -36,7 +36,7 @@
         };
         loadImbaAdminTabContent(data);
     }
-    
+
 </script>
 <form id="ImbaAjaxAdminProfileForm" action="post">
     <input id="myPortalId" type="hidden" name="id" value="{$id}" />
@@ -74,7 +74,12 @@
                     </ul>
                 </td>
             </tr>
-
+            <tr>
+                <td style="vertical-align: top;">Portal Modules</td>
+                <td>
+                    to do
+                </td>
+            </tr>
             <tr>
                 <td><a id="ImbaAjaxAdminProfileBackToOverview" href="javascript:void(0)" onclick="javascript: backToPortalOverview();">Back</a></td>
                 <td><input id="ImbaAjaxAdminProfileSave" type="submit" value="Save" /></td>
