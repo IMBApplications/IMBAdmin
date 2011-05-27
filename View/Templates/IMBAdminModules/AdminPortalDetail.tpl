@@ -15,7 +15,8 @@
                     "icon": $("#myPortalIcon").val(),
                     "name": $("#myPortalName").val(),
                     "comment": $("#myPortalComment").val(),
-                    "portalentries": $("#myPortalEntries").val()
+                    "portalentries": $("#myPortalEntries").val(),
+                    "portalmodules": $("#myPortalModules").val()
                 })
             }, function(response){
                 if (response != "Ok"){
@@ -145,7 +146,11 @@
             <tr>
                 <td style="vertical-align: top;">Portal Modules</td>
                 <td>
-                    to do
+                    <select id="myPortalModules" multiple="true" size="5">
+                        {foreach $modules as $module}
+                        <option value="{$module.name}" {if $module.selected == 'true'}selected{/if}>{$module.name}</option>
+                        {/foreach}
+                    </select>
                 </td>
             </tr>
             <tr>

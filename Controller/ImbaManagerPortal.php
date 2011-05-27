@@ -16,7 +16,15 @@
   `comment` text NOT NULL,
   PRIMARY KEY (`id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
- *
+
+  CREATE TABLE IF NOT EXISTS `oom_openid_portals_modules` (
+  `portal_id` int(11) NOT NULL,
+  `module` varchar(40) NOT NULL,
+  UNIQUE KEY `portal_id` (`portal_id`,`module`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+  ALTER TABLE `oom_openid_portals_modules`
+  ADD CONSTRAINT `oom_openid_portals_modules_ibfk_1` FOREIGN KEY (`portal_id`) REFERENCES `oom_openid_portals` (`id`);
  */
 class ImbaManagerPortal extends ImbaManagerBase {
 
@@ -88,13 +96,29 @@ class ImbaManagerPortal extends ImbaManagerBase {
             $portal->getId()
         ));
 
+        // add the portal modules
+        $query = "DELETE FROM %s WHERE portal_id = '%s';";
+        $this->database->query($query, array(
+            ImbaConstants::$DATABASE_TABLES_SYS_PORTALS_MODULES,
+            $portal->getId()
+        ));
+
+        foreach ($portal->getPortalModules() as $module) {
+            $query = "INSERT INTO %s (portal_id, module) VALUES (%s, '%s');";
+
+            $this->database->query($query, array(
+                ImbaConstants::$DATABASE_TABLES_SYS_PORTALS_MODULES,
+                $portal->getId(),
+                $module
+            ));
+        }
+
         // add the portal entries
         $query = "DELETE FROM %s WHERE portal_id = '%s';";
         $this->database->query($query, array(
             ImbaConstants::$DATABASE_TABLES_SYS_PORTALS_INTERCEPT_PORTALS_PORTALENTRIES,
             $portal->getId()
         ));
-
 
         foreach ($portal->getPortalEntries() as $portalentry) {
             $query = "INSERT INTO %s (portal_id, portalentry_id) VALUES (%s, %s);";
@@ -173,6 +197,16 @@ class ImbaManagerPortal extends ImbaManagerBase {
             $result = array();
 
             /**
+             * Get the modules of the portals
+             */
+            $query = "SELECT * FROM %s WHERE 1;";
+            $this->database->query($query, array(ImbaConstants::$DATABASE_TABLES_SYS_PORTALS_MODULES));
+            $modules = array();
+            while ($row = $this->database->fetchRow()) {
+                array_push($modules, array("portal_id" => $row['portal_id'], "module" => $row['module']));
+            }
+
+            /**
              * Get the aliases of the portals
              */
             $query = "SELECT * FROM %s WHERE 1;";
@@ -213,6 +247,17 @@ class ImbaManagerPortal extends ImbaManagerBase {
                 $portal->setIcon($row["icon"]);
 
                 /**
+                 * Fill the modules
+                 */
+                $tmpModule = array();
+                foreach ($modules as $module) {
+                    if ($module['portal_id'] == $portal->getId()) {
+                        array_push($tmpModule, $module['module']);
+                    }
+                }
+                $portal->setPortalModules($tmpModule);
+
+                /**
                  * Fill the aliases
                  */
                 $tmpAliases = array();
@@ -229,10 +274,7 @@ class ImbaManagerPortal extends ImbaManagerBase {
                 $tmpEntries = array();
                 foreach ($portalentries_intersect as $intersect) {
                     if ($intersect['portal_id'] == $portal->getId()) {
-                        foreach ($portalentries as $portalEntry) {
-                            if ($intersect['portalentry_id'] == $portalEntry->getId())
-                                array_push($tmpEntries, $portalEntry);
-                        }
+                        array_push($tmpEntries, $managerPortalEntries->selectById($intersect['portalentry_id']));
                     }
                 }
                 $portal->setPortalEntries($tmpEntries);

@@ -63,7 +63,8 @@ class ImbaManagerDatabase {
         $this->result = mysql_query($query, $this->connection);
 
         if (!$this->result) {
-            throw new Exception("Database Query not working!");
+            $q = $this->getQuery($queryStr, $args);
+            throw new Exception("Database Query not working! ( '$q' )");
         }
 
         $this->counter = null;
@@ -74,7 +75,7 @@ class ImbaManagerDatabase {
             $args[$key] = mysql_real_escape_string(stripslashes($value));
         }
         $query = vsprintf($queryStr, $args);
-        
+
         return $query;
     }
 
@@ -101,7 +102,8 @@ class ImbaManagerDatabase {
 
     public function getLastInsertedId() {
         return mysql_insert_id();
-    }    
+    }
+
 }
 
 ?>

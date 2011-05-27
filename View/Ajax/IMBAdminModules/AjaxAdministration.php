@@ -87,7 +87,9 @@ class AjaxAdministration extends AjaxBase {
 
     /**
      * updates a portal
-     * @param type $params ({"portalid":"1", "icon":"iconurl", "name":"Name", "comment":"Comment", "portalentries": ["1", "2", "3"]})
+     * @param type $params ({"portalid": "1", "icon": "iconurl", "name": "Name",
+      "comment": "Comment", "portalentries": ["1", "2", "3"],
+      "portalmodules": ["mod1", "mod2", "mod3"]})
      */
     public function updatePortal($params) {
         $portalid = $params->portalid;
@@ -96,6 +98,7 @@ class AjaxAdministration extends AjaxBase {
         $name = $params->name;
         $comment = $params->comment;
         $portalentries = $params->portalentries;
+        $portalmodules = $params->portalmodules;
 
         $portal = new ImbaPortal();
         $portal = $this->managerPortal->selectById($portalid);
@@ -103,11 +106,17 @@ class AjaxAdministration extends AjaxBase {
         $portal->setName($name);
         $portal->setComment($comment);
         $portal->setPortalEntries(array());
+        $portal->setPortalModules(array());
+
+        if ($portalmodules != null) {
+            foreach ($portalmodules as $module) {
+                $portal->addModule($module);
+            }
+        }
 
         foreach ($portalentries as $portalentryId) {
             $portalentry = $this->managerPortalEntry->getNew();
             $portalentry->setId($portalentryId);
-
             $portal->addEntry($portalentry);
         }
 
@@ -164,6 +173,29 @@ class AjaxAdministration extends AjaxBase {
             }
         }
         $this->smarty->assign("aliases", $this->smartyPortalAliases);
+
+        $this->smartyPortalModules = array();
+
+        $ordner = "View/Ajax/";
+        $handle = opendir($ordner);
+        while ($file = readdir($handle)) {
+            if ($file != "." && $file != "..") {
+                if (is_dir($ordner . "/" . $file)) {
+                    if ($file != "IMBAdminGames" && $file != "IMBAdminModules") {
+                        $selected = "false";
+                        foreach ($portal->getPortalModules() as $module) {
+                            if ($module == $file) {
+                                $selected = "true";
+                            }
+                        }
+                        array_push($this->smartyPortalModules, array("name" => $file, "selected" => $selected));
+                    }
+                }
+            }
+        }
+        closedir($handle);
+
+        $this->smarty->assign("modules", $this->smartyPortalModules);
 
         $this->smarty->display('IMBAdminModules/AdminPortalDetail.tpl');
     }

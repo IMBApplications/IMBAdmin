@@ -26,7 +26,7 @@ class ImbaConstants extends ImbaConfig {
     public static $WEB_AUTH_MAIN_PATH = "ImbaAuth.php";
     public static $WEB_AJAX_PROXY_PATH = "ImbaProxy.php?facility=ajax";
     public static $WEB_AJAX_MAIN_PATH = "ImbaAjaxFacade.php";
-    
+
     /**
      *  0   => Auto, let the system decide
      * +1   => always use proxy
@@ -59,6 +59,7 @@ class ImbaConstants extends ImbaConfig {
      */
     public static $DATABASE_TABLES_SYS_PORTALS = "oom_openid_portals";
     public static $DATABASE_TABLES_SYS_PORTALS_ALIAS = "oom_openid_portals_alias";
+    public static $DATABASE_TABLES_SYS_PORTALS_MODULES = "oom_openid_portals_modules";
     public static $DATABASE_TABLES_SYS_PORTALS_PORTALENTRIES = "oom_openid_portals_portalentries";
     public static $DATABASE_TABLES_SYS_PORTALS_INTERCEPT_PORTALS_PORTALENTRIES = "oom_openid_portals_int_portal_portalentries";
     public static $DATABASE_TABLES_SYS_SETTINGS = "oom_openid_settings";
