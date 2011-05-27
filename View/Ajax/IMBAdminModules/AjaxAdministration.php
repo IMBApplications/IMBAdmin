@@ -87,7 +87,7 @@ class AjaxAdministration extends AjaxBase {
 
     /**
      * updates a portal
-     * @param type $params ({"portalid":"1", "icon":"iconurl", "name":"Name", "comment":"Comment"})
+     * @param type $params ({"portalid":"1", "icon":"iconurl", "name":"Name", "comment":"Comment", "portalentries": ["1", "2", "3"]})
      */
     public function updatePortal($params) {
         $portalid = $params->portalid;
@@ -95,12 +95,22 @@ class AjaxAdministration extends AjaxBase {
         $icon = $params->icon;
         $name = $params->name;
         $comment = $params->comment;
+        $portalentries = $params->portalentries;
 
         $portal = new ImbaPortal();
-        $portal = $this->managerPortal->selectById($portalid);        
+        $portal = $this->managerPortal->selectById($portalid);
         $portal->setIcon($icon);
         $portal->setName($name);
         $portal->setComment($comment);
+        $portal->setPortalEntries(array());
+
+        foreach ($portalentries as $portalentryId) {
+            $portalentry = $this->managerPortalEntry->getNew();
+            $portalentry->setId($portalentryId);
+
+            $portal->addEntry($portalentry);
+        }
+
         $this->managerPortal->update($portal);
         echo "Ok";
     }
@@ -129,13 +139,21 @@ class AjaxAdministration extends AjaxBase {
         $this->smarty->assign("icon", $portal->getIcon());
 
         $this->smartyPortalEntries = array();
-        if ($portal->getPortalEntries() != null) {
-            foreach ($portal->getPortalEntries() as $portalentry) {
-                array_push($this->smartyPortalEntries, array(
-                    "id" => $portalentry->getId(),
-                    "name" => $portalentry->getName()
-                ));
+        foreach ($this->managerPortalEntry->selectAll() as $portalentry) {
+            $selected = "false";
+
+            foreach ($portal->getPortalEntries() as $portalentrySelected) {
+                if ($portalentrySelected->getId() == $portalentry->getId()) {
+                    $selected = "true";
+                }
             }
+
+            array_push($this->smartyPortalEntries, array(
+                "id" => $portalentry->getId(),
+                "url" => $portalentry->getUrl(),
+                "name" => $portalentry->getName(),
+                "selected" => $selected
+            ));
         }
         $this->smarty->assign("portalentries", $this->smartyPortalEntries);
 
@@ -148,6 +166,24 @@ class AjaxAdministration extends AjaxBase {
         $this->smarty->assign("aliases", $this->smartyPortalAliases);
 
         $this->smarty->display('IMBAdminModules/AdminPortalDetail.tpl');
+    }
+
+    /**
+     * deletes a portal alias
+     * @param type $params ({"portalid":"1", "alias": "alias"})
+     */
+    public function deletePortalAlias($params) {
+        $this->managerPortal->deleteAlias($params->portalid, $params->alias);
+        echo "Ok";
+    }
+
+    /**
+     * adds a portal alias
+     * @param type $params ({"portalid":"1", "alias": "alias"})
+     */
+    public function addPortalAlias($params) {
+        $this->managerPortal->addAlias($params->portalid, $params->alias);
+        echo "Ok";
     }
 
     /**
@@ -305,7 +341,7 @@ class AjaxAdministration extends AjaxBase {
 
     /**
      * updates a update Role
-     * @param type $params ({"roleid":"1", "rolecolumn":"abc"}) 
+     * @param type $params ({"roleid":"1", "rolecolumn":"abc"})
      * and a $_POST["value"]
      */
     public function updateRole($params) {
@@ -638,9 +674,9 @@ class AjaxAdministration extends AjaxBase {
 
     /**
      * User Management
-     * @param type $params ({"openid":"abc", "sex":"abc", "motto":"abc", 
-     * "role":"1", "birthday":"11.11.1111", "lastname":"abc", "firstname":"abc", 
-     * "usertitle":"abc", "avatar":"abc", "website":"abc", "nickname":"abc", 
+     * @param type $params ({"openid":"abc", "sex":"abc", "motto":"abc",
+     * "role":"1", "birthday":"11.11.1111", "lastname":"abc", "firstname":"abc",
+     * "usertitle":"abc", "avatar":"abc", "website":"abc", "nickname":"abc",
      * "email":"abc", "skype":"abc", "icq":"abc", "msn":"abc", "signature":"abc",
      *  "id":"1"})
      */

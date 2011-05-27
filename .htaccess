@@ -1,5 +1,0 @@
-<Files ~ "\.(inc|sql|tpl)$">
-  order allow,deny
-  deny from all
-</Files>
-Options -Indexes

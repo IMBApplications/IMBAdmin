@@ -16,7 +16,7 @@
   `comment` text NOT NULL,
   PRIMARY KEY (`id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
- * 
+ *
  */
 class ImbaManagerPortal extends ImbaManagerBase {
 
@@ -88,6 +88,24 @@ class ImbaManagerPortal extends ImbaManagerBase {
             $portal->getId()
         ));
 
+        // add the portal entries
+        $query = "DELETE FROM %s WHERE portal_id = '%s';";
+        $this->database->query($query, array(
+            ImbaConstants::$DATABASE_TABLES_SYS_PORTALS_INTERCEPT_PORTALS_PORTALENTRIES,
+            $portal->getId()
+        ));
+
+
+        foreach ($portal->getPortalEntries() as $portalentry) {
+            $query = "INSERT INTO %s (portal_id, portalentry_id) VALUES (%s, %s);";
+
+            $this->database->query($query, array(
+                ImbaConstants::$DATABASE_TABLES_SYS_PORTALS_INTERCEPT_PORTALS_PORTALENTRIES,
+                $portal->getId(),
+                $portalentry->getId()
+            ));
+        }
+
         // add the aliases
         $query = "DELETE FROM %s WHERE portal_id = '%s';";
         $this->database->query($query, array(
@@ -119,6 +137,34 @@ class ImbaManagerPortal extends ImbaManagerBase {
     }
 
     /**
+     * Adds a portal alias
+     */
+    public function addAlias($portalid, $alias) {
+        if ($alias == "") {
+            throw new Exception("No Alias given");
+        }
+
+        $query = "INSERT INTO %s (portal_id, name) VALUES ('%s', '%s')";
+        $this->database->query($query, array(ImbaConstants::$DATABASE_TABLES_SYS_PORTALS_ALIAS, $portalid, $alias));
+
+        $this->portalsCached = null;
+    }
+
+    /**
+     * Delets a portal alias
+     */
+    public function deleteAlias($portalid, $alias) {
+        if ($alias == "") {
+            throw new Exception("No Alias given");
+        }
+
+        $query = "DELETE FROM %s Where portal_id = '%s' AND name = '%s';";
+        $this->database->query($query, array(ImbaConstants::$DATABASE_TABLES_SYS_PORTALS_ALIAS, $portalid, $alias));
+
+        $this->portalsCached = null;
+    }
+
+    /**
      * Select all Portals
      */
     public function selectAll() {
@@ -139,21 +185,7 @@ class ImbaManagerPortal extends ImbaManagerBase {
             /**
              * Get the portal entries of the portals
              */
-            $query = "SELECT * FROM %s WHERE 1;";
-            $this->database->query($query, array(ImbaConstants::$DATABASE_TABLES_SYS_PORTALS_PORTALENTRIES));
-            $portalentries = array();
-            while ($row = $this->database->fetchRow()) {
-                $portalEntry = $managerPortalEntries->getNew();
-                $portalEntry->setId($row['id']);
-                $portalEntry->setHandle($row['handle']);
-                $portalEntry->setName($row['name']);
-                $portalEntry->setTarget($row['target']);
-                $portalEntry->setUrl($row['url']);
-                $portalEntry->setComment($row['comment']);
-                $portalEntry->setLoggedin($row['loggedin']);
-                $portalEntry->setRole($row['role']);
-                array_push($portalentries, $portalEntry);
-            }
+            $portalentries = $managerPortalEntries->selectAll();
 
             /**
              * Get the portal <-> entries intersect data
