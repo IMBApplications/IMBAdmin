@@ -10,27 +10,19 @@ class ImbaManagerChatChannel extends ImbaManagerBase {
      * Property
      */
     protected $chatChannelsCached = null;
-    /**
-     * Singleton implementation
-     */
-    private static $instance = null;
-
+   
     /**
      * Ctor
      */
-    protected function __construct() {
-        //parent::__construct();
-        $this->database = ImbaManagerDatabase::getInstance();
+    public function __construct() {
+        parent::__construct();
     }
 
     /*
      * Singleton init
      */
-
     public static function getInstance() {
-        if (self::$instance === null)
-            self::$instance = new self();
-        return self::$instance;
+        return new ImbaManagerChatChannel();
     }
 
     /**
@@ -69,7 +61,7 @@ class ImbaManagerChatChannel extends ImbaManagerBase {
 
                 // Check if my Role is allowed:
                 $allowed = json_decode($channel->getAllowed(), true);
-                
+
                 $amIallowed = false;
                 foreach ($allowed as $a) {
                     if ($a["allowed"] == true && $a["role"] == ImbaUserContext::getUserRole()) {

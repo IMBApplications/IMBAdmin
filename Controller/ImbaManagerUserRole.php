@@ -3,10 +3,10 @@
 /**
  *  Controller / Manager for Role
  *  - insert, update, delete Roles
- * 
- * 
+ *
+ *
  *  TODO: Remove old fields from database eqdkp and phpraider
- * 
+ *
  */
 class ImbaManagerUserRole extends ImbaManagerBase {
 
@@ -14,17 +14,12 @@ class ImbaManagerUserRole extends ImbaManagerBase {
      * ImbaManagerDatabase
      */
     protected $rolesCached = null;
-    /**
-     * Singleton implementation
-     */
-    private static $instance = null;
 
     /**
      * Ctor
      */
-    protected function __construct() {
-        //parent::__construct();
-        $this->database = ImbaManagerDatabase::getInstance();
+    public function __construct() {
+        parent::__construct();
     }
 
     /*
@@ -32,9 +27,7 @@ class ImbaManagerUserRole extends ImbaManagerBase {
      */
 
     public static function getInstance() {
-        if (self::$instance === null)
-            self::$instance = new self();
-        return self::$instance;
+        return new ImbaManagerUserRole();
     }
 
     /**

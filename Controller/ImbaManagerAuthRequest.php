@@ -7,28 +7,19 @@
 class ImbaManagerAuthRequest extends ImbaManagerBase {
 
     /**
-     * Singleton implementation
-     */
-    private static $instance = null;
-
-    /**
      * Ctor
      */
-    protected function __construct() {
-        //parent::__construct();
-        $this->database = ImbaManagerDatabase::getInstance();
+    public function __construct() {
+        parent::__construct();
     }
 
     /*
      * Singleton init
      */
-
     public static function getInstance() {
-        if (self::$instance === null)
-            self::$instance = new self();
-        return self::$instance;
+        return new ImbaManagerAuthRequest();
     }
-    
+
     public function getNew() {
         return new ImbaAuthRequest();
     }

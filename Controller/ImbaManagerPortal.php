@@ -33,17 +33,12 @@ class ImbaManagerPortal extends ImbaManagerBase {
      * Property
      */
     protected $portalsCached = null;
-    /**
-     * Singleton implementation
-     */
-    private static $instance = null;
 
     /**
      * Ctor
      */
-    protected function __construct() {
-        //parent::__construct();
-        $this->database = ImbaManagerDatabase::getInstance();
+    public function __construct() {
+        parent::__construct();
     }
 
     /*
@@ -51,9 +46,7 @@ class ImbaManagerPortal extends ImbaManagerBase {
      */
 
     public static function getInstance() {
-        if (self::$instance === null)
-            self::$instance = new self();
-        return self::$instance;
+        return new ImbaManagerPortal();
     }
 
     /**

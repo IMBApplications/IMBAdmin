@@ -6,26 +6,17 @@
 class ImbaManagerMessage extends ImbaManagerBase {
 
     /**
-     * Singleton implementation
-     */
-    private static $instance = null;
-
-    /**
      * Ctor
      */
-    protected function __construct() {
-        //parent::__construct();
-        $this->database = ImbaManagerDatabase::getInstance();
+    public function __construct() {
+        parent::__construct();
     }
 
     /*
      * Singleton init
      */
-
     public static function getInstance() {
-        if (self::$instance === null)
-            self::$instance = new self();
-        return self::$instance;
+        return new ImbaManagerMessage();
     }
 
     /**
@@ -58,7 +49,7 @@ class ImbaManagerMessage extends ImbaManagerBase {
             $message->getNew(),
             $message->getXmpp()
         ));
-        
+
         return $this->database->getLastInsertedId();
     }
 
@@ -148,7 +139,7 @@ class ImbaManagerMessage extends ImbaManagerBase {
     public function selectLastMessageTimestamp($idOpponent) {
         $return = 0;
         $query = "SELECT timestamp FROM %s Where (receiver = '%s' and sender = '%s') OR (receiver = '%s' and sender = '%s') ORDER BY timestamp DESC LIMIT 0,1;";
-        
+
         $this->database->query($query, array(
             ImbaConstants::$DATABASE_TABLES_USR_MESSAGES,
             ImbaUserContext::getUserId(),

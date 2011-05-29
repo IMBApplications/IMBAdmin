@@ -3,7 +3,7 @@
 /**
  *  Controller / Manager for Top Navigation
  *  - insert, update, delete navigation entries
- * 
+ *
  */
 class ImbaManagerNavigation extends ImbaManagerBase {
 
@@ -11,10 +11,7 @@ class ImbaManagerNavigation extends ImbaManagerBase {
      * ImbaManagerDatabase
      */
     protected $navEntriesCached = null;
-    /**
-     * Singleton implementation
-     */
-    private static $instance = null;
+
     /**
      * our portal context
      */
@@ -24,9 +21,8 @@ class ImbaManagerNavigation extends ImbaManagerBase {
     /**
      * Ctor
      */
-    protected function __construct() {
-        //parent::__construct();
-        $this->database = ImbaManagerDatabase::getInstance();
+    public function __construct() {
+        parent::__construct();
 
         $this->loadPortalContext = ImbaConstants::$SETTINGS['DEFAULT_PORTAL_ID'];
         $this->managerPortal = ImbaManagerPortal::getInstance();
@@ -50,9 +46,7 @@ class ImbaManagerNavigation extends ImbaManagerBase {
      */
 
     public static function getInstance() {
-        if (self::$instance === null)
-            self::$instance = new self();
-        return self::$instance;
+        return new ImbaManagerNavigation();
     }
 
     /**
@@ -72,11 +66,11 @@ class ImbaManagerNavigation extends ImbaManagerBase {
          * Set up the portal navigation
          */
         $portal = $this->managerPortal->selectById($portalId);
-        
+
         if ($portal == null){
             throw new Exception("Portal not found");
         }
-        
+
         foreach ($portal->getPortalEntries() as $portalEntry) {
             $showMe = false;
             if (ImbaUserContext::getUserRole() >= $portalEntry->getRole()) {
@@ -94,7 +88,7 @@ class ImbaManagerNavigation extends ImbaManagerBase {
 
     public function renderImbaAdminNavigation() {
         $moduleName = "IMBAdminModules";
-        
+
         require_once ("View/Ajax/AjaxBase.php");
         $navigations = AjaxBase::getModulesNavigation($moduleName);
 

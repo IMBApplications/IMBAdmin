@@ -2,7 +2,7 @@
 
 /**
  *  Controller / Manager for User
- *  - insert, update, delete Users 
+ *  - insert, update, delete Users
  */
 class ImbaManagerUser extends ImbaManagerBase {
 
@@ -11,17 +11,12 @@ class ImbaManagerUser extends ImbaManagerBase {
      */
     protected $usersCached = null;
     protected $usersCachedTimestamp = null;
-    /**
-     * Singleton implementation
-     */
-    private static $instance = null;
 
     /**
      * Ctor
      */
-    protected function __construct() {
-        //parent::__construct();
-        $this->database = ImbaManagerDatabase::getInstance();
+    public function __construct() {
+        parent::__construct();
     }
 
     /*
@@ -29,9 +24,7 @@ class ImbaManagerUser extends ImbaManagerBase {
      */
 
     public static function getInstance() {
-        if (self::$instance === null)
-            self::$instance = new self();
-        return self::$instance;
+        return new ImbaManagerUser();
     }
 
     /**
@@ -287,7 +280,7 @@ class ImbaManagerUser extends ImbaManagerBase {
     }
 
     /**
-     * Setting the timestamp for Current User 
+     * Setting the timestamp for Current User
      */
     public function setMeOnline() {
         if (ImbaUserContext::getLoggedIn() &&

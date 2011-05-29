@@ -10,27 +10,19 @@ class ImbaManagerPortalEntry extends ImbaManagerBase {
      * Property
      */
     protected $portalEntriesCached = null;
-    /**
-     * Singleton implementation
-     */
-    private static $instance = null;
 
     /**
      * Ctor
      */
-    protected function __construct() {
-        //parent::__construct();
-        $this->database = ImbaManagerDatabase::getInstance();
+    public function __construct() {
+        parent::__construct();
     }
 
     /*
      * Singleton init
      */
-
     public static function getInstance() {
-        if (self::$instance === null)
-            self::$instance = new self();
-        return self::$instance;
+        return new ImbaManagerPortalEntry();
     }
 
     /**
@@ -78,7 +70,7 @@ class ImbaManagerPortalEntry extends ImbaManagerBase {
             $portalEntry->getRole(),
             $portalEntry->getId()
         ));
-        
+
         $this->portalEntriesCached = null;
     }
 

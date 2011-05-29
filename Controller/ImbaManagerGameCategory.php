@@ -10,27 +10,19 @@ class ImbaManagerGameCategory extends ImbaManagerBase {
      * Property
      */
     protected $gameCategoriesCached = null;
-    /**
-     * Singleton implementation
-     */
-    private static $instance = null;
 
     /**
      * Ctor
      */
-    protected function __construct() {
-        //parent::__construct();
-        $this->database = ImbaManagerDatabase::getInstance();
+    public function __construct() {
+        parent::__construct();
     }
 
     /*
      * Singleton init
      */
-
     public static function getInstance() {
-        if (self::$instance === null)
-            self::$instance = new self();
-        return self::$instance;
+       return new ImbaManagerGameCategory();
     }
 
     /**
@@ -44,7 +36,7 @@ class ImbaManagerGameCategory extends ImbaManagerBase {
             ImbaConstants::$DATABASE_TABLES_SYS_MULTIGAMING_CATEGORIES,
             $category->getName(),
         ));
-        
+
         $this->gameCategoriesCached = null;
     }
 
@@ -60,7 +52,7 @@ class ImbaManagerGameCategory extends ImbaManagerBase {
             $category->getName(),
             $category->getId()
         ));
-        
+
         $this->gameCategoriesCached = null;
     }
 
@@ -73,7 +65,7 @@ class ImbaManagerGameCategory extends ImbaManagerBase {
             ImbaConstants::$DATABASE_TABLES_SYS_MULTIGAMING_CATEGORIES,
             $id
         ));
-        
+
         $this->gameCategoriesCached = null;
     }
 

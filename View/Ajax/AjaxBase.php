@@ -63,7 +63,7 @@ abstract class AjaxBase {
                 break;
         }
     }
-    
+
     /**
      * Gets all Navigation for existing modules
      */

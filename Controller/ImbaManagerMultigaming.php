@@ -12,30 +12,21 @@ class ImbaManagerMultigaming extends ImbaManagerBase {
     /*
      * Cache
      */
-
     protected $categoriesCached = null;
     protected $gamesCached = null;
-    /**
-     * Singleton implementation
-     */
-    private static $instance = null;
 
     /**
      * Ctor
      */
-    protected function __construct() {
-        //parent::__construct();
-        $this->database = ImbaManagerDatabase::getInstance();
+    public function __construct() {
+        parent::__construct();
     }
 
     /*
      * Singleton init
      */
-
     public static function getInstance() {
-        if (self::$instance === null)
-            self::$instance = new self();
-        return self::$instance;
+        return new ImbaManagerMultigaming();
     }
 
     /**
@@ -135,7 +126,7 @@ class ImbaManagerMultigaming extends ImbaManagerBase {
 
         return $result;
     }
-    
+
     /**
      * Inserts a Gameproperty
      */
@@ -147,7 +138,7 @@ class ImbaManagerMultigaming extends ImbaManagerBase {
             $gameProperty->getProperty()
         ));
     }
-        
+
     /**
      * Updates a Gameproperty
      */
@@ -160,14 +151,14 @@ class ImbaManagerMultigaming extends ImbaManagerBase {
             $gameProperty->getId()
         ));
     }
-    
+
     /**
      * Deletes a Gameproperty
      */
     public function deleteGameProperty(ImbaGameProperty $gameProperty) {
         $query = "DELETE FROM %s WHERE id='%s';";
         $this->database->query($query, array(
-            ImbaConstants::$DATABASE_TABLES_SYS_MULTIGAMING_GAMES_PROPERTIES,            
+            ImbaConstants::$DATABASE_TABLES_SYS_MULTIGAMING_GAMES_PROPERTIES,
             $gameProperty->getId()
         ));
     }
@@ -209,8 +200,8 @@ class ImbaManagerMultigaming extends ImbaManagerBase {
                 while ($row = $this->database->fetchRow()) {
                     array_push($game->getCategories(), $this->selectCategoryById($row["cat_id"]));
                 }
-                
-                $game->setProperties($this->selectAllGamePropertiesByGameId($game->getId()));                
+
+                $game->setProperties($this->selectAllGamePropertiesByGameId($game->getId()));
             }
 
             $this->gamesCached = $result;
@@ -236,7 +227,7 @@ class ImbaManagerMultigaming extends ImbaManagerBase {
     }
 
     /**
-     * Inserts a game 
+     * Inserts a game
      */
     public function insertGame(ImbaGame $game) {
         $query = "INSERT INTO %s (name, url, comment, icon, forumlink) VALUES ('%s', '%s', '%s', '%s', '%s');";
@@ -257,7 +248,7 @@ class ImbaManagerMultigaming extends ImbaManagerBase {
         foreach ($game->getCategories() as $category) {
             $this->insertCategory($category);
         }
-        
+
         foreach ($game->getProperties() as $properties) {
             $this->insertGameProperty($properties);
         }
@@ -266,7 +257,7 @@ class ImbaManagerMultigaming extends ImbaManagerBase {
     }
 
     /**
-     * Updates a game 
+     * Updates a game
      */
     public function updateGame(ImbaGame $game) {
         $query = "UPDATE %s SET name = '%s', url = '%s', comment = '%s', icon = '%s', forumlink = '%s' Where id = '%s';";
