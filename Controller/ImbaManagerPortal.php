@@ -30,11 +30,6 @@
 class ImbaManagerPortal extends ImbaManagerBase {
 
     /**
-     * Property
-     */
-    protected $portalsCached = null;
-
-    /**
      * Ctor
      */
     public function __construct() {
@@ -65,7 +60,7 @@ class ImbaManagerPortal extends ImbaManagerBase {
         $this->database->query($query, array());
         $row = $this->database->fetchRow();
 
-        $this->portalsCached = null;
+        $this->setManagerCache(null);
 
         return $row["LastId"];
     }
@@ -142,7 +137,7 @@ class ImbaManagerPortal extends ImbaManagerBase {
         }
 
 
-        $this->portalsCached = null;
+        $this->setManagerCache(null);
     }
 
     /**
@@ -152,7 +147,7 @@ class ImbaManagerPortal extends ImbaManagerBase {
         $query = "DELETE FROM %s Where id = '%s';";
         $this->database->query($query, array(ImbaConstants::$DATABASE_TABLES_SYS_PORTALS, $id));
 
-        $this->portalsCached = null;
+        $this->setManagerCache(null);
     }
 
     /**
@@ -166,7 +161,7 @@ class ImbaManagerPortal extends ImbaManagerBase {
         $query = "INSERT INTO %s (portal_id, name) VALUES ('%s', '%s')";
         $this->database->query($query, array(ImbaConstants::$DATABASE_TABLES_SYS_PORTALS_ALIAS, $portalid, $alias));
 
-        $this->portalsCached = null;
+        $this->setManagerCache(null);
     }
 
     /**
@@ -180,14 +175,14 @@ class ImbaManagerPortal extends ImbaManagerBase {
         $query = "DELETE FROM %s Where portal_id = '%s' AND name = '%s';";
         $this->database->query($query, array(ImbaConstants::$DATABASE_TABLES_SYS_PORTALS_ALIAS, $portalid, $alias));
 
-        $this->portalsCached = null;
+        $this->setManagerCache(null);
     }
 
     /**
      * Select all Portals
      */
     public function selectAll() {
-        if ($this->portalsCached == null) {
+        if ($this->getManagerCache() == null) {
             $managerPortalEntries = ImbaManagerPortalEntry::getInstance();
             $result = array();
 
@@ -278,9 +273,9 @@ class ImbaManagerPortal extends ImbaManagerBase {
                 array_push($result, $portal);
             }
 
-            $this->portalsCached = $result;
+            $this->setManagerCache($result);
         }
-        return $this->portalsCached;
+        return $this->getManagerCache();
     }
 
     /**

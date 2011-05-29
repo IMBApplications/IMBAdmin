@@ -7,11 +7,6 @@
 class ImbaManagerPortalEntry extends ImbaManagerBase {
 
     /**
-     * Property
-     */
-    protected $portalEntriesCached = null;
-
-    /**
      * Ctor
      */
     public function __construct() {
@@ -45,7 +40,7 @@ class ImbaManagerPortalEntry extends ImbaManagerBase {
         $this->database->query($query, array());
         $row = $this->database->fetchRow();
 
-        $this->portalEntriesCached = null;
+        $this->setManagerCache(null);
 
         return $row["LastId"];
     }
@@ -71,7 +66,7 @@ class ImbaManagerPortalEntry extends ImbaManagerBase {
             $portalEntry->getId()
         ));
 
-        $this->portalEntriesCached = null;
+        $this->setManagerCache(null);
     }
 
     /**
@@ -81,14 +76,14 @@ class ImbaManagerPortalEntry extends ImbaManagerBase {
         $query = "DELETE FROM %s Where id = '%s';";
         $this->database->query($query, array(ImbaConstants::$DATABASE_TABLES_SYS_PORTALS_PORTALENTRIES, $id));
 
-        $this->portalEntriesCached = null;
+        $this->setManagerCache(null);
     }
 
     /**
      * Select all PortalEntries
      */
     public function selectAll() {
-        if ($this->portalEntriesCached == null) {
+        if ($this->getManagerCache() == null) {
             $result = array();
 
             $query = "SELECT * FROM %s WHERE 1 ORDER BY name ASC;";
@@ -107,9 +102,9 @@ class ImbaManagerPortalEntry extends ImbaManagerBase {
 
                 array_push($result, $entry);
             }
-            $this->portalEntriesCached = $result;
+            $this->setManagerCache($result);
         }
-        return $this->portalEntriesCached;
+        return $this->getManagerCache();
     }
 
     /**

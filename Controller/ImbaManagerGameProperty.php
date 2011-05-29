@@ -7,11 +7,6 @@
 class ImbaManagerGameProperty extends ImbaManagerBase {
 
     /**
-     * Fields
-     */
-    protected $propertiesCached = null;
-
-    /**
      * Ctor
      */
     public function __construct() {
@@ -68,7 +63,7 @@ class ImbaManagerGameProperty extends ImbaManagerBase {
      * Select all properties
      */
     public function selectAll() {
-        if ($this->propertiesCached == null) {
+        if ($this->getManagerCache() == null) {
             $result = array();
 
             $query = "SELECT * FROM %s order by property ASC;";
@@ -82,10 +77,10 @@ class ImbaManagerGameProperty extends ImbaManagerBase {
 
                 array_push($result, $property);
             }
-            $this->propertiesCached = $result;
+            $this->setManagerCache($result);
         }
 
-        return $this->propertiesCached;
+        return $this->getManagerCache();
     }
 
     /**

@@ -7,12 +7,6 @@
 class ImbaManagerUser extends ImbaManagerBase {
 
     /**
-     * ImbaManagerDatabase
-     */
-    protected $usersCached = null;
-    protected $usersCachedTimestamp = null;
-
-    /**
      * Ctor
      */
     public function __construct() {
@@ -51,7 +45,7 @@ class ImbaManagerUser extends ImbaManagerBase {
      * Selects a list of Users into an array w/o yourself
      */
     public function selectAllUser() {
-        if ($this->usersCached == null) {
+        if ($this->getManagerCache() == null) {
             // Only fetch Users with role <> banned
             $result = array();
 
@@ -119,11 +113,10 @@ class ImbaManagerUser extends ImbaManagerBase {
                 }
             }
 
-            $this->usersCachedTimestamp = time();
-            $this->usersCached = $result;
+            $this->setManagerCache($result);
         }
 
-        return $this->usersCached;
+        return $this->getManagerCache();
     }
 
     /**
@@ -156,8 +149,7 @@ class ImbaManagerUser extends ImbaManagerBase {
             $user->getRole()
         ));
 
-        $this->usersCached = null;
-        $this->usersCachedTimestamp = null;
+        $this->setManagerCache(null);
     }
 
     /**
@@ -209,8 +201,7 @@ class ImbaManagerUser extends ImbaManagerBase {
             $this->database->query($query, array(ImbaConstants::$DATABASE_TABLES_USR_MULTIGAMING_INTERCEPT_GAMES_PROPERTY, $user->getId(), $gamePropertyValue->getProperty()->getId(), $gamePropertyValue->getValue()));
         }
 
-        $this->usersCached = null;
-        $this->usersCachedTimestamp = null;
+        $this->setManagerCache(null);
     }
 
     /**
@@ -220,8 +211,7 @@ class ImbaManagerUser extends ImbaManagerBase {
         $query = "DELETE FROM  " . ImbaConstants::$DATABASE_TABLES_SYS_USER_PROFILES . " Where openid = '" . $openId . "';";
         $this->database->query($query);
 
-        $this->usersCached = null;
-        $this->usersCachedTimestamp = null;
+        $this->setManagerCache(null);
     }
 
     /**

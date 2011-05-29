@@ -7,11 +7,6 @@
 class ImbaManagerGameCategory extends ImbaManagerBase {
 
     /**
-     * Property
-     */
-    protected $gameCategoriesCached = null;
-
-    /**
      * Ctor
      */
     public function __construct() {
@@ -37,7 +32,7 @@ class ImbaManagerGameCategory extends ImbaManagerBase {
             $category->getName(),
         ));
 
-        $this->gameCategoriesCached = null;
+        $this->setManagerCache(null);
     }
 
     /**
@@ -53,7 +48,7 @@ class ImbaManagerGameCategory extends ImbaManagerBase {
             $category->getId()
         ));
 
-        $this->gameCategoriesCached = null;
+        $this->setManagerCache(null);
     }
 
     /**
@@ -66,14 +61,14 @@ class ImbaManagerGameCategory extends ImbaManagerBase {
             $id
         ));
 
-        $this->gameCategoriesCached = null;
+        $this->setManagerCache(null);
     }
 
     /**
      * Select all categories
      */
     public function selectAll() {
-        if ($this->gameCategoriesCached == null) {
+        if ($this->getManagerCache() == null) {
             $result = array();
 
             $query = "SELECT * FROM %s WHERE 1 ORDER BY name ASC;";
@@ -87,10 +82,10 @@ class ImbaManagerGameCategory extends ImbaManagerBase {
                 array_push($result, $category);
             }
 
-            $this->gameCategoriesCached = $result;
+            $this->setManagerCache($result);
         }
 
-        return $this->gameCategoriesCached;
+        return $this->getManagerCache();
     }
 
     /**

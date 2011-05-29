@@ -11,11 +11,6 @@
 class ImbaManagerUserRole extends ImbaManagerBase {
 
     /**
-     * ImbaManagerDatabase
-     */
-    protected $rolesCached = null;
-
-    /**
      * Ctor
      */
     public function __construct() {
@@ -86,7 +81,7 @@ class ImbaManagerUserRole extends ImbaManagerBase {
      * Select all roles
      */
     public function selectAll() {
-        if ($this->rolesCached == null) {
+        if ($this->getManagerCache() == null) {
             $result = array();
 
             $query = "SELECT * FROM %s WHERE 1 ORDER BY role ASC;";
@@ -105,10 +100,10 @@ class ImbaManagerUserRole extends ImbaManagerBase {
                 array_push($result, $role);
             }
 
-            $this->rolesCached = $result;
+            $this->setManagerCache($result);
         }
 
-        return $this->rolesCached;
+        return $this->getManagerCache();
     }
 
     /**

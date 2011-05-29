@@ -8,11 +8,6 @@
 class ImbaManagerNavigation extends ImbaManagerBase {
 
     /**
-     * ImbaManagerDatabase
-     */
-    protected $navEntriesCached = null;
-
-    /**
      * our portal context
      */
     private $loadPortalContext = null;

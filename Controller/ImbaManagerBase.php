@@ -13,6 +13,7 @@ class ImbaManagerBase {
      * Cache
      */
     protected $managerCache = null;
+    protected $managerCacheExtended = null;
 
     /**
      * Ctor
@@ -27,6 +28,14 @@ class ImbaManagerBase {
 
     public function setManagerCache($managerCache) {
         $this->managerCache = $managerCache;
+    }
+
+    public function getManagerCacheExtended() {
+        return $this->managerCacheExtended;
+    }
+
+    public function setManagerCacheExtended($managerCacheExtended) {
+        $this->managerCacheExtended = $managerCacheExtended;
     }
 
 }

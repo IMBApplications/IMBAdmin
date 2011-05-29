@@ -5,9 +5,6 @@
  */
 class ImbaManagerLog extends ImbaManagerBase {
 
-    protected $logsCached = null;
-    protected $logsCachedTimestamp = null;
-
     /**
      * Ctor
      */
@@ -63,7 +60,7 @@ class ImbaManagerLog extends ImbaManagerBase {
     }
 
     public function selectAll() {
-        if ($this->logsCached == null) {
+        if ($this->getManagerCache() == null) {
             $query = "SELECT * FROM %s WHERE 1 ORDER BY id DESC;";
             $this->database->query($query, array(ImbaConstants::$DATABASE_TABLES_SYS_SYSTEMMESSAGES));
 
@@ -82,11 +79,10 @@ class ImbaManagerLog extends ImbaManagerBase {
                 array_push($messages, $log);
                 unset($log);
             }
-            $this->logsCachedTimestamp = time();
-            $this->logsCached = $messages;
+            $this->setManagerCache($messages);
         }
 
-        return $this->logsCached;
+        return $this->getManagerCache();
     }
 
     /**

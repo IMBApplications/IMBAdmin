@@ -7,11 +7,6 @@
 class ImbaManagerGame extends ImbaManagerBase {
 
     /**
-     * Property
-     */
-    protected $gamesCached = null;
-
-    /**
      * Ctor
      */
     public function __construct() {
@@ -56,7 +51,7 @@ class ImbaManagerGame extends ImbaManagerBase {
             ));
         }
 
-        $this->gamesCached = null;
+        $this->setManagerCache(null);
 
         return $game;
     }
@@ -102,7 +97,7 @@ class ImbaManagerGame extends ImbaManagerBase {
             }
         }
 
-        $this->gamesCached = null;
+        $this->setManagerCache(null);
     }
 
     /**
@@ -118,14 +113,14 @@ class ImbaManagerGame extends ImbaManagerBase {
         $query = "DELETE FROM %s Where game_id = '%s';";
         $this->database->query($query, array(ImbaConstants::$DATABASE_TABLES_SYS_MULTIGAMING_INTERCEPT_GAMES_CATEGORY, $id));
 
-        $this->gamesCached = null;
+        $this->setManagerCache(null);
     }
 
     /**
      * Select all Games
      */
     public function selectAll() {
-        if ($this->gamesCached == null) {
+        if ($this->getManagerCache() == null) {
             $result = array();
 
             $query = "SELECT * FROM %s WHERE 1 ORDER BY name ASC;";
@@ -163,10 +158,10 @@ class ImbaManagerGame extends ImbaManagerBase {
                 $game->setProperties(ImbaManagerGameProperty::getInstance()->selectAllByGameId($game->getId()));
             }
 
-            $this->gamesCached = $result;
+            $this->setManagerCache($result);
         }
 
-        return $this->gamesCached;
+        return $this->getManagerCache();
     }
 
     /**

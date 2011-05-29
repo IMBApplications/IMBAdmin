@@ -9,11 +9,6 @@
  * CREATE TABLE  `oom_openid_multig_game_properties` (`id` INT NOT NULL AUTO_INCREMENT ,`game_id` INT NOT NULL ,`property` VARCHAR( 255 ) NOT NULL ,PRIMARY KEY (  `id` )) ENGINE = MYISAM
  */
 class ImbaManagerMultigaming extends ImbaManagerBase {
-    /*
-     * Cache
-     */
-    protected $categoriesCached = null;
-    protected $gamesCached = null;
 
     /**
      * Ctor
@@ -33,7 +28,7 @@ class ImbaManagerMultigaming extends ImbaManagerBase {
      * Selects all Gaming Categories
      */
     public function selectAllCategories() {
-        if ($this->categoriesCached == null) {
+        if ($this->getManagerCacheExtended() == null) {
             $query = "SELECT * FROM %s order by name DESC;";
             $this->database->query($query, array(
                 ImbaConstants::$DATABASE_TABLES_SYS_MULTIGAMING_CATEGORIES
@@ -47,21 +42,21 @@ class ImbaManagerMultigaming extends ImbaManagerBase {
                 array_push($result, $category);
             }
 
-            $this->categoriesCached = $result;
+            $this->setManagerCacheExtended($result);
         }
 
-        return $this->categoriesCached;
+        return $this->getManagerCacheExtended();
     }
 
     /**
      * Selecting a Categorie by Id
      */
     public function selectCategoryById($gameCategoryId) {
-        if ($this->categoriesCached == null) {
+        if ($this->getManagerCacheExtended() == null) {
             $this->selectAllCategories();
         }
 
-        foreach ($this->categoriesCached as $category) {
+        foreach ($this->getManagerCacheExtended() as $category) {
             if ($category->getId() == $gameCategoryId) {
                 return $category;
             }
@@ -79,7 +74,7 @@ class ImbaManagerMultigaming extends ImbaManagerBase {
             ImbaConstants::$DATABASE_TABLES_SYS_MULTIGAMING_CATEGORIES,
             $gameCategory->getName()
         ));
-        $this->categoriesCached = null;
+        $this->setManagerCacheExtended(null);
     }
 
     /**
@@ -92,7 +87,7 @@ class ImbaManagerMultigaming extends ImbaManagerBase {
             $gameCategory->getName(),
             $gameCategory->getId()
         ));
-        $this->categoriesCached = null;
+        $this->setManagerCacheExtended(null);
     }
 
     /**
@@ -105,7 +100,7 @@ class ImbaManagerMultigaming extends ImbaManagerBase {
             $gameCategory->getId()
         ));
 
-        $this->categoriesCached = null;
+        $this->setManagerCacheExtended(null);
     }
 
     /**
@@ -167,7 +162,7 @@ class ImbaManagerMultigaming extends ImbaManagerBase {
      * Selects all Games
      */
     public function selectAllGames() {
-        if ($this->gamesCached == null) {
+        if ($this->getManagerCache() == null) {
             $query = "SELECT * FROM %s order by name DESC;";
             $this->database->query($query, array(
                 ImbaConstants::$DATABASE_TABLES_SYS_MULTIGAMING_GAMES
@@ -204,20 +199,20 @@ class ImbaManagerMultigaming extends ImbaManagerBase {
                 $game->setProperties($this->selectAllGamePropertiesByGameId($game->getId()));
             }
 
-            $this->gamesCached = $result;
+            $this->setManagerCache($result);
         }
-        return $this->gamesCached;
+        return $this->getManagerCache();
     }
 
     /**
      * Selecting a Game by Id
      */
     public function selectGameById($id) {
-        if ($this->gamesCached == null) {
+        if ($this->getManagerCache() == null) {
             $this->selectAllGames();
         }
 
-        foreach ($this->gamesCached as $game) {
+        foreach ($this->getManagerCache() as $game) {
             if ($game->getId() == $id) {
                 return $game;
             }
@@ -253,7 +248,7 @@ class ImbaManagerMultigaming extends ImbaManagerBase {
             $this->insertGameProperty($properties);
         }
 
-        $this->gamesCached = null;
+        $this->setManagerCache(null);
     }
 
     /**
@@ -282,7 +277,7 @@ class ImbaManagerMultigaming extends ImbaManagerBase {
             $this->database->query($query, array(ImbaConstants::$DATABASE_TABLES_SYS_MULTIGAMING_INTERCEPT_GAMES_CATEGORY, $game->getId(), $category->getId()));
         }
 
-        $this->gamesCached = null;
+        $this->setManagerCache(null);
     }
 
     /**
@@ -298,7 +293,7 @@ class ImbaManagerMultigaming extends ImbaManagerBase {
         $query = "DELETE FROM %s Where game_id = '%s';";
         $this->database->query($query, array(ImbaConstants::$DATABASE_TABLES_SYS_MULTIGAMING_GAMES_PROPERTIES, $game->getId()));
 
-        $this->gamesCached = null;
+        $this->setManagerCache(null);
     }
 
     /**

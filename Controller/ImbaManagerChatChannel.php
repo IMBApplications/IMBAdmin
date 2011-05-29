@@ -7,11 +7,6 @@
 class ImbaManagerChatChannel extends ImbaManagerBase {
 
     /**
-     * Property
-     */
-    protected $chatChannelsCached = null;
-   
-    /**
      * Ctor
      */
     public function __construct() {
@@ -38,14 +33,14 @@ class ImbaManagerChatChannel extends ImbaManagerBase {
             "0"
         ));
 
-        $this->chatChannelsCached = null;
+        $this->setManagerCache(null);
     }
 
     /**
      * Select all Channels for logged in User
      */
     public function selectAll() {
-        if ($this->chatChannelsCached == null) {
+        if ($this->getManagerCache() == null) {
             $result = array();
 
             $query = "SELECT * FROM %s ORDER BY name ASC;";
@@ -74,10 +69,10 @@ class ImbaManagerChatChannel extends ImbaManagerBase {
                 }
             }
 
-            $this->chatChannelsCached = $result;
+            $this->setManagerCache($result);
         }
 
-        return $this->chatChannelsCached;
+        return $this->getManagerCache();
     }
 
     /**

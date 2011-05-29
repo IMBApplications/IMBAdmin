@@ -7,11 +7,6 @@
 class ImbaManagerChatMessage extends ImbaManagerBase {
 
     /**
-     * Property
-     */
-    protected $chatMessagesCached = null;
-
-    /**
      * Ctor
      */
     public function __construct() {
