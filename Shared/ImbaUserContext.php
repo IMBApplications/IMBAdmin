@@ -5,7 +5,7 @@
 
 class ImbaUserContext {
 
-    //user session basics    
+    //user session basics
     public static function getLoggedIn() {
         return $_SESSION["IUC_loggedIn"];
     }

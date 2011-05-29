@@ -11,6 +11,7 @@ class ImbaPortal extends ImbaBase {
     protected $portalEntries = array();
     protected $portalModules = array();
     protected $comment = null;
+    protected $portalAuth = null;
 
     public function getName() {
         return $this->name;
@@ -40,7 +41,7 @@ class ImbaPortal extends ImbaBase {
         $this->aliases = $aliases;
     }
 
-    public function addAlias($alias){
+    public function addAlias($alias) {
         array_push($this->aliases, $alias);
     }
 
@@ -74,6 +75,14 @@ class ImbaPortal extends ImbaBase {
 
     public function setComment($comment) {
         $this->comment = $comment;
+    }
+
+    public function getPortalAuth() {
+        return $this->portalAuth;
+    }
+
+    public function setPortalAuth($portalAuth) {
+        $this->portalAuth = $portalAuth;
     }
 
 }

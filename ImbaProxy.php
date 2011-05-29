@@ -58,7 +58,7 @@ $set['facility'] = $_POST['facility'];
 unset($_POST['facility']);
 
 /**
- * Toggle debug mode 
+ * Toggle debug mode
  */
 if ($_POST['toggleProxyDebug'] == "true") {
     if ($_SESSION['debugMode'] == "false") {
@@ -95,17 +95,31 @@ if (empty($set['facility'])) {
     echo "Error:No facility recieved";
     exit;
 } else {
-    if ($set['facility'] == "ajax") {
-        $set['requestUrl'] = ImbaSharedFunctions::getTrustRoot() . ImbaConstants::$WEB_AJAX_MAIN_PATH;
-    } elseif ($set['facility'] == "auth") {
-        $set['requestUrl'] = ImbaSharedFunctions::getTrustRoot() . ImbaConstants::$WEB_AUTH_MAIN_PATH;
-    } elseif ($set['facility'] == "logout") {
-        $set['requestUrl'] = ImbaSharedFunctions::getTrustRoot() . ImbaConstants::$WEB_AUTH_MAIN_PATH . "?logout=true";
-    } elseif ($set['facility'] == "test") {
-        $set['requestUrl'] = ImbaSharedFunctions::getTrustRoot() . "Tools/ProxySessionTest.php";
-    } else {
-        echo "Error:Unknown facility (" . $set['facility'] . ")";
-        exit;
+    switch ($set['facility']) {
+        case "ajax":
+            $set['requestUrl'] = ImbaSharedFunctions::getTrustRoot() . ImbaConstants::$WEB_AJAX_MAIN_PATH;
+            break;
+
+        case "auth":
+            $set['requestUrl'] = ImbaSharedFunctions::getTrustRoot() . ImbaConstants::$WEB_AUTH_MAIN_PATH;
+            break;
+
+        case "logout":
+            $set['requestUrl'] = ImbaSharedFunctions::getTrustRoot() . ImbaConstants::$WEB_AUTH_MAIN_PATH . "?logout=true";
+            break;
+
+        case "test":
+            $set['requestUrl'] = ImbaSharedFunctions::getTrustRoot() . "Tools/ProxySessionTest.php";
+            break;
+
+        case "me":
+            $set['requestUrl'] = ImbaSharedFunctions::getTrustRoot() . "ImbaMe.php";
+            break;
+
+        default:
+            echo "Error:Unknown facility (" . $set['facility'] . ")";
+            exit;
+            break;
     }
 }
 
@@ -124,7 +138,7 @@ if (empty($set['facility'])) {
 //array_unique($_POST);
 $set['postvars'] = '';
 foreach ($_POST as $name => $value) {
-    $set['postvars'] .= $name . '=' . $value. '&';
+    $set['postvars'] .= $name . '=' . $value . '&';
 }
 
 /**
@@ -153,7 +167,7 @@ if ($mySession != false) {
   curl_setopt($curlSession, CURLOPT_COOKIEJAR, $set['cookieFilePath']);
   curl_setopt($curlSession, CURLOPT_COOKIEFILE, $set['cookieFilePath']);
   }
- * 
+ *
  */
 curl_setopt($curlSession, CURLOPT_HEADER, true);
 curl_setopt($curlSession, CURLOPT_FOLLOWLOCATION, true);
@@ -161,9 +175,9 @@ curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, true);
 /*
  * if ($requestHeaders) {
  *
-    curl_setopt($curlSession, CURLOPT_HTTPHEADER, $requestHeaders);
-}
- * 
+  curl_setopt($curlSession, CURLOPT_HTTPHEADER, $requestHeaders);
+  }
+ *
  */
 curl_setopt($curlSession, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"]);
 curl_setopt($curlSession, CURLOPT_REFERER, $_SERVER["HTTP_REFERER"]);
@@ -277,7 +291,7 @@ if ($set['facility'] == "test") {
       setcookie("PHPSESSID", "", time() - 3600);
       session_destroy();
       session_write_close();
-     * 
+     *
      */
     session_start();
     session_regenerate_id();
@@ -297,7 +311,7 @@ if ($set['facility'] == "test") {
       $tmpLogOut .= "ee: no session found (error)\n";
       ImbaSharedFunctions::writeProxyLog($tmpLogOut);
       }
-     * 
+     *
      */
     /**
      * Display the headers
@@ -324,7 +338,7 @@ if ($set['facility'] == "test") {
 
 /**
  * TMP STUFF. DELETE AS SOON AS PROXY WORKS
- * 
+ *
 
   /**
  * Helper function for headers if we are not on a apache server

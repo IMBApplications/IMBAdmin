@@ -16,11 +16,11 @@ var currentUserOpenid = null;
 setInterval('refreshUsersOnline()', 10000);
 
 // Test if user is online, if then show chat, else hide
-$(document).ready(function() {    
+$(document).ready(function() {
     $.ajaxSetup({
         async: true
     });
-    
+
     // new menu stuff
     $('.fg-button').hover(
         function(){
@@ -32,9 +32,9 @@ $(document).ready(function() {
         );
     $('#ImbaMenu2').menu({
         content: $('#ImbaMenu2').next().html(),
-        flyOut: true                        
+        flyOut: true
     });
- 
+
     $("#imbaSsoOpenIdSubmit").button();
     $("#imbaSsoOpenIdSubmit").click(function () {
         if ($("#imbaSsoOpenId").val() == "") {
@@ -61,13 +61,13 @@ $(document).ready(function() {
         return true;
     });
     $("#imbaMessageTextSubmit").button();
-    
+
     // setting old openid
     var oldOpenId = unescape(decodeURIComponent(readCookie("ImbaSsoLastLoginName")));
     if (oldOpenId != null && oldOpenId != "null" && oldOpenId != ""){
         $("#imbaSsoOpenId").val(oldOpenId);
     }
-    
+
     // Checking if user is online
     $.post(ajaxEntry, {
         secSession: phpSessionID,
@@ -75,7 +75,7 @@ $(document).ready(function() {
         submodule: "IMBAdminModules",
         ajaxmethod: "getCurrentUserStatus"
     }, function (response){
-        if (checkReturn(response) == false) {  
+        if (checkReturn(response) == false) {
             if (response == "Need to register") {
                 setLoggedIn(false);
                 loadImbaAdminDefaultModule();
@@ -84,7 +84,7 @@ $(document).ready(function() {
             } else {
                 setLoggedIn(true);
                 $("#imbaSsoShowNickname").html('Hallo ' + response);
-                
+
                 // Firsttime show users online
                 refreshUsersOnline();
             }
@@ -94,7 +94,7 @@ $(document).ready(function() {
     /**
      * Menu
      */
-    $("ul.subnav").parent().append("<span></span>"); 
+    $("ul.subnav").parent().append("<span></span>");
     $("ul.topnav li span").click(function() {
         var subNav = $(this).parent().find("ul.subnav");
         if (subNav.is(":hidden")){
@@ -124,11 +124,11 @@ $(document).ready(function() {
             hideMenu();
             menuIsThere = false;
         }
-        
+
         return false;
     });
-    
-    
+
+
     /*
      * ImbAdmin Window Tabs Module
      */
@@ -138,19 +138,19 @@ $(document).ready(function() {
         $.each($("#imbaContentNav a"), function (k, v) {
             if (k == ui.index){
                 var moduleTmp = v.toString().split("#");
-                
+
                 tmpModuleTabId = "#" + moduleTmp[1];
-                
+
                 var data = {
                     secSession: phpSessionID,
                     module: currentModule,
                     ajaxmethod: moduleTmp[1]
                 };
-                loadImbaAdminTabContent(data, tmpModuleTabId); 
+                loadImbaAdminTabContent(data, tmpModuleTabId);
             }
         });
     });
-    
+
     /*
      * ImbaGame Window Tabs Module
      */
@@ -160,9 +160,9 @@ $(document).ready(function() {
         $.each($("#imbaGameNav a"), function (k, v) {
             if (k == ui.index){
                 var gameTmp = v.toString().split("#");
-                
+
                 tmpGameTabId = "#" + gameTmp[1];
-                
+
                 var data = {
                     action: "game",
                     game: currentGame,
@@ -170,11 +170,11 @@ $(document).ready(function() {
                     secSession: phpSessionID,
                     request: gameTmp[1]
                 };
-                loadImbaGameTabContent(data, tmpGameTabId); 
+                loadImbaGameTabContent(data, tmpGameTabId);
             }
         });
     });
-    
+
     /**
      * Setting up the Dialog for the ImbaAdmin
      */
@@ -197,7 +197,7 @@ $(document).ready(function() {
      * Load current active Portal
      */
     loadImbaPortal(-1);
-    
+
     //Display potential Error Message
     if (imbaAuthReferer.length > 0) {
         $("#imbaSsoLoginInner").hide();
@@ -214,13 +214,13 @@ $(document).ready(function() {
         });
     }
 });
-   
+
 /**
  * refreshing the users online tag cloud
- */ 
+ */
 function refreshUsersOnline(){
     if (isUserLoggedIn){
-        $.post(ajaxEntry, {           
+        $.post(ajaxEntry, {
             secSession: phpSessionID,
             module: "AjaxUser",
             submodule: "IMBAdminModules",
@@ -229,7 +229,7 @@ function refreshUsersOnline(){
             //create list for tag links
             $("#imbaUsersOnline").html("");
             $("<ul>").attr("id", "imbaUsersOnlineTagList").appendTo("#imbaUsersOnline");
-                
+
             //create tags
             $.each($.parseJSON(response), function(key, value){
                 //create item
@@ -239,7 +239,7 @@ function refreshUsersOnline(){
                 li.css("fontSize", value.fontsize);
                 li.css("color", value.color);
                 li.attr("title", "Start Chat with " + value.name);
-            
+
                 li.click(function (){
                     //createChatWindow(value.name, value.id);
                     createTab(value.name, value.id, "1");
@@ -315,15 +315,15 @@ function showMenu() {
     $("#imbaMenu").show("slide", {
         direction: "right"
     });
-    
+
     if (isSystemInErrorState == false) {
         $("#imbaSsoLoginInner").show("slide", {
             direction: "right"
-        });    
-    
+        });
+
         $("#imbaUsersOnline").show("slide", {
             direction: "up"
-        });   
+        });
     }
 }
 
@@ -358,8 +358,8 @@ function loadImbaPortal(portalId) {
         params: JSON.stringify({
             "id": portalId
         })
-    }, function (response){        
-        if (checkReturn(response) == false) {            
+    }, function (response){
+        if (checkReturn(response) == false) {
             var currentPortal = $.parseJSON(response);
             if (portalId != null) {
                 $.jGrowl('<img src="' + currentPortal.icon + '" style="width: 24px; height: 24px; vertical-align: middle; padding: 3px;" /> <big>' + currentPortal.name + '</big>', {
@@ -370,6 +370,17 @@ function loadImbaPortal(portalId) {
             $("#imbaNavigationPortal").html(currentPortal.navigation);
             $("#imbaSsoLogoImage").attr('src', currentPortal.icon);
             $("#document").attr('title', currentPortal.name + ' Portal');
-        }
+
+            // Send auth post
+            if (isUserLoggedIn) {
+                if (currentPortal.portalauth != ""){
+                    $.jGrowl("Starte Auth nach: " + currentPortal.portalauth);
+                    $.post(currentPortal.portalauth, function(data) {
+                        if (data != "") $.jGrowl(data);
+                        else $.jGrowl("bereits angemeldet");
+                    });
+                }
+            }
+    }
     });
 }

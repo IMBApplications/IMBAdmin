@@ -358,6 +358,9 @@ if ($_GET["logout"] == true || $_POST["logout"] == true) {
                 setcookie("ImbaSsoLastLoginName", "", (time() - 3600));
                 setcookie("ImbaSsoLastLoginName", $currentUser->getNickname(), (time() + (60 * 60 * 24 * 30)));
 
+                //include("/../wordpress/wp-load.php");
+                //wp_setcookie("admin");
+
                 $managerUser->setMeOnline();
                 ImbaUserContext::setImbaErrorMessage("Du bist angemeldet als " . $currentUser->getNickname());
             }
@@ -406,7 +409,7 @@ if ($_GET["logout"] == true || $_POST["logout"] == true) {
 } else {
     ImbaUserContext::setWaitingForVerify("");
     /**
-     * we are logged in! everithing is ok, we have a running session 
+     * we are logged in! everithing is ok, we have a running session
      * and we have a party here
      * - set cookie with logged in openid for autofill login box
      * - redirect back to page

@@ -16,7 +16,8 @@
                     "name": $("#myPortalName").val(),
                     "comment": $("#myPortalComment").val(),
                     "portalentries": $("#myPortalEntries").val(),
-                    "portalmodules": $("#myPortalModules").val()
+                    "portalmodules": $("#myPortalModules").val(),
+                    "portalauth": $("#myPortalAuth").val()
                 })
             }, function(response){
                 if (response != "Ok"){
@@ -114,6 +115,10 @@
             <tr>
                 <td>Comment:</td>
                 <td><textarea id="myPortalComment" name="comment" rows="4" cols="50">{$comment}</textarea></td>
+            </tr>
+            <tr>
+                <td>Portal Auth:</td>
+                <td><input id="myPortalAuth" type="text" name="icon" value="{$portalauth}" /></td>
             </tr>
             <tr>
                 <td style="vertical-align: top;">Aliases</td>

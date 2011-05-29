@@ -88,7 +88,7 @@ class AjaxAdministration extends AjaxBase {
     /**
      * updates a portal
      * @param type $params ({"portalid": "1", "icon": "iconurl", "name": "Name",
-      "comment": "Comment", "portalentries": ["1", "2", "3"],
+      "comment": "Comment", "portalauth": "portal_auth", "portalentries": ["1", "2", "3"],
       "portalmodules": ["mod1", "mod2", "mod3"]})
      */
     public function updatePortal($params) {
@@ -97,6 +97,7 @@ class AjaxAdministration extends AjaxBase {
         $icon = $params->icon;
         $name = $params->name;
         $comment = $params->comment;
+        $portalauth = $params->portalauth;
         $portalentries = $params->portalentries;
         $portalmodules = $params->portalmodules;
 
@@ -105,6 +106,7 @@ class AjaxAdministration extends AjaxBase {
         $portal->setIcon($icon);
         $portal->setName($name);
         $portal->setComment($comment);
+        $portal->setPortalAuth($portalauth);
         $portal->setPortalEntries(array());
         $portal->setPortalModules(array());
 
@@ -145,6 +147,7 @@ class AjaxAdministration extends AjaxBase {
         $this->smarty->assign("id", $portal->getId());
         $this->smarty->assign("name", $portal->getName());
         $this->smarty->assign("comment", $portal->getComment());
+        $this->smarty->assign("portalauth", $portal->getPortalAuth());
         $this->smarty->assign("icon", $portal->getIcon());
 
         $this->smartyPortalEntries = array();

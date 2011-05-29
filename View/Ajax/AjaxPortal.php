@@ -54,9 +54,13 @@ class AjaxPortal extends AjaxBase {
             $portal = $this->managerPortal->selectById(ImbaUserContext::getPortalContext());
             $navContent = $this->managerNavigation->renderPortalNavigation(ImbaUserContext::getPortalContext());
         }
-        
+
         //get currently active portal and send the data back
-        echo json_encode(array("name" => $portal->getName(), "icon" => ImbaSharedFunctions::fixWebPath($portal->getIcon()), "navigation" => $navContent));
+        echo json_encode(array(
+            "name" => $portal->getName(),
+            "icon" => ImbaSharedFunctions::fixWebPath($portal->getIcon()),
+            "navigation" => $navContent,
+            "portalauth" => $portal->getPortalAuth()));
     }
 
 }

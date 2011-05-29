@@ -14,6 +14,7 @@
   `navitems` text NOT NULL,
   `icon` varchar(200) NOT NULL,
   `comment` text NOT NULL,
+  `portal_auth` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
@@ -85,7 +86,7 @@ class ImbaManagerPortal extends ImbaManagerBase {
 
         // update the portal itself
         $query = "UPDATE %s SET ";
-        $query .= "name = '%s', icon = '%s', comment = '%s' ";
+        $query .= "name = '%s', icon = '%s', comment = '%s', portal_auth = '%s' ";
         $query .= "WHERE id = '%s';";
 
         $this->database->query($query, array(
@@ -93,6 +94,7 @@ class ImbaManagerPortal extends ImbaManagerBase {
             $portal->getName(),
             $portal->getIcon(),
             $portal->getComment(),
+            $portal->getPortalAuth(),
             $portal->getId()
         ));
 
@@ -244,6 +246,7 @@ class ImbaManagerPortal extends ImbaManagerBase {
                 $portal->setId($row["id"]);
                 $portal->setName($row["name"]);
                 $portal->setComment($row["comment"]);
+                $portal->setPortalAuth($row["portal_auth"]);
                 $portal->setIcon($row["icon"]);
 
                 /**
@@ -304,6 +307,20 @@ class ImbaManagerPortal extends ImbaManagerBase {
                 return $portal;
         }
         return null;
+    }
+
+    /**
+     * Returns all aliases from all portals
+     */
+    public function getAllAliases() {
+        $query = "SELECT * FROM %s WHERE 1;";
+        $this->database->query($query, array(ImbaConstants::$DATABASE_TABLES_SYS_PORTALS_ALIAS));
+        $aliases = array();
+        while ($row = $this->database->fetchRow()) {
+            array_push($aliases, $row['name']);
+        }
+
+        return array_unique($aliases);
     }
 
 }
