@@ -4,12 +4,13 @@
  * Single point of Ajax entry
  *
  */
-session_start();
-header('Access-Control-Allow-Origin: *');
-
 require_once ("Controller/Include.php");
 require_once ("Shared/Include.php");
 require_once ("View/Ajax/AjaxBase.php");
+
+session_start();
+header('Access-Control-Allow-Origin: *');
+
 
 try {
     // Check if module and ajaxmethod is set

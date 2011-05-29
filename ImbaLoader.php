@@ -1,15 +1,14 @@
 <?php
 
-header('Access-Control-Allow-Origin: *');
-
-session_set_cookie_params(3600);
-session_start();
-
-
 require_once 'ImbaConstants.php';
 require_once 'Shared/Include.php';
 require_once 'Model/Include.php';
 require_once 'Controller/Include.php';
+
+header('Access-Control-Allow-Origin: *');
+
+session_set_cookie_params(3600);
+session_start();
 
 $smarty = ImbaSharedFunctions::newSmarty();
 $smarty->assign("thrustRoot", ImbaSharedFunctions::getTrustRoot());

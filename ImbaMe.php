@@ -4,10 +4,10 @@
  * If a request comes from any of our portals, tell them the current logged in
  * username
  */
-session_start();
-
 require_once 'Controller/Include.php';
 require_once 'Shared/Include.php';
+
+session_start();
 
 $ref = ImbaSharedFunctions::getDomain($_SERVER["HTTP_REFERER"]);
 $ref = str_replace("http://", "", $ref);
