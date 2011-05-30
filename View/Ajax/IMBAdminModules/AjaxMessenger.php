@@ -49,13 +49,13 @@ class AjaxMessenger extends AjaxBase {
      * - current users in open chats
      * - new messages in open chats
      * - ping open chats
-     * @param type $params ({"channelids":["1","2","3","4"], "sinces":["1","2","3","4"]})
+     * @param type $params ({"channelids":["1","2","3","4"], "channelsinces":["1","2","3","4"]})
      */
     public function getAllNewsForMe($params) {
         // load new messages
         $resultConversations = array();
         foreach ($this->managerMessage->selectMyNewMessages() as $conversations) {
-            $conversation = $this->managerMessage->selectAllByOpponentId($conversations["id"]);
+            $conversation = $this->managerMessage->selectAllByOpponentId($conversations["id"], 1);
 
             $newMessages = array();
 
@@ -78,7 +78,7 @@ class AjaxMessenger extends AjaxBase {
         $resultMessagesInChannel = array();
         for ($i = 0; $i < count($params->channelids); $i++) {
             $channelId = $params->channelids[$i];
-            $channelSince = $params->sinces[$i];
+            $channelSince = $params->channelsinces[$i];
             $channel = $this->managerChatChannel->selectById($channelId);
 
             // load current users in open chats
@@ -152,7 +152,7 @@ class AjaxMessenger extends AjaxBase {
      */
     public function loadMessages($params) {
         $reciever = $params->reciever;
-        $conversation = $this->managerMessage->selectAllByOpponentId($reciever);
+        $conversation = $this->managerMessage->selectAllByOpponentId($reciever, -1);
 
         $result = array();
         foreach ($conversation as $message) {
@@ -162,7 +162,6 @@ class AjaxMessenger extends AjaxBase {
 
             array_push($result, array("time" => $time, "sender" => $sender, "message" => $msg));
         }
-        $result = array_reverse($result);
         echo json_encode($result);
     }
 
@@ -237,7 +236,7 @@ class AjaxMessenger extends AjaxBase {
     }
 
     /**
-     * Pings the User into a channel 
+     * Pings the User into a channel
      * @param type $param ({"channelids":["1","2","3","4"]})
      */
     public function pingChats($params) {

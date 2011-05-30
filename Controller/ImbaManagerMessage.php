@@ -76,8 +76,11 @@ class ImbaManagerMessage extends ImbaManagerBase {
 
     /**
      * Selects a complete Conversation between me and an Opponent
+     * $since == +1 => all new
+     * $since == 0 => all Messages
+     * $since == -1 => give me the last 10 Messages
      */
-    public function selectAllByOpponentId($idOpponent, $lines = 10) {
+    public function selectAllByOpponentId($idOpponent, $since = 0) {
         // cachen all users
         $managerUser = ImbaManagerUser::getInstance();
         $managerUser->selectAll();
@@ -85,11 +88,18 @@ class ImbaManagerMessage extends ImbaManagerBase {
         /**
          * if $lines is 0, return all messages
          */
-        $tmpLimit = "";
-        if ($lines != 0) {
-            $tmpLimit = " LIMIT 0, " . $lines;
+        if ($since == 0) {
+            $tmpIdSince = "";
+            $tmpLimit = "";
+        } else if ($since == -1) {
+            $tmpIdSince = "";
+            $tmpLimit = " LIMIT 0, 10 ";
+        } else {
+            $tmpIdSince = " AND new = '1'";
+            $tmpLimit = "";
         }
-        $query = "SELECT * FROM %s Where (sender = '%s' and receiver = '%s') or (sender = '%s' and receiver = '%s') order by id DESC" . $tmpLimit . ";";
+
+        $query = "SELECT * FROM %s Where (sender = '%s' and receiver = '%s') or (sender = '%s' and receiver = '%s')  " . $tmpIdSince . " ORDER BY id ASC " . $tmpLimit . ";";
         $this->database->query($query, array(
             ImbaConstants::$DATABASE_TABLES_USR_MESSAGES,
             ImbaUserContext::getUserId(),

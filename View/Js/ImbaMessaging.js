@@ -21,16 +21,16 @@ var tabMessageSinceId = new Array();
 /**
  * Types of the Tabs
  */
-var tab_type_info = "0";
-var tab_type_message = "1";
-var tab_type_chat = "2";
+var tab_type_info       = "0";
+var tab_type_message    = "1";
+var tab_type_chat       = "2";
 
 /**
  * A Tab can store the following informations
  */
-var tab_data_type = "tab_data_type";
-var tab_data_name = "tab_data_name";
-var tab_data_id = "tab_data_id";
+var tab_data_type       = "tab_data_type";
+var tab_data_name       = "tab_data_name";
+var tab_data_id         = "tab_data_id";
 
 // Reload Tabs every 2000 ms
 setInterval('refreshMessaging()', 2000);
