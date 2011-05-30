@@ -34,24 +34,24 @@ var tab_data_id = "tab_data_id";
 
 // Reload Tabs every 2000 ms
 setInterval('refreshMessaging()', 2000);
-   
+
 /**
  * Check for news and update the tabs
  */
-function refreshMessaging() {    
+function refreshMessaging() {
     if (isUserLoggedIn){
         // find the chats
         var chats = new Array();
         var sinceids = new Array();
         var selectedTabIndex = getSelectedTabIndex();
         var reloadCurrentTab = false;
-    
-        // Walk through all the open tabs    
+
+        // Walk through all the open tabs
         $.each($("#imbaMessages a"), function (k, v) {
             // leave out info tab
             if (k > 0){
                 var tabData = getTabDataFromTabIndex(k, tab_data_type);
-            
+
                 // Check if its a chat
                 if (tabData == tab_type_chat){
                     chats.push(tabData);
@@ -59,39 +59,39 @@ function refreshMessaging() {
                 }
             }
         });
-        
+
         $.post(ajaxEntry, {
             secSession: phpSessionID,
             module: "AjaxMessenger",
             submodule: "IMBAdminModules",
             ajaxmethod: "getAllNewsForMe",
             params: JSON.stringify({
-                "channelids": chats, 
+                "channelids": chats,
                 "sinces": sinceids
             })
-        }, 
+        },
         function(response) {
             var responseData = $.parseJSON(response);
             var gotNewMessages = false;
-            
+
             /**
              * Got new messages
              */
-            $.each(responseData.newmessages, function(key, val) {                                
-                // check if there is a open window with key as id and type is message                
+            $.each(responseData.newmessages, function(key, val) {
+                // check if there is a open window with key as id and type is message
                 var tabIndex = getTabIndexFromId(key, tab_type_message);
-                
+
                 if (tabIndex != null) {
-                    var htmlConversation = "";
-                    
+                    var htmlConversation = tabMessageCache[tabIndex];
+
                     $.each(val, function(k, v) {
                         htmlConversation += createMessage(v.time, v.sender, v.message);
                     });
-                
+
                     // Set the content of the tab
                     tabMessageCache[tabIndex] = htmlConversation;
                     reloadCurrentTab = true;
-                                        
+
                     // Mark conversation as read
                     $.post(ajaxEntry, {
                         secSession: phpSessionID,
@@ -103,10 +103,10 @@ function refreshMessaging() {
                         })
                     });
                 }
-                
+
                 gotNewMessages = true;
             });
-            
+
             // Show icon for new message
             if (gotNewMessages){
                 $("#imbaGotMessage").effect("pulsate", {
@@ -115,49 +115,49 @@ function refreshMessaging() {
             } else {
                 $("#imbaGotMessage").hide();
             }
-            
+
             /**
              * Update Users in Channel
              */
-            $.each(responseData.usersinchannel, function(key, val) {          
+            $.each(responseData.usersinchannel, function(key, val) {
                 // check if there is a open window with key as id and type is chat
                 var tabIndex = getTabIndexFromId(key, tab_type_chat);
-                                    
+
                 // should never be null though
                 if (tabIndex != null) {
                     var htmlUsers = "";
                     $.each(val, function(k, v) {
                         htmlUsers += v + "<br/>";
                     });
-                
+
                     // Set the users in channel
                     tabUsers[tabIndex] = htmlUsers;
                     reloadCurrentTab = true;
                 }
             });
-            
+
             /**
              * Update Messages in Channels
              */
-            $.each(responseData.newchatmessages, function(key, val) { 
+            $.each(responseData.newchatmessages, function(key, val) {
                 // check if there is a open window with key as id and type is chat
                 var tabIndex = getTabIndexFromId(key, tab_type_chat);
-                                
+
                 // should never be null though
                 if (tabIndex != null) {
                     var htmlConversation = tabMessageCache[tabIndex];
-                                        
-                    $.each(val, function(k, v) {                        
-                        htmlConversation += createMessage(v.time, v.sender, v.message);                    
+
+                    $.each(val, function(k, v) {
+                        htmlConversation += createMessage(v.time, v.sender, v.message);
                         tabMessageSinceId[tabIndex] = v.id;
                     });
-                
+
                     // Set the content of the tab
                     tabMessageCache[tabIndex] = htmlConversation;
                     reloadCurrentTab = true;
                 }
             });
-            
+
             if (reloadCurrentTab){
                 loadChatWindowContent(selectedTabIndex);
             }
@@ -185,17 +185,17 @@ function createMessage(time, sender, message){
         time += ":"
         time += (tmp.getSeconds() < 9) ? "0" + tmp.getSeconds() : tmp.getSeconds();
     }
-    
+
     if (sender == null) {
         sender = currentUserName;
     }
-    
+
     return "<div>"
     + time + " "
     + sender + ": "
     + message + "</div>";
 }
-   
+
 /**
  * Create the info tab
  */
@@ -206,20 +206,20 @@ function createInfoTab(){
     $("#imbaMessagesTab_" + tabCount).data(tab_data_type, tab_type_info);
     $("#imbaMessagesTab_" + tabCount).data(tab_data_name, "Info");
     $('#imbaMessages').tabs("select", countOpenTabs);
-    
+
     // Set the content of the info tab
     tabMessageCache.push("\
         <div style='margin-left: 10px'>\
             <p><b>/w</b> &lt;Username&gt; zum Chatten mit einem User</p>\
             <p><b>/j</b> zum Chatten in einem Channel</p>\
         </div>");
-    
+
     // for sync reasons
-    tabMessageSinceId.push(-1);    
+    tabMessageSinceId.push(-1);
     tabUsers.push("");
-    
+
     loadChatWindowContent(tabCount);
-    
+
     tabCount++;
 }
 
@@ -256,7 +256,7 @@ function createTab(name, data, type) {
         $("#imbaMessagesTab_" + tabCount).data(tab_data_id, data);
         $("#imbaMessagesTab_" + tabCount).data(tab_data_name, name);
         $("#imbaMessagesTab_" + tabCount).data(tab_data_type, type);
-        
+
         // load initial
         if (type == tab_type_chat) {
             $.post(ajaxEntry, {
@@ -272,7 +272,7 @@ function createTab(name, data, type) {
                 var htmlConversation = "";
                 var htmlUsers = "";
                 var responsJSON = $.parseJSON(response);
-                    
+
                 $.each(responsJSON.messages, function(key, val) {
                     htmlConversation += "<div>"
                     + val.time + " "
@@ -281,19 +281,19 @@ function createTab(name, data, type) {
 
                     tabMessageSinceId[countOpenTabs] = val.id;
                 });
-                
+
                 $.each(responsJSON.users, function(key, val) {
                     htmlUsers += val + "<br/>";
                 });
-                
+
                 // Set the content of the info tab
                 tabMessageCache[countOpenTabs] = htmlConversation;
-                tabUsers.push(htmlUsers); 
+                tabUsers.push(htmlUsers);
 
                 $("#imbaChatConversation").attr({
                     scrollTop: $("#imbaChatConversation").attr("scrollHeight")
                 });
-                    
+
                 $('#imbaMessages').tabs("select", countOpenTabs);
             });
         } else if (type == tab_type_message) {
@@ -316,16 +316,16 @@ function createTab(name, data, type) {
                     + val.sender + ": "
                     + val.message + "</div>";
                 });
-                
+
                 // Set the content of the info tab
                 tabMessageCache.push(htmlConversation);
-                tabMessageSinceId.push(-1);    
-                tabUsers.push("You<br />" + name);                
+                tabMessageSinceId.push(-1);
+                tabUsers.push("You<br />" + name);
 
                 $("#imbaChatConversation").attr({
                     scrollTop: $("#imbaChatConversation").attr("scrollHeight")
                 });
-                
+
                 $('#imbaMessages').tabs("select", countOpenTabs);
             });
 
@@ -340,7 +340,7 @@ function createTab(name, data, type) {
                 })
             });
         }
-                
+
         tabCount++;
     }
 }
@@ -351,11 +351,11 @@ function createTab(name, data, type) {
 function loadChatWindowContent(tabIndex) {
     $("#imbaChatConversation").html(tabMessageCache[tabIndex]);
     $("#imbaChatConversationUserlist").html(tabUsers[tabIndex]);
-    
+
     $("#imbaChatConversation").attr({
         scrollTop: $("#imbaChatConversation").attr("scrollHeight")
     });
-                
+
 }
 
 /**
@@ -387,7 +387,7 @@ function getTabIndexFromId(tab_data, tab_type){
     var result = null;
     $.each($("#imbaMessages a"), function (k, v) {
         var tmp = v.toString().split("#");
-                
+
         if ($("#" + tmp[1]).data(tab_data_id) == tab_data && $("#" + tmp[1]).data(tab_data_type) == tab_type) {
             result = k;
         }
@@ -397,11 +397,11 @@ function getTabIndexFromId(tab_data, tab_type){
 }
 
 /**
- * Sends a message 
+ * Sends a message
  */
 function sendMessage(msgText, tabIndex) {
     if (tabIndex == 0) return;
-    
+
     // Get data from the tab
     var tabData = getTabDataFromTabIndex(tabIndex, tab_data_id);
     var tabType = getTabDataFromTabIndex(tabIndex, tab_data_type);
@@ -434,7 +434,7 @@ function sendMessage(msgText, tabIndex) {
     else {
         return;
     }
-    
+
     // Send post
     $.post(ajaxEntry, httpPostData , function(response) {
         if (response.substr(0, 2) == "Ok"){
@@ -455,16 +455,16 @@ function sendMessage(msgText, tabIndex) {
  * When Browser is closed => disconnect from all chat channels
  */
 $(window).bind('beforeunload', function() {
-    //alert("ByeBye");    
+    //alert("ByeBye");
     });
-    
+
 /**
  * jQuery DOM-Document has been loaded
  */
 $(document).ready(function() {
     // Load user
     loadMyImbaUser();
-    
+
     // Creats the Dialog around the tabs
     $("#imbaMessagesDialog").dialog({
         position:  ['left','bottom'] ,
@@ -473,7 +473,7 @@ $(document).ready(function() {
         height: 270,
         width: 600
     });
-    
+
     // Setting the hights of the chatcontent and userlist
     $("#imbaChatConversation").height(140);
     $("#imbaChatConversationUserlist").height(140);
@@ -482,16 +482,16 @@ $(document).ready(function() {
     $("#imbaOpenMessaging").click(function(){
         $("#imbaMessagesDialog").dialog("open");
     });
-    
+
     // Load the Tabs an inits the Variable for them and create info tab
     $msgTabs = $('#imbaMessages').tabs();
     createInfoTab();
-    
+
     // Setting a Template for the tabs, making them closeable
     $msgTabs.tabs({
         tabTemplate: "<li><a href='#{href}'>#{label}</a><div class='ui-icon ui-icon-info' style='cursor: pointer; float: left;'>Info</div><div class='ui-icon ui-icon-close'>Remove Tab</div></li>"
     });
-    
+
     // Tab selected change Event (Reload content of that chat window
     $msgTabs.bind("tabsselect", function(event, ui) {
         // Load the Content
@@ -504,8 +504,8 @@ $(document).ready(function() {
     // Close icon: removing the tab on click
     $("#imbaMessages div.ui-icon-close").live("click", function() {
         var index = $("li", $msgTabs).index($(this).parent());
-        
-        // reorganize the tabs cache        
+
+        // reorganize the tabs cache
         for (var i = index; i < countOpenTabs; i++) {
             tabMessageCache[i] = tabMessageCache[i+1];
             tabUsers[i] = tabUsers[i+1];
@@ -516,11 +516,11 @@ $(document).ready(function() {
         if (countOpenTabs > 0) {
             countOpenTabs--;
         }
-        
+
         // load content of new selected Tab
         loadChatWindowContent(getSelectedTabIndex());
     });
-    
+
     // info icon: showing the ImbAdmin module
     $("#imbaMessages div.ui-icon-info").live("click", function() {
         $.jGrowl("User info / Chat history.");
@@ -532,18 +532,18 @@ $(document).ready(function() {
             showUserProfile(getTabDataFromTabIndex(index));
         }*/
     });
-    
+
     // User submits the textbox
     $("#imbaMessageTextSubmit").click(function(){
         var tabIndex = getSelectedTabIndex();
         var msgText = $("#imbaMessageText").val();
 
         sendMessage(msgText, tabIndex);
-        
+
         $("#imbaMessageText").attr("value", "");
         return false;
     });
-    
+
     // autocomplete for Chat
     $("#imbaMessageText").autocomplete({
         source: function( request, response ) {
@@ -615,7 +615,7 @@ $(document).ready(function() {
 
     // Hide new Message Icon and create Click
     $("#imbaGotMessage").hide().click(function(){
-        //showTabsWithNewMessage();        
+        //showTabsWithNewMessage();
         $("#imbaGotMessage").hide();
     });
 });
