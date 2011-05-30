@@ -21,6 +21,13 @@ $(document).ready(function() {
         async: true
     });
 
+    var tmpURL = window.location.toString().split("/");
+    var tmpURL2 = "";
+    for (var i=0; i<(tmpURL.length-1); i++) {
+        tmpURL2 += tmpURL[i] + "/";
+    }
+
+
     $("#imbaSsoOpenIdSubmit").button();
     $("#imbaSsoOpenIdSubmit").click(function () {
         if ($("#imbaSsoOpenId").val() == "") {
@@ -31,7 +38,7 @@ $(document).ready(function() {
             $.jGrowl('Betrete das System...', {
                 header: 'Knock, Knock, Neo!'
             });
-            $("#imbaSsoOpenIdLoginReferer").attr('value', window.location);
+            $("#imbaSsoOpenIdLoginReferer").attr('value', tmpURL2);
             $("#imbaSsoLoginForm").submit();
             return true;
         }
@@ -42,7 +49,7 @@ $(document).ready(function() {
         $.jGrowl('Verlasse das System...', {
             header: 'Knock, Knock, Neo!'
         });
-        $("#imbaSsoOpenIdLogoutReferer").attr('value', window.location);
+        $("#imbaSsoOpenIdLogoutReferer").attr('value', tmpURL2);
         $("#imbaSsoLogoutForm").submit();
         return true;
     });
