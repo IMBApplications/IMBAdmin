@@ -15,6 +15,7 @@ class ImbaManagerMessage extends ImbaManagerBase {
     /*
      * Singleton init
      */
+
     public static function getInstance() {
         return new ImbaManagerMessage();
     }
@@ -27,7 +28,7 @@ class ImbaManagerMessage extends ImbaManagerBase {
         if ($message->getMessage() == null || trim($message->getMessage()) == "") {
             throw new Exception("No Message!");
         }
-        if ($message->getSender() == null ) {
+        if ($message->getSender() == null) {
             throw new Exception("No Sender!");
         }
 
@@ -85,28 +86,32 @@ class ImbaManagerMessage extends ImbaManagerBase {
         $managerUser = ImbaManagerUser::getInstance();
         $managerUser->selectAll();
 
-        /**
-         * if $lines is 0, return all messages
-         */
         if ($since == 0) {
-            $tmpIdSince = "";
-            $tmpLimit = "";
+            $query = "SELECT * FROM %s WHERE (sender = '%s' and receiver = '%s') or (sender = '%s' and receiver = '%s') ORDER BY id ASC;";
+            $this->database->query($query, array(
+                ImbaConstants::$DATABASE_TABLES_USR_MESSAGES,
+                ImbaUserContext::getUserId(),
+                $idOpponent,
+                $idOpponent,
+                ImbaUserContext::getUserId()
+            ));
         } else if ($since == -1) {
-            $tmpIdSince = "";
-            $tmpLimit = " LIMIT 0, 10 ";
+            $query = "SELECT * FROM %s WHERE (sender = '%s' and receiver = '%s') or (sender = '%s' and receiver = '%s') ORDER BY id ASC LIMIT 0, 10;";
+            $this->database->query($query, array(
+                ImbaConstants::$DATABASE_TABLES_USR_MESSAGES,
+                ImbaUserContext::getUserId(),
+                $idOpponent,
+                $idOpponent,
+                ImbaUserContext::getUserId()
+            ));
         } else {
-            $tmpIdSince = " AND new = '1'";
-            $tmpLimit = "";
+            $query = "SELECT * FROM %s WHERE sender = '%s' and receiver = '%s' and new = '1'  ORDER BY id ASC;";
+            $this->database->query($query, array(
+                ImbaConstants::$DATABASE_TABLES_USR_MESSAGES,
+                $idOpponent,
+                ImbaUserContext::getUserId()
+            ));
         }
-
-        $query = "SELECT * FROM %s Where (sender = '%s' and receiver = '%s') or (sender = '%s' and receiver = '%s')  " . $tmpIdSince . " ORDER BY id ASC " . $tmpLimit . ";";
-        $this->database->query($query, array(
-            ImbaConstants::$DATABASE_TABLES_USR_MESSAGES,
-            ImbaUserContext::getUserId(),
-            $idOpponent,
-            $idOpponent,
-            ImbaUserContext::getUserId()
-        ));
 
         $result = new ArrayObject();
         while ($row = $this->database->fetchRow()) {
@@ -176,7 +181,7 @@ class ImbaManagerMessage extends ImbaManagerBase {
         $this->database->query($query, array(
             ImbaConstants::$DATABASE_TABLES_USR_MESSAGES,
             ImbaUserContext::getUserId()
-            ));
+        ));
 
         $result = array();
         while ($row = $this->database->fetchRow()) {
