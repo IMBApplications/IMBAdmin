@@ -15,7 +15,7 @@ include library javascript files
 *}
 {fetch file='Libs/json2/json2.js'}
 {fetch file='Libs/jQuery/js/jquery-1.5.2.min.js'}
-{fetch file='Libs/jQuery/js/jquery-ui-git.js'}
+{fetch file='Libs/jquery-ui/ui/minified/jquery-ui.min.js'}
 {fetch file='Libs/DataTables/media/js/jquery.dataTables.min.js'}
 {fetch file='Libs/jquery_jeditable/jquery.jeditable.js'}
 {fetch file='Libs/jgrowl/jquery.jgrowl_compressed.js'}

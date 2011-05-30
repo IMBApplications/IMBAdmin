@@ -1,0 +1,426 @@
+
+<ul class="UIAPIPlugin-toc">
+<li><a href="#overview">Overview</a></li>
+<li><a href="#options">Options</a></li>
+<li><a href="#events">Events</a></li>
+<li><a href="#methods">Methods</a></li>
+<li><a href="#theming">Theming</a></li>
+</ul>
+<div class="UIAPIPlugin">
+  <h1>jQuery UI Menu</h1>
+  <div id="overview">
+    <h2 class="top-header">Overview</h2>
+    <div id="overview-main">
+        Menu ...
+    </div>
+    <div id="overview-dependencies">
+        <h3>Dependencies</h3>
+        <ul>
+<li>jQuery UI Core</li>
+<li>jQuery UI Widget</li>
+</ul>
+    </div>
+    <div id="overview-example">
+        <h3>Example</h3>
+        <div id="overview-example" class="example">
+<ul><li><a href="#demo"><span>Demo</span></a></li><li><a href="#source"><span>View Source</span></a></li></ul>
+<p><div id="demo" class="tabs-container" rel="300">
+Transform a simple list with a few links into a themable menu widget.<br />
+</p>
+<pre>$(&quot;ul&quot;).menu();
+</pre>
+<p></div><div id="source" class="tabs-container">
+</p>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;link href=&quot;http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;/&gt;
+  &lt;script src=&quot;http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js&quot;&gt;&lt;/script&gt;
+  
+&lt;link href=&quot;http://view.jqueryui.com/menu/themes/base/jquery.ui.menu.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;/&gt;
+&lt;script src=&quot;http://view.jqueryui.com/menu/ui/jquery.ui.menu.js&quot;&gt;&lt;/script&gt;
+
+  &lt;script&gt;
+  $(document).ready(function() {
+    $(&quot;ul&quot;).menu();
+  });
+  &lt;/script&gt;
+&lt;/head&gt;
+&lt;body style="font-size:62.5%;"&gt;
+  &lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Aberdeen&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Ada&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Adamsville&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Addyston&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#&quot;&gt;Adelphi&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p></div>
+</p><p></div>
+    </div>
+  </div>
+  <div id="options">
+    <h2 class="top-header">Options</h2>
+    <ul class="options-list">
+      
+<li class="option" id="option-disabled">
+  <div class="option-header">
+    <h3 class="option-name"><a href="#option-disabled">disabled</a></h3>
+    <dl>
+      <dt class="option-type-label">Type:</dt>
+        <dd class="option-type">Boolean</dd>
+      
+      <dt class="option-default-label">Default:</dt>
+        <dd class="option-default">false</dd>
+      
+    </dl>
+  </div>
+  <div class="option-description">
+    <p>Disables (true) or enables (false) the menu. Can be set when initialising (first creating) the menu.</p>
+  </div>
+  <div class="option-examples">
+    <h4>Code examples</h4>
+    <dl class="option-examples-list">
+    
+<dt>
+  Initialize a menu with the <code>disabled</code> option specified.
+</dt>
+<dd>
+<pre><code>$( ".selector" ).menu({ disabled: true });</code></pre>
+</dd>
+
+    
+<dt>
+  Get or set the <code>disabled</code> option, after init.
+</dt>
+<dd>
+<pre><code>//getter
+var disabled = $( ".selector" ).menu( "option", "disabled" );
+//setter
+$( ".selector" ).menu( "option", "disabled", true );</code></pre>
+</dd>
+
+    </dl>
+  </div>
+</li>
+
+incomplete
+    </ul>
+  </div>
+  <div id="events">
+    <h2 class="top-header">Events</h2>
+    <ul class="events-list">
+      
+<li class="event" id="event-focus">
+  <div class="event-header">
+    <h3 class="event-name"><a href="#event-focus">focus</a></h3>
+    <dl>
+      <dt class="event-type-label">Type:</dt>
+        <dd class="event-type">menufocus</dd>
+    </dl>
+  </div>
+  <div class="event-description">
+    <p>Triggered when a menu item gets mouse (on hover) or keyboard (navigation with cursor keys) focus. ui.item refers to a jQuery object containing the focused menu item (a li-element)</p>
+  </div>
+  <div class="event-examples">
+    <h4>Code examples</h4>
+    <dl class="event-examples-list">
+    
+<dt>
+  Supply a callback function to handle the <code>focus</code> event as an init option.
+</dt>
+<dd>
+<pre><code>$( &quot;.selector&quot; ).menu({
+   focus: function(event, ui) { ... }
+});</code></pre>
+</dd>
+
+    
+<dt>
+  Bind to the <code>focus</code> event by type: <code>menufocus</code>.
+</dt>
+<dd>
+<pre><code>$( &quot;.selector&quot; ).bind( &quot;menufocus&quot;, function(event, ui) {
+  ...
+});</code></pre>
+</dd>
+
+    </dl>
+  </div>
+</li>
+
+
+<li class="event" id="event-blur">
+  <div class="event-header">
+    <h3 class="event-name"><a href="#event-blur">blur</a></h3>
+    <dl>
+      <dt class="event-type-label">Type:</dt>
+        <dd class="event-type">menublur</dd>
+    </dl>
+  </div>
+  <div class="event-description">
+    <p>Triggered a menu item looses focus.</p>
+  </div>
+  <div class="event-examples">
+    <h4>Code examples</h4>
+    <dl class="event-examples-list">
+    
+<dt>
+  Supply a callback function to handle the <code>blur</code> event as an init option.
+</dt>
+<dd>
+<pre><code>$( &quot;.selector&quot; ).menu({
+   blur: function(event, ui) { ... }
+});</code></pre>
+</dd>
+
+    
+<dt>
+  Bind to the <code>blur</code> event by type: <code>menublur</code>.
+</dt>
+<dd>
+<pre><code>$( &quot;.selector&quot; ).bind( &quot;menublur&quot;, function(event, ui) {
+  ...
+});</code></pre>
+</dd>
+
+    </dl>
+  </div>
+</li>
+
+
+<li class="event" id="event-select">
+  <div class="event-header">
+    <h3 class="event-name"><a href="#event-select">select</a></h3>
+    <dl>
+      <dt class="event-type-label">Type:</dt>
+        <dd class="event-type">menuselect</dd>
+    </dl>
+  </div>
+  <div class="event-description">
+    <p>Triggered when a menu item was selected. ui.item refers to a jQuery object containing the selected menu item (a li-element).</p>
+  </div>
+  <div class="event-examples">
+    <h4>Code examples</h4>
+    <dl class="event-examples-list">
+    
+<dt>
+  Supply a callback function to handle the <code>select</code> event as an init option.
+</dt>
+<dd>
+<pre><code>$( &quot;.selector&quot; ).menu({
+   select: function(event, ui) { ... }
+});</code></pre>
+</dd>
+
+    
+<dt>
+  Bind to the <code>select</code> event by type: <code>menuselect</code>.
+</dt>
+<dd>
+<pre><code>$( &quot;.selector&quot; ).bind( &quot;menuselect&quot;, function(event, ui) {
+  ...
+});</code></pre>
+</dd>
+
+    </dl>
+  </div>
+</li>
+
+    </ul>
+  </div>
+  <div id="methods">
+    <h2 class="top-header">Methods</h2>
+    <ul class="methods-list">
+      
+<li class="method" id="method-destroy">
+  <div class="method-header">
+    <h3 class="method-name"><a href="#method-destroy">destroy</a></h3>
+    <dl>
+      <dt class="method-signature-label">Signature:</dt>
+        <dd class="method-signature">.menu( "destroy"
+
+
+
+
+
+
+
+)</dd>
+    </dl>
+  </div>
+  <div class="method-description">
+    <p>Remove the menu functionality completely. This will return the element back to its pre-init state.</p>
+  </div>
+</li>
+
+
+<li class="method" id="method-disable">
+  <div class="method-header">
+    <h3 class="method-name"><a href="#method-disable">disable</a></h3>
+    <dl>
+      <dt class="method-signature-label">Signature:</dt>
+        <dd class="method-signature">.menu( "disable"
+
+
+
+
+
+
+
+)</dd>
+    </dl>
+  </div>
+  <div class="method-description">
+    <p>Disable the menu.</p>
+  </div>
+</li>
+
+
+<li class="method" id="method-enable">
+  <div class="method-header">
+    <h3 class="method-name"><a href="#method-enable">enable</a></h3>
+    <dl>
+      <dt class="method-signature-label">Signature:</dt>
+        <dd class="method-signature">.menu( "enable"
+
+
+
+
+
+
+
+)</dd>
+    </dl>
+  </div>
+  <div class="method-description">
+    <p>Enable the menu.</p>
+  </div>
+</li>
+
+
+<li class="method" id="method-option">
+  <div class="method-header">
+    <h3 class="method-name"><a href="#method-option">option</a></h3>
+    <dl>
+      <dt class="method-signature-label">Signature:</dt>
+        <dd class="method-signature">.menu( "option"
+
+, optionName
+
+, <span class="optional">[</span>value<span class="optional">] </span>
+
+
+
+)</dd>
+    </dl>
+  </div>
+  <div class="method-description">
+    <p>Get or set any menu option. If no value is specified, will act as a getter.</p>
+  </div>
+</li>
+
+
+<li class="method" id="method-option">
+  <div class="method-header">
+    <h3 class="method-name"><a href="#method-option">option</a></h3>
+    <dl>
+      <dt class="method-signature-label">Signature:</dt>
+        <dd class="method-signature">.menu( "option"
+
+, options
+
+
+
+
+
+)</dd>
+    </dl>
+  </div>
+  <div class="method-description">
+    <p>Set multiple menu options at once by providing an options object.</p>
+  </div>
+</li>
+
+
+<li class="method" id="method-widget">
+  <div class="method-header">
+    <h3 class="method-name"><a href="#method-widget">widget</a></h3>
+    <dl>
+      <dt class="method-signature-label">Signature:</dt>
+        <dd class="method-signature">.menu( "widget"
+
+
+
+
+
+
+
+)</dd>
+    </dl>
+  </div>
+  <div class="method-description">
+    <p>Returns the .ui-menu element.</p>
+  </div>
+</li>
+
+
+<li class="method" id="method-refresh">
+  <div class="method-header">
+    <h3 class="method-name"><a href="#method-refresh">refresh</a></h3>
+    <dl>
+      <dt class="method-signature-label">Signature:</dt>
+        <dd class="method-signature">.menu( "refresh"
+
+
+
+
+
+
+
+)</dd>
+    </dl>
+  </div>
+  <div class="method-description">
+    <p>Renders all non-menu-items as menu-items, called once by _create. Call whenever adding or replacing items in the menu via DOM operations.</p>
+  </div>
+</li>
+
+incomplete, too
+    </ul>
+  </div>
+  <div id="theming">
+    <h2 class="top-header">Theming</h2>
+    <p>The jQuery UI Menu plugin uses the jQuery UI CSS Framework to style its look and feel, including colors and background textures. We recommend using the ThemeRoller tool to create and download custom themes that are easy to build and maintain.
+</p>
+  <p>If a deeper level of customization is needed, there are widget-specific classes referenced within the jquery.ui.menu.css stylesheet that can be modified. These classes are highlighed in bold below.
+</p>
+    
+  <h3>Sample markup with jQuery UI CSS Framework classes</h3>
+  &lt;ul tabindex="0" aria-activedescendant="ui-active-menuitem" role="listbox" class="ui-menu ui-widget ui-widget-content ui-corner-all"&gt;<br />
+&nbsp;&nbsp;&lt;li role="menuitem" class="ui-menu-item"&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;a tabindex="-1" class="ui-corner-all" href="#"&gt;Text&lt;/a&gt;<br />
+&nbsp;&nbsp;&lt;/li&gt;<br />
+&lt;/ul&gt;
+  <p class="theme-note">
+    <strong>
+      Note: This is a sample of markup generated by the menu plugin, not markup you should use to create a menu. The only markup needed for that is &lt;ul&gt;<br />
+&nbsp;&nbsp;&lt;li&gt;&lt;a href="#"&gt;Text&lt;/a&gt;&lt;/li&gt;<br />
+&lt;/ul&gt;.
+    </strong>
+  </p>
+
+  </div>
+</div>
+
+</p><!-- 
+Pre-expand include size: 20002 bytes
+Post-expand include size: 24060 bytes
+Template argument size: 10022 bytes
+Maximum: 2097152 bytes
+-->
+
+<!-- Saved in parser cache with key jqdocs_docs:pcache:idhash:3795-1!1!0!!en!2 and timestamp 20100619154256 -->

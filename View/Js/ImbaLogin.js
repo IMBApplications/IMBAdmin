@@ -367,6 +367,6 @@ function loadImbaPortal(portalId) {
                     });
                 }
             }
-    }
+        }
     });
 }
