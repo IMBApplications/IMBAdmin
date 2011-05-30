@@ -27,6 +27,7 @@ $(document).ready(function() {
         tmpURL2 += tmpURL[i] + "/";
     }
 
+    $.jGrowl(tmpURL2);
 
     $("#imbaSsoOpenIdSubmit").button();
     $("#imbaSsoOpenIdSubmit").click(function () {
