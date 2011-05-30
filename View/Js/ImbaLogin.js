@@ -21,20 +21,6 @@ $(document).ready(function() {
         async: true
     });
 
-    // new menu stuff
-    $('.fg-button').hover(
-        function(){
-            $(this).removeClass('ui-state-default').addClass('ui-state-focus');
-        },
-        function(){
-            $(this).removeClass('ui-state-focus').addClass('ui-state-default');
-        }
-        );
-    $('#ImbaMenu2').menu({
-        content: $('#ImbaMenu2').next().html(),
-        flyOut: true
-    });
-
     $("#imbaSsoOpenIdSubmit").button();
     $("#imbaSsoOpenIdSubmit").click(function () {
         if ($("#imbaSsoOpenId").val() == "") {
