@@ -154,11 +154,6 @@ if ($_GET["logout"] == true || $_POST["logout"] == true) {
                     $authRequest->setUserId($myUser->getId());
                     $authRequest->setHash(ImbaSharedFunctions::getRandomString());
                     $authRequest->setRealm(ImbaSharedFunctions::getTrustRoot());
-
-                    $testString = "Schema: #" . ImbaSharedFunctions::getScheme() . "#";
-                    $testString .= "Server: #" . $_SERVER['SERVER_NAME'] . "#";
-                    $testString .= "dirname($_SERVER[PHP_SELF]): #" . dirname($_SERVER['PHP_SELF']) . "#";
-
                     $authRequest->setReturnTo(ImbaSharedFunctions::getReturnTo($authRequest->getHash()));
                     $authRequest->setType($authMethod);
                     $authRequest->setDomain($_POST['imbaSsoOpenIdLoginReferer']);
