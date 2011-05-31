@@ -54,6 +54,11 @@ function redirectTo($line, $url, $message = "") {
     // Discover if we need to do the html redirect and make it so
     //if (headers_sent()) {
         $smarty = ImbaSharedFunctions::newSmarty();
+        $url = str_replace("%3A", ":", $url);
+        $url = str_replace("%2F", "/", $url);
+        $url = str_replace("%3F", "?", $url);
+        $url = str_replace("%3D", "=", $url);
+
         $smarty->assign("redirectUrl", $url);
         $smarty->assign("redirectDomain", $myDomain);
         $smarty->assign("internalCode", $line);
