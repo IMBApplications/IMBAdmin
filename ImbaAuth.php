@@ -162,7 +162,7 @@ if ($_GET["logout"] == true || $_POST["logout"] == true) {
                     $managerAuthRequest->insert($authRequest);
 
                     // Try to do the first step of the openid authentication steps
-                    writeAuthLog("Determing Auth style for " . $openid);
+                    writeAuthLog("Determing Auth style for #" . $openid . "#");
 
                     try {
                         $redirectUrl = $managerOpenId->openidAuth($openid, $authRequest->getHash(), $authRequest->getRealm(), $authRequest->getReturnTo());
