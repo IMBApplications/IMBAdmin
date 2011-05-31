@@ -18,7 +18,7 @@
 			right: 10,
 			top: 10
 		}).appendTo(document.body).themeswitcher();
-		
+
 		$(".menubar").children("a")
 			.button()
 			.click(function() {
@@ -52,6 +52,8 @@
 				});
 			});
 
+                $(".menubar ul li ul").hide().prepend('<span class="ui-icon ui-icon-carat-1-w">yxc</span>');
+
 	});
 	</script>
 	<style>
@@ -81,7 +83,13 @@
 	<ul>
 		<li><a href="#">Fullscreen</a></li>
 		<li><a href="#">Fit into view</a></li>
-		<li><a href="#">Customize...</a></li>
+		<li><a href="#">Customize...</a>
+                    <ul>
+                        <li><a href="#">Customize 1</a></li>
+                        <li><a href="#">Customize 2</a></li>
+                        <li><a href="#">Customize 3</a></li>
+                    </ul>
+                </li>
 	</ul>
 </div>
 
