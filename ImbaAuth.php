@@ -52,9 +52,8 @@ function redirectTo($line, $url, $message = "") {
     $myDomain = ImbaSharedFunctions::getDomain($url);
 
     // Discover if we need to do the html redirect and make it so
-    //if (headers_sent()) {
+    if (headers_sent()) {
         $smarty = ImbaSharedFunctions::newSmarty();
-        $url = rawurldecode($url);
 
         $smarty->assign("redirectUrl", $url);
         $smarty->assign("redirectDomain", $myDomain);
@@ -63,10 +62,10 @@ function redirectTo($line, $url, $message = "") {
         $smarty->assign("phpsession", session_id());
         $smarty->display("ImbaAuthRedirect.tpl");
         exit;
-    //} else {
-    //    header("Location: " . $url);
-    //    exit;
-    //}
+    } else {
+        header("Location: " . $url);
+        exit;
+    }
 }
 
 // OpenID auth logic
