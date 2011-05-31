@@ -160,6 +160,7 @@ if ($_GET["logout"] == true || $_POST["logout"] == true) {
                     $authRequest->setPhpsession(session_id());
                     $authRequest->setIp(ImbaSharedFunctions::getIP());
                     $managerAuthRequest->insert($authRequest);
+                    throw new Exception("Realm vorm speichern: " . $authRequest->getRealm());
 
                     // Try to do the first step of the openid authentication steps
                     writeAuthLog("Determing Auth style for " . $openid);
@@ -224,7 +225,6 @@ if ($_GET["logout"] == true || $_POST["logout"] == true) {
 
         // Get the stored data for the current authrequest from the database
         $authRequest = $managerAuthRequest->select($imbaHash);
-        throw new Exception("Realm nach dem auslesen: " . $authRequest->getRealm());
 
         writeAuthLog("Verification starting", 2);
 
