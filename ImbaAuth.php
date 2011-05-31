@@ -154,13 +154,17 @@ if ($_GET["logout"] == true || $_POST["logout"] == true) {
                     $authRequest->setUserId($myUser->getId());
                     $authRequest->setHash(ImbaSharedFunctions::getRandomString());
                     $authRequest->setRealm(ImbaSharedFunctions::getTrustRoot());
+
+                    $testString = "Schema: #" . ImbaSharedFunctions::getScheme() . "#";
+                    $testString .= "Server: #" . $_SERVER['SERVER_NAME'] . "#";
+                    $testString .= "dirname($_SERVER[PHP_SELF]): #" . dirname($_SERVER['PHP_SELF']) . "#";
+
                     $authRequest->setReturnTo(ImbaSharedFunctions::getReturnTo($authRequest->getHash()));
                     $authRequest->setType($authMethod);
                     $authRequest->setDomain($_POST['imbaSsoOpenIdLoginReferer']);
                     $authRequest->setPhpsession(session_id());
                     $authRequest->setIp(ImbaSharedFunctions::getIP());
                     $managerAuthRequest->insert($authRequest);
-                    throw new Exception("Realm vorm speichern: " . $authRequest->getRealm());
 
                     // Try to do the first step of the openid authentication steps
                     writeAuthLog("Determing Auth style for " . $openid);
