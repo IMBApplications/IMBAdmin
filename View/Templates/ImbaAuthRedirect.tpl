@@ -1,10 +1,10 @@
 <html>
     <head>
         <title>IMBAdmin is Redirecting you to {$redirectDomain}</title>
-        <link type='text/css' href='{$thrustRoot}ImbaLoader.php?load=css' rel='Stylesheet' />
+        <link type='text/css' href='/IMBAdmin/ImbaLoader.php?load=css' rel='Stylesheet' />
         <script type="text/javascript">
             /*
-            $(document).ready(function() {    
+            $(document).ready(function() {
                 $("#imbaRedirectDialog").dialog({
                     autoOpen: false
                 })
