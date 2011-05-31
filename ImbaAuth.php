@@ -169,7 +169,7 @@ if ($_GET["logout"] == true || $_POST["logout"] == true) {
 
                         if (!empty($redirectUrl)) {
                             // we got a redirection url as answer. go there now!
-                            $tmpMsg = writeAuthLog("OpenIdAuth redirecting to: " . ImbaSharedFunctions::getDomain($redirectUrl));
+                            $tmpMsg = writeAuthLog("OpenIdAuth Redirection, Domain: #" . ImbaSharedFunctions::getDomain($redirectUrl) . "# URL: #" . $redirectUrl . "#");
 
                             // If this is set, the user will be sent to verification next time
                             ImbaUserContext::setWaitingForVerify(ImbaUserContext::getRedirectUrl());
