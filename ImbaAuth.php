@@ -301,13 +301,13 @@ if ($_GET["logout"] == true || $_POST["logout"] == true) {
             }
             $myDomain = $authRequest->getDomain();
             if (!empty($myDomain)) {
-                $managerAuthRequest->delete($imbaHash);
+                //$managerAuthRequest->delete($imbaHash);
                 redirectTo(__LINE__, $myDomain, $tmpMsg);
                 exit;
             } else {
                 $tmpUrl = ImbaUserContext::getWaitingForVerify();
                 ImbaUserContext::setWaitingForVerify("");
-                $managerAuthRequest->delete($imbaHash);
+                //$managerAuthRequest->delete($imbaHash);
                 redirectTo(__LINE__, $tmpUrl, $tmpMsg);
                 exit;
             }
