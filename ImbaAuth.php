@@ -55,7 +55,7 @@ function redirectTo($line, $url, $message = "") {
     if (headers_sent() || true) {
         $smarty = ImbaSharedFunctions::newSmarty();
 
-        $smarty->assign("redirectUrl", $url);
+        $smarty->assign("redirectUrl", rawurldecode($url));
         $smarty->assign("redirectDomain", $myDomain);
         $smarty->assign("internalCode", $line);
         $smarty->assign("internalMessage", $message);
