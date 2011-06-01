@@ -238,7 +238,7 @@ if ($_GET["logout"] == true || $_POST["logout"] == true) {
             $esc_identity = $managerOpenId->openidVerify($authRequest->getRealm(), $authRequest->getReturnTo());
 
             // If we got no openid, something went wrong with auth
-            if (empty($esc_identity)) {
+            if ($esc_identity === false) {
                 throw new Exception("OpenId verification failed! No OpenId recieved from the OpenId Manager. Realm:" . $authRequest->getRealm() . " Ret:" . $authRequest->getReturnTo());
             }
             writeAuthLog("OpenID Verification sucessful", 2);
