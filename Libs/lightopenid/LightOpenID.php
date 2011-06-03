@@ -623,9 +623,11 @@ class LightOpenID
         # id_res, in order to avoid throwing errors.
         if(isset($this->data['openid_user_setup_url'])) {
             $this->setup_url = $this->data['openid_user_setup_url'];
+            throw new Exception("Fehler in LightOpenID.php Zeile 624");
             return false;
         }
         if($this->mode != 'id_res') {
+            throw new Exception("Fehler in LightOpenID.php Zeile 629");
             return false;
         }
 
@@ -653,6 +655,7 @@ class LightOpenID
         if ($this->data['openid_return_to'] != $this->returnUrl) {
             # The return_to url must match the url of current request.
             # I'm assuing that noone will set the returnUrl to something that doesn't make sense.
+            throw new Exception("Fehler in LightOpenID.php Zeile 655");
             return false;
         }
 
