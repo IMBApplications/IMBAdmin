@@ -14,6 +14,11 @@ if (empty($_GET["step"])) {
         header('Location: ' . $lightOpenId->authUrl());
     }
 } else if ($_GET["step"] == 2) {
-    echo $lightOpenId->validate() ? 'Logged in.' : 'Failed';
+    try {
+        echo $lightOpenId->validate() ? 'Logged in.' : 'Failed';
+    } catch (Exception $ex) {
+        echo "Fehler: <br>";
+        echo $ex->getMessage();
+    }
 }
 ?>
