@@ -3,7 +3,7 @@
 /**
  * Loading required libs
  */
-require_once "Libs/lightopenid/openid.php";
+require_once "Libs/lightopenid/LightOpenID.php";
 
 /**
  * TMP Space
