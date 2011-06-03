@@ -5,9 +5,9 @@ require_once ("Test/SimpleOpenID.php");
 
 
 $openid = new SimpleOpenID;
-$openid->SetIdentity('https://oom.ch/openid/identity/sampit');
-$openid->SetApprovedURL('http://dev.alptroeim.ch/IMBAdmin/Test/openid.php');
-$openid->SetTrustRoot('http://dev.alptroeim.ch/');
+$openid->SetIdentity('openid-provider.appspot.com/steffen.so@googlemail.com');
+$openid->SetApprovedURL('http://localhost/IMBAdmin/Test/openid.php');
+$openid->SetTrustRoot('http://localhost/');
 $server_url = $openid->GetOpenIDServer();
 if ($server_url !== false) {
     $openid->SetOpenIDServer($server_url);
