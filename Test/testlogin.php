@@ -11,3 +11,4 @@ if (!$consumer->login("http://openid-provider.appspot.com/Steffen.So@googlemail.
 } else {
     echo "Logged in";
 }
+?>
