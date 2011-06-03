@@ -12,7 +12,9 @@ $consumer = new Zend_OpenId_Consumer();
 if ($consumer->login("http://openid-provider.appspot.com/Steffen.So@googlemail.com")) {
     echo "Logged in";
 } else {
-    echo "OpenID login failed.";
+    echo "OpenID login failed. <br>";
+    echo $consumer->getError();
+
 }
 
 echo "<hr>Und fertig."
