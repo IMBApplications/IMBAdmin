@@ -2,7 +2,7 @@
 
 $tmpPath = getcwd();
 chdir("Libs/");
-require_once "lightopenid/openid.php";
+require_once "lightopenid/LightOpenID.php";
 require_once "Zend/Oauth/Consumer.php";
 chdir($tmpPath);
 
@@ -50,7 +50,7 @@ class ImbaManagerOpenID {
             return false;
         }
     }
-    
+
     /**
      * Return thrust root for redirection
      */
