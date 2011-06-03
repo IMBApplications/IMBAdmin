@@ -144,7 +144,12 @@ class LightOpenID {
     }
 
     protected function request_curl($url, $method='GET', $params=array()) {
+        echo "curl start<br>";
+
         $params = http_build_query($params, '', '&');
+
+        echo "curl params: <br>" . var_export($params, true);
+
         $curl = curl_init($url . ($method == 'GET' && $params ? '?' . $params : ''));
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($curl, CURLOPT_HEADER, false);
@@ -154,16 +159,20 @@ class LightOpenID {
 
         if ($this->verify_peer !== null) {
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $this->verify_peer);
+            echo "curl CURLOPT_SSL_VERIFYPEER set to " . $this->verify_peer . "<br>";
             if ($this->capath) {
                 curl_setopt($curl, CURLOPT_CAPATH, $this->capath);
+                echo "curl CURLOPT_CAPATH set to " . $this->capath . "<br>";
             }
 
             if ($this->cainfo) {
                 curl_setopt($curl, CURLOPT_CAINFO, $this->cainfo);
+                echo "curl CURLOPT_CAINFO set to " . $this->cainfo . "<br>";
             }
         }
 
         if ($method == 'POST') {
+            echo "curl using post<br>";
             curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
         } elseif ($method == 'HEAD') {
@@ -172,7 +181,9 @@ class LightOpenID {
         } else {
             curl_setopt($curl, CURLOPT_HTTPGET, true);
         }
+        echo "curl curl_exec run with" . var_export($curl, true) . "<br>";
         $response = curl_exec($curl);
+        echo "curl  curl_exec ran, with response: ##" . $response . "<br>";
 
         if ($method == 'HEAD') {
             $headers = array();
@@ -291,8 +302,10 @@ class LightOpenID {
         if (function_exists('curl_init')
                 && (!in_array('https', stream_get_wrappers()) || !ini_get('safe_mode') && !ini_get('open_basedir'))
         ) {
+            echo "using curl<br>";
             return $this->request_curl($url, $method, $params);
         }
+        echo "using stream<br>";
         return $this->request_streams($url, $method, $params);
     }
 
@@ -618,11 +631,9 @@ class LightOpenID {
         # id_res, in order to avoid throwing errors.
         if (isset($this->data['openid_user_setup_url'])) {
             $this->setup_url = $this->data['openid_user_setup_url'];
-            throw new Exception("Fehler in LightOpenID.php Zeile 624");
             return false;
         }
         if ($this->mode != 'id_res') {
-            throw new Exception("Fehler in LightOpenID.php Zeile 629");
             return false;
         }
 
@@ -650,7 +661,6 @@ class LightOpenID {
         if ($this->data['openid_return_to'] != $this->returnUrl) {
             # The return_to url must match the url of current request.
             # I'm assuing that noone will set the returnUrl to something that doesn't make sense.
-            throw new Exception("Fehler in LightOpenID.php Zeile 655");
             return false;
         }
 
@@ -671,7 +681,6 @@ class LightOpenID {
 
         $response = $this->request($server, 'POST', $params);
 
-        throw new Exception("Fehler in LightOpenID.php Zeile 674! Wir sind bis zum Ende gekommen und haben: #$response# zurückbekommen!");
         return preg_match('/is_valid\s*:\s*true/i', $response);
     }
 
