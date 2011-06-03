@@ -183,7 +183,7 @@ class LightOpenID {
         }
         echo "curl curl_exec run with" . var_export($curl, true) . "<br>";
         $response = curl_exec($curl);
-        echo "curl  curl_exec ran, with response: ##" . $response . "<br>";
+        echo "curl  curl_exec ran, with response: #" . $response . "#<br>";
 
         if ($method == 'HEAD') {
             $headers = array();
@@ -679,6 +679,7 @@ class LightOpenID {
 
         $params['openid.mode'] = 'check_authentication';
 
+        echo "Und los geht der eigentlich auth request! <br>";
         $response = $this->request($server, 'POST', $params);
 
         return preg_match('/is_valid\s*:\s*true/i', $response);
