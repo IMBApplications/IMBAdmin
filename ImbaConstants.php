@@ -33,7 +33,7 @@ class ImbaConstants extends ImbaConfig {
      * -1   => never use proxy
      */
     public static $WEB_FORCE_PROXY = 0;
-    public static $WEB_AUTH_SSL_CHECK = true;
+    public static $WEB_AUTH_SSL_CHECK = false;
 
 
     public static $WEB_ENTRY_INDEX_FILE = "index.html";
