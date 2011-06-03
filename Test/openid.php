@@ -5,8 +5,8 @@ require_once ("Libs/lightopenid/LightOpenID.php");
 
 $lightOpenId = new LightOpenID();
 $lightOpenId->verify_peer = false;
-$lightOpenId->returnUrl = "http://locahost/IMBAdmin/Test/openid.php?step=2";
-$lightOpenId->realm = "http://locahost/";
+$lightOpenId->returnUrl = "http://http://dev.alptroeim.ch/IMBAdmin/Test/openid.php?step=2";
+$lightOpenId->realm = "http://dev.alptroeim.ch";
 
 if (empty($_GET["step"])) {
     if (!$lightOpenId->mode) {
