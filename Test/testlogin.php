@@ -1,6 +1,6 @@
 <?php
 
-echo "Immernoch nicht einverstanden?";
+echo "Immernoch nicht einverstanden? 1.1";
 
 chdir("../Libs/");
 require_once ("Zend/OpenID.php");
