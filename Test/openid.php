@@ -16,6 +16,11 @@ if (empty($_GET["step"])) {
     }
 } else if ($_GET["step"] == 2) {
     try {
+        echo "GET: <br>\n";
+        foreach ($_GET as $key=>$value) {
+            echo $key . " = " . rawurldecode($value) . "<br>\n";
+        }
+
         echo $lightOpenId->validate() ? 'Logged in.' : 'Failed';
     } catch (Exception $ex) {
         echo "Fehler: <br>";
