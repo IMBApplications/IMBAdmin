@@ -10,7 +10,8 @@ $lightOpenId->realm = "http://dev.alptroeim.ch";
 
 if (empty($_GET["step"])) {
     if (!$lightOpenId->mode) {
-        $lightOpenId->identity = "https://oom.ch/openid/identity/sampit";
+        //$lightOpenId->identity = "https://oom.ch/openid/identity/sampit";
+        $lightOpenId->identity = "http://openid-provider.appspot.com/Steffen.So@googlemail.com";
         header('Location: ' . $lightOpenId->authUrl());
     }
 } else if ($_GET["step"] == 2) {
