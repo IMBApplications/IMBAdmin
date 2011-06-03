@@ -172,13 +172,15 @@ class LightOpenID {
         }
 
         if ($method == 'POST') {
-            echo "curl using post<br>";
+            echo "curl using POST<br>";
             curl_setopt($curl, CURLOPT_POST, true);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
         } elseif ($method == 'HEAD') {
+            echo "curl using HEAD<br>";
             curl_setopt($curl, CURLOPT_HEADER, true);
             curl_setopt($curl, CURLOPT_NOBODY, true);
         } else {
+            echo "curl using GET<br>";
             curl_setopt($curl, CURLOPT_HTTPGET, true);
         }
         echo "curl curl_exec run with" . var_export($curl, true) . "<br>";
