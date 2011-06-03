@@ -2,9 +2,9 @@
 
 echo "Immernoch nicht einverstanden?";
 
-/*
 chdir("../Libs/");
 require_once ("Zend/OpenID.php");
+/*
 require_once ("Zend/OpenId/Consumer.php");
 require_once ("Zend/Controller/Exception.php");
 
