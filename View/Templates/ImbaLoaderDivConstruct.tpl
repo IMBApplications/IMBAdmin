@@ -1,6 +1,6 @@
-{* 
+{*
     Basic div construct which will be injected into the website
-    
+
 *}{strip}<div id='imbaSsoLoginBorder' class='ui-widget-content ui-corner-all'>
     <div id='imbaSsoLogin'>
         <img id='imbaSsoLogoImage' src='{$thrustRoot}Images/noicon.png' alt='Guild Logo' title='Show/Hide Menu' />
@@ -43,8 +43,4 @@
         <ul></ul>
     </div>
 </div>
-<div id='imbaGameDialog' title='IMBAGame' style='padding: 3px;'>
-    <div id='imbaGameNav' style='height: 98%; overflow: auto;'>
-        <ul></ul>
-    </div>
-</div>{/strip}
+{/strip}

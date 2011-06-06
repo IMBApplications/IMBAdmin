@@ -57,9 +57,7 @@ class ImbaManagerNavigation extends ImbaManagerBase {
     public function renderPortalNavigation($portalId) {
         $return = "";
 
-        /**
-         * Set up the portal navigation
-         */
+        // Set up the portal navigation
         $portal = $this->managerPortal->selectById($portalId);
 
         if ($portal == null){
@@ -157,17 +155,21 @@ class ImbaManagerNavigation extends ImbaManagerBase {
     public function renderPortalChooser() {
         $managerPortal = ImbaManagerPortal::getInstance();
 
-        $return = "<li>";
-        $return .= "<a id='imbaMenuImbaPortal' href='javascript:void(0)' onclick='javascript: loadImbaPortal(-1);' title='Portal Zur&uuml;cksetzen'>Portal</a>";
-        $return .= "<ul class='subnav'>";
+        $result = "<div id='imbaNavigationPortalChooser'>";
+        $result .= "<li>";
+        //$return .= "<a id='imbaMenuImbaPortal' href='javascript:void(0)' onclick='javascript: loadImbaPortal(-1);' title='Portal Zur&uuml;cksetzen'>Portal</a>";
+        $result .= "<a id='imbaMenuImbaPortal' title='Portale'>Portal</a>";
+        $result .= "<ul class='subnav'>";
         foreach ($managerPortal->selectAll() as $portal) {
-            $return .= "<li style='vertical-align: middle;'><a href='javascript:void(0)' onclick='javascript: loadImbaPortal(\\\"" . $portal->getId() . "\\\");' title='" . $portal->getComment() . "'>";
-            $return .= "<img src='" . ImbaSharedFunctions::fixWebPath($portal->getIcon()) . "' width='24px' height='24px' style='float: left;' /> " . $portal->getName();
-            $return .= "</a></li>";
+            $result .= "<li style='vertical-align: middle;'><a href='javascript:void(0)' onclick='javascript: loadImbaPortal(\\\"" . $portal->getId() . "\\\");' title='" . $portal->getComment() . "'>";
+            $result .= "<img src='" . ImbaSharedFunctions::fixWebPath($portal->getIcon()) . "' width='24px' height='24px' style='float: left;' /> " . $portal->getName();
+            $result .= "</a></li>";
         }
-        $return .= "</ul>";
-        $return .= "</li>";
-        return "<div id='imbaNavigationPortalChooser'>" . $return . "</div>";
+        $result .= "</ul>";
+        $result .= "</li>";
+        $result .= "</div>";
+
+        return $result;
     }
 
 }

@@ -1,34 +1,26 @@
 /**
- * loads the ImbaAdmin module in the IMBAdmin window
+ * Loads the ImbaAdmin module in the IMBAdmin window
  */
 function loadImbaAdminModule(moduleName, ajaxMethod, params){
     currentModule = moduleName;
 
-    /**
-     * fill currentUserName and currentUserOpenid
-     */
+    // Fill currentUserName and currentUserOpenid
     loadMyImbaUser();
-    
-    /**
-     * Remove all tabs
-     */   
-    $("#imbaContentNav").tabs("destroy");  
-    
-    /**
-     * Create new tabs on element
-     */
+
+    // Remove all tabs
+    $("#imbaContentNav").tabs("destroy");
+
+    // Create new tabs on element
     $("#imbaContentNav").tabs();
-    
-    /**
-     * Set the window title
-     */
+
+    // Set the window title
     $.post(ajaxEntry, {
         module: currentModule,
         submodule: "IMBAdminModules",
         ajaxmethod: "getNavigationData",
         params: JSON.stringify({"datarequest": "name"})
-    }, function (response){        
-        if (checkReturn(response) == false) {  
+    }, function (response){
+        if (checkReturn(response) == false) {
             tmpTitle  = "<div onclick='javascript:loadImbaAdminDefaultModule();' style='float: left; cursor: pointer;'>";
             tmpTitle += "<span class='ui-icon ui-icon-home' style='float: left;' /></div>";
             tmpTitle += "<div style='float: left;'>&nbsp;&nbsp;&nbsp;</div>";
@@ -36,7 +28,7 @@ function loadImbaAdminModule(moduleName, ajaxMethod, params){
             if (currentUserName != null) {
                 tmpTitle += "<div style='float: left;'>" + currentUserName + "&nbsp;&nbsp;&nbsp;@&nbsp;&nbsp;&nbsp;</div>";
             }
-        
+
             tmpTitle += "<div style='float: left; cursor: pointer;' onclick='javascript:loadImbaAdminDefaultModule();'>IMBAdmin&nbsp;&nbsp;&nbsp;</div>";
 
             if (response) {
@@ -49,14 +41,12 @@ function loadImbaAdminModule(moduleName, ajaxMethod, params){
         }
     });
 
-    /**
-     * get and render tabs
-     */
-    $.post(ajaxEntry, {        
+    // Get and render tabs
+    $.post(ajaxEntry, {
         module: currentModule,
         submodule: "IMBAdminModules",
         ajaxmethod: "getNavigationData",
-        params: JSON.stringify({"datarequest": "nav"})       
+        params: JSON.stringify({"datarequest": "nav"})
     }, function (response){
         $.each($.parseJSON(response), function(key, value){
             $("#imbaContentNav").tabs("add", "#" + value.id, value.name);
@@ -75,14 +65,14 @@ function loadImbaAdminModule(moduleName, ajaxMethod, params){
             }
         });
     });
-        
+
     if (isSystemInErrorState == false) {
         $("#imbaContentDialog").dialog("open");
     }
 }
 
 /**
- * loads the ImbaAdminTab content, depending on the data for the post request
+ * Loads the ImbaAdminTab content, depending on the data for the post request
  */
 function loadImbaAdminTabContent(data, myModuleTabId) {
     var targetModuleIabId = null;
@@ -96,7 +86,7 @@ function loadImbaAdminTabContent(data, myModuleTabId) {
     data.secSession = phpSessionID;
 
     $.post(ajaxEntry, data, function (response){
-        if (checkReturn(response) == false) {  
+        if (checkReturn(response) == false) {
             if (response != ""){
                 $(targetModuleIabId).html(response);
             }
@@ -116,13 +106,13 @@ function showUserProfile(openid) {
  */
 function loadImbaAdminDefaultModule(){
     // Get the default module
-    $.post(ajaxEntry, {      
+    $.post(ajaxEntry, {
         module: "IMBAdminModules",
         submodule: "IMBAdminModules",
-        ajaxmethod: "returnDefaultModule"        
+        ajaxmethod: "returnDefaultModule"
     }, function (response){
-        if (checkReturn(response) == false) {  
-            // Call the loadImbaAdminModule to open the dialog         
+        if (checkReturn(response) == false) {
+            // Call the loadImbaAdminModule to open the dialog
             loadImbaAdminModule(response.toString());
         }
     });
