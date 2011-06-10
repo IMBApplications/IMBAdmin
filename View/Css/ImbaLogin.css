@@ -139,86 +139,15 @@ body {
     cursor: pointer;
 }
 
-#imbaMenu {
-    position: fixed;
-    right: 10px;
-    top: 12px;
-    z-index: 9999;
-}
-
 .ImbaAjaxBlindTable {
     color: #999999;
     font-size: 1.1em;
 }
 
-/* IMAdmin Menu */
-
-#imbaMenu ul.topnav {
-    list-style: none;
-    padding: 0 20px;
-    margin: 0;
-    float: left;
-    width: 750px;
-    background: #505050;
-}
-
-#imbaMenu ul.topnav li {
-    float: left;
-    margin: 0;
-    padding: 0 15px 0 0;
-    position: relative; /*--Declare X and Y axis base for sub navigation--*/
-}
-
-#imbaMenu ul.topnav li a {
-    padding: 10px 5px;
-    color: #fff;
-    display: block;
-    text-decoration: none;
-    float: left;
-}
-
-#imbaMenu ul.topnav li span {
-    width: 17px;
-    height: 35px;
-    float: left;
-    cursor: pointer;
-    background: url('/IMBAdmin/Images/subnav_btn.gif') no-repeat;
-}
-
-#imbaMenu ul.topnav li span.subhover {
-    cursor: pointer;
-}
-
-#imbaMenu ul.topnav li ul.subnav {
-    list-style: none;
-    position: absolute;
-    left: 0;
-    top: 39px;
-    background: #505050;
-    margin: 0;
-    padding: 0;
-    display: none;
-    float: left;
-    width: 170px;
-}
-
-#imbaMenu ul.topnav li ul.subnav li {
-    margin: 0; padding: 0;
-    clear: both;
-    width: 170px;
-}
-
-#imbaMenu html ul.topnav li ul.subnav li a {
-    float: left;
-    width: 145px;
-    background: #333;
-    padding-left: 20px;
-}
-
-#imbaMenu html ul.topnav li ul.subnav li a:hover {
-    /*--Hover effect for subnav links--*/
-    background: #222;
-}
+/* IMBAMenu */
+.ui-menu { width: 183px; position: absolute; }
+.ui-menu .ui-icon { float: right; }
+#menu { position: absolute; right: 2px; top: 90px; }
 
 /* IMBAdmin Content */
 #imbaContentNav {

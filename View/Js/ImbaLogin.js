@@ -83,29 +83,6 @@ $(document).ready(function() {
         }
     });
 
-    /**
-     * Menu
-     */
-    $("ul.subnav").parent().append("<span></span>");
-    $("ul.topnav li span").click(function() {
-        var subNav = $(this).parent().find("ul.subnav");
-        if (subNav.is(":hidden")){
-            subNav.slideDown('fast').show();
-        }else {
-            subNav.slideUp('fast').show();
-        }
-    });
-
-    $("ul.topnav li ul li").click(function() {
-        var subNav = $(this).parent();
-        if (subNav.is(":hidden")){
-            subNav.slideDown('fast').show();
-        }else {
-            subNav.slideUp('fast').show();
-        }
-    });
-
-
     var menuIsThere = true;
     $("#imbaSsoLogoImage").click(function() {
         if (!menuIsThere){
@@ -342,24 +319,72 @@ function loadImbaPortal(portalId) {
     }, function (response){
         if (checkReturn(response) == false) {
             var currentPortal = $.parseJSON(response);
+            document.title = currentPortal.name;
+
             if (portalId != null) {
                 $.jGrowl('<img src="' + currentPortal.icon + '" style="width: 24px; height: 24px; vertical-align: middle; padding: 3px;" /> <big>' + currentPortal.name + '</big>', {
                     life: 350,
                     header: 'Portal geladen:<br /><br />'
                 });
             }
-            $("#imbaNavigationPortal").html(currentPortal.navigation);
+            // Set Portal Image
             $("#imbaSsoLogoImage").attr('src', currentPortal.icon);
-            $("#document").attr('title', currentPortal.name + ' Portal');
+
+            // Set Menu Content
+            $("#imbaMenu").html(currentPortal.navigation);
+
+            $.widget("ui.nestedmenu", {
+                _init: function() {
+                    var self = this;
+                    this.active = this.element;
+
+                    // hide submenus and create indicator icons
+                    this.element.find("ul").hide().prev("a").prepend('<span class="ui-icon ui-icon-carat-1-w"></span>');
+
+                    this.element.find("ul").andSelf().menu({
+                        // disable built-in key handling
+                        input: $(),
+                        select: this.options.select,
+                        focus: function(event, ui) {
+                            self.active = ui.item.parent();
+                            self.activeItem = ui.item;
+                            ui.item.parent().find("ul").hide();
+                            var nested = $(">ul", ui.item);
+                            if (nested.length && /^mouse/.test(event.originalEvent.type)) {
+                                self._open(nested);
+                            }
+                        }
+                    })
+                },
+
+                _open: function(submenu) {
+                    submenu.show().css({
+                        top: 2,
+                        right: 188
+                    }).position({
+                        my: "left top",
+                        at: "left top",
+                        of: this.parent
+                    });
+                }
+            });
+
+            $("#menu").nestedmenu().show();
+            $("#menu").hover(function(){
+                // nothing
+            }, function() {
+                $(this).find("li").children("ul").hide();
+            });
+
 
             // Send auth post
             if (isUserLoggedIn) {
                 if (currentPortal.portalauth != ""){
-                    $.jGrowl("Starte Auth nach: " + currentPortal.portalauth);
+                    //$.jGrowl("Starte Auth nach: " + currentPortal.portalauth);
                     $.post(currentPortal.portalauth, function(data) {
-                        if (data != "") $.jGrowl(data);
-                        else $.jGrowl("bereits angemeldet");
-                    });
+                        //if (data != "") $.jGrowl(data);
+                        //else $.jGrowl("bereits angemeldet");
+                        });
                 }
             }
         }

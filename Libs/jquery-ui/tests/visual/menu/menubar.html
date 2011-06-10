@@ -13,12 +13,6 @@
 	<script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
 	<script type="text/javascript">
 	$(function() {
-		$.fn.themeswitcher && $('<div/>').css({
-			position: "absolute",
-			right: 10,
-			top: 10
-		}).appendTo(document.body).themeswitcher();
-
 		$(".menubar").children("a")
 			.button()
 			.click(function() {
@@ -45,10 +39,7 @@
 			})
 			.each(function() {
 				$(this).next().hide().menu({
-					input: $(this),
-					select: function(event, ui) {
-						$("<div/>").text("Selected: " + ui.item.text()).appendTo("#log");
-					}
+					input: $(this)
 				});
 			});
 
@@ -91,11 +82,6 @@
                     </ul>
                 </li>
 	</ul>
-</div>
-
-<div class="ui-widget" style="margin-top:2em; font-family:Arial">
-	Log:
-	<div id="log" style="height: 400px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
 </div>
 
 </body>

@@ -42,11 +42,11 @@ switch ($_GET["load"]) {
          */
         $smarty->assign("authPath", ImbaConstants::$WEB_AUTH_MAIN_PATH);
 
-
-        $smarty->assign("PortalNavigation", $managerNavigation->displayLoaderPortalNavigation());
-        $smarty->assign("ImbaAdminNavigation", $managerNavigation->renderImbaAdminNavigation());
+        // This is now all part of loadImbaPortal() in ImbaLogin.js
+        //$smarty->assign("PortalNavigation", $managerNavigation->displayLoaderPortalNavigation());
+        //$smarty->assign("ImbaAdminNavigation", $managerNavigation->renderImbaAdminNavigation());
         //$smarty->assign("ImbaGameNavigation", $managerNavigation->renderImbaGameNavigation());
-        $smarty->assign("PortalChooser", $managerNavigation->renderPortalChooser());
+        //$smarty->assign("PortalChooser", $managerNavigation->renderPortalChooser());
 
         /**
          * Set Auth referer for automatic redirection
