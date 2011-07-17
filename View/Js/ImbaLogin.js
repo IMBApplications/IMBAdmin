@@ -61,6 +61,8 @@ $(document).ready(function() {
         $("#imbaSsoOpenId").val(oldOpenId);
         $("#imbaSsoNickname").val(oldOpenId);
         $("#imbaSsoPassword").focus();
+    } else {
+        $("#imbaSsoNickname").focus();
     }
 
     // Checking if user is online
