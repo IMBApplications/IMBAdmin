@@ -29,7 +29,7 @@ $(document).ready(function() {
 
     $("#imbaSsoOpenIdSubmit").button();
     $("#imbaSsoOpenIdSubmit").click(function () {
-        if (($("#imbaSsoOpenId").val() == "") || ($("#imbaSsoNickname").val() == "")) {
+        if (($("#imbaSsoOpenId").val() == "") && ($("#imbaSsoNickname").val() == "")) {
             /* if ($("#imbaSsoOpenId").val() == "") { */
             loadImbaAdminDefaultModule();
             return true;
