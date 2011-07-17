@@ -29,7 +29,8 @@ $(document).ready(function() {
 
     $("#imbaSsoOpenIdSubmit").button();
     $("#imbaSsoOpenIdSubmit").click(function () {
-        if ($("#imbaSsoOpenId").val() == "") {
+        if (($("#imbaSsoOpenId").val() == "") || ($("#imbaSsoNickname").val() == "")) {
+            /* if ($("#imbaSsoOpenId").val() == "") { */
             loadImbaAdminDefaultModule();
             return true;
         } else {
@@ -58,6 +59,8 @@ $(document).ready(function() {
     var oldOpenId = unescape(decodeURIComponent(readCookie("ImbaSsoLastLoginName")));
     if (oldOpenId != null && oldOpenId != "null" && oldOpenId != ""){
         $("#imbaSsoOpenId").val(oldOpenId);
+        $("#imbaSsoNickname").val(oldOpenId);
+        $("#imbaSsoPassword").focus();
     }
 
     // Checking if user is online
@@ -372,9 +375,9 @@ function loadImbaPortal(portalId) {
             $("#menu").nestedmenu().show();
             $("#menu").hover(function(){
                 // nothing
-            }, function() {
-                $(this).find("li").children("ul").hide();
-            });
+                }, function() {
+                    $(this).find("li").children("ul").hide();
+                });
 
 
             // Send auth post

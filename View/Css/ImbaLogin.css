@@ -12,6 +12,7 @@ body {
 #imbaMessagesDialog input[type=text],
 #imbaMessagesDialog textarea,
 #imbaSsoLoginBorder input[type=text],
+#imbaSsoLoginBorder input[type=password],
 #imbaSsoLoginBorder textarea {
     background-color: #222222;
     border: 1px solid #999999;

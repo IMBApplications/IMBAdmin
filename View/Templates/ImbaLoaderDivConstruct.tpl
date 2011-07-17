@@ -6,7 +6,10 @@
         <img id='imbaSsoLogoImage' src='{$thrustRoot}Images/noicon.png' alt='Guild Logo' title='Show/Hide Menu' />
         <div id='imbaSsoLoginInner'>
             <form id='imbaSsoLoginForm' action='{$thrustRoot}{$authPath}' method='post'>
-                <input id='imbaSsoOpenId' name='openid' type='text' />
+                <input id='imbaSsoOpenId' name='openid' type='hidden' />
+                <input name='authMethod' type='hidden' value='password' />
+                <input id='imbaSsoNickname' name='nickname' type='text' size='6' />
+                <input id='imbaSsoPassword' name='password' type='password' size='6' />
                 <input id='imbaSsoOpenIdLoginReferer' name='imbaSsoOpenIdLoginReferer' value='' type='hidden' />
                 <br />
                 <span id='imbaSsoOpenIdSubmit'>Login / Registrieren</span>
