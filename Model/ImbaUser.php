@@ -10,6 +10,7 @@ class ImbaUser extends ImbaBase {
      */
     protected $openId = null;
     protected $nickname = null;
+    protected $password = null;
     protected $email = null;
     protected $firstname = null;
     protected $lastname = null;
@@ -51,6 +52,14 @@ class ImbaUser extends ImbaBase {
 
     public function setNickname($nickname) {
         $this->nickname = $nickname;
+    }
+
+    public function getPassword() {
+        return $this->password;
+    }
+
+    public function setPassword($password) {
+        $this->password = $password;
     }
 
     public function getEmail() {

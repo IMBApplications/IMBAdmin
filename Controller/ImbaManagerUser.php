@@ -62,6 +62,7 @@ class ImbaManagerUser extends ImbaManagerBase {
                 $user->setId($row["id"]);
                 $user->setOpenId($row["openid"]);
                 $user->setNickname($row["nickname"]);
+                $user->setPassword($row["password"]);
                 $user->setEmail($row["email"]);
                 $user->setFirstname($row["forename"]);
                 $user->setLastname($row["surname"]);
@@ -124,12 +125,13 @@ class ImbaManagerUser extends ImbaManagerBase {
      */
     public function insert(ImbaUser $user) {
         $query = "INSERT INTO %s ";
-        $query .= "(openid, nickname, email, surname, forename, dob, mob, yob, sex, icq, msn, skype, usertitle, avatar, signature, website, motto, accurate, role) VALUES ";
+        $query .= "(openid, nickname, password, email, surname, forename, dob, mob, yob, sex, icq, msn, skype, usertitle, avatar, signature, website, motto, accurate, role) VALUES ";
         $query .= "('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')";
         $this->database->query($query, array(
             ImbaConstants::$DATABASE_TABLES_SYS_USER_PROFILES,
             $user->getOpenId(),
             $user->getNickname(),
+            $user->getPassword(),
             $user->getEmail(),
             $user->getLastname(),
             $user->getFirstname(),
@@ -157,12 +159,13 @@ class ImbaManagerUser extends ImbaManagerBase {
      */
     public function update(ImbaUser $user) {
         $query = "UPDATE %s SET ";
-        $query .= "nickname = '%s', email = '%s', surname = '%s', forename = '%s', dob = '%s', mob = '%s', yob = '%s', sex = '%s', icq = '%s', msn = '%s', skype = '%s', usertitle = '%s', avatar = '%s', signature = '%s', website = '%s', motto = '%s', accurate = '%s', role = '%s' ";
+        $query .= "nickname = '%s', password = '%s', email = '%s', surname = '%s', forename = '%s', dob = '%s', mob = '%s', yob = '%s', sex = '%s', icq = '%s', msn = '%s', skype = '%s', usertitle = '%s', avatar = '%s', signature = '%s', website = '%s', motto = '%s', accurate = '%s', role = '%s' ";
         $query .= "WHERE openid = '%s'";
 
         $this->database->query($query, array(
             ImbaConstants::$DATABASE_TABLES_SYS_USER_PROFILES,
             $user->getNickname(),
+            $user->getpassword(),
             $user->getEmail(),
             $user->getLastname(),
             $user->getFirstname(),
@@ -243,7 +246,7 @@ class ImbaManagerUser extends ImbaManagerBase {
      */
     public function selectMyself() {
         foreach ($this->selectAllUser()as $user) {
-            if ($user->getOpenId() == ImbaUserContext::getOpenIdUrl())
+            if ($user->getId() == ImbaUserContext::getUserId())
                 return $user;
         } return null;
     }

@@ -68,7 +68,44 @@ function redirectTo($line, $url, $message = "") {
     }
 }
 
-// OpenID auth logic
+/**
+ * 
+ */
+function checkAndLogin($currentUser, $esc_identity = "") {
+    $managerUser = ImbaManagerUser::getInstance();
+
+    // Check the status of the user
+    if (empty($currentUser)) {
+        // This is a new user. let him register
+        writeAuthLog("Registering new user", 2);
+
+        if (!empty($esc_identity)) {
+            ImbaUserContext::setNeedToRegister(true);
+            ImbaUserContext::setOpenIdUrl($esc_identity);
+        }
+    } elseif ($currentUser->getRole() == 0) {
+        // This user is banned
+        writeAuthLog($currentUser->getName() . " is banned but tried to login", 1);
+        throw new Exception("You are Banned!");
+    } elseif ($currentUser->getRole() != null) {
+        // This user is allowed to log in
+        $tmpMsg = writeAuthLog($currentUser->getNickname() . " logged in", 1);
+
+        // Setup all login stuff
+        ImbaUserContext::setLoggedIn(true);
+        ImbaUserContext::setOpenIdUrl($esc_identity);
+        ImbaUserContext::setUserRole($currentUser->getRole());
+        ImbaUserContext::setUserId($currentUser->getId());
+
+        setcookie("ImbaSsoLastLoginName", "", (time() - 3600));
+        setcookie("ImbaSsoLastLoginName", $currentUser->getNickname(), (time() + (60 * 60 * 24 * 30)));
+
+        $managerUser->setMeOnline();
+        ImbaUserContext::setImbaErrorMessage($currentUser->getNickname() . " logged in.");
+    }
+}
+
+// Logout has highest prio
 if ($_GET["logout"] == true || $_POST["logout"] == true) {
     // We want to log out
     writeAuthLog("Logging out (Redirecting)", 2);
@@ -94,47 +131,88 @@ if ($_GET["logout"] == true || $_POST["logout"] == true) {
         }
 
         // Determine Authentication method (we also don't have to be verified)
-        if (!(empty($_POST['openid']) && (empty($_GET['openid'])))) {
-            // OpenID Authentification
-            $authMethod = "openid";
-        } else {
-            // Send the User to the registration page
-            if (empty($_SERVER['HTTP_REFERER'])) {
-                $tmpUrl = ImbaSharedFunctions::getTrustRoot();
-            } else {
-                $tmpUrl = $_SERVER['HTTP_REFERER'];
-            }
-            $tmpMsg = writeAuthLog("Authentificationmethod not found");
-            redirectTo(__LINE__, $tmpUrl, $tmpMsg);
-            exit;
+        switch ($_REQUEST["authMethod"]) {
+            case "openId":
+                // OpenID Authentification
+                $authMethod = "openId";
+                break;
+
+            case "password":
+                // Password Authentification
+                $authMethod = "password";
+                break;
+            default:
+                // Send the User to the registration page
+                if (empty($_SERVER['HTTP_REFERER'])) {
+                    $tmpUrl = ImbaSharedFunctions::getTrustRoot();
+                } else {
+                    $tmpUrl = $_SERVER['HTTP_REFERER'];
+                }
+                $tmpMsg = writeAuthLog("Authentificationmethod not found");
+                redirectTo(__LINE__, $tmpUrl, $tmpMsg);
+                exit;
         }
 
         // Do the Authentication
         // -> determine the authentification method
         switch ($authMethod) {
-            case "openid":
-                // We got the openid via get? => write it into post
-                if (empty($_POST["openid"]) && (!empty($_GET["openid"]))) {
-                    $_POST["openid"] = $_GET["openid"];
+            case "password":
+                // Password auth
+                // Check if all needed things are here
+                if ((!empty($_REQUEST["nickname"])) && (!empty($_REQUEST["password"]))) {
+                    $tmpMsg = writeAuthLog("Password authentification detected.");
+
+                    // Get all users to search for username
+                    $myUsers = $managerUser->selectAllUser();
+
+                    $userFound = false;
+
+                    foreach ($myUsers as $user) {
+                        //Searching for username
+                        if (strtolower($user->getNickname()) == trim(strtolower($_REQUEST["nickname"]))) {
+                            $userFound = true;
+                            // Found Username, check the password
+
+                            if (md5($_REQUEST["password"]) == $user->getPassword()) {
+                                // Password is OK
+                                $tmpMsg = writeAuthLog("Password authentification successful for " . $_REQUEST["nickname"]);
+                                checkAndLogin($user);
+                            } else {
+                                $tmpMsg = writeAuthLog("Password authentification failed for " . $_REQUEST["nickname"]);
+                            }
+                        }
+                    }
+
+                    if (!$userFound) {
+                        $tmpMsg = writeAuthLog("No such user found: " . $_REQUEST["nickname"]);
+                    }
+                } else {
+                    $tmpMsg = writeAuthLog("Nickname (" . $_REQUEST["nickname"] . ") or Password not recieved for Password auth.");
                 }
 
+                redirectTo(__LINE__, ImbaUserContext::getRedirectUrl(), $tmpMsg);
+                exit;
+
+                break;
+
+            case "openId":
                 // double check the existence of the openid
-                if (!empty($_POST["openid"])) {
-                    $_POST["openid"] = trim($_POST["openid"]);
+                if (!empty($_REQUEST["openid"])) {
+                    $_REQUEST["openid"] = trim($_REQUEST["openid"]);
                     $redirectUrl = null;
 
                     // Get all users
                     $allUsers = $managerUser->selectAllUser();
 
                     // Check if this is a openid (which looks like a URL) or possibly the nickname of the user
-                    if (ImbaSharedFunctions::isValidURL($_POST["openid"])) {
-                        $openid = $_POST["openid"];
+                    if (ImbaSharedFunctions::isValidURL($_REQUEST["openid"])) {
+                        $openid = $_REQUEST["openid"];
                     } else {
                         // Try to lookup the nickname and only take a unique user
                         $securityCounter = 0;
                         $tmpOpenid = null;
                         foreach ($allUsers as $user) {
-                            if (strtolower($user->getNickname()) == strtolower($_POST["openid"])) {
+                            if (strtolower($user->getNickname()) == strtolower($_REQUEST["openid"])) {
                                 $securityCounter++;
                                 $tmpOpenid = $user->getOpenId();
                             }
@@ -246,36 +324,8 @@ if ($_GET["logout"] == true || $_POST["logout"] == true) {
             // Select our user
             $currentUser = $managerUser->selectByOpenId($esc_identity);
 
-            // Check the status of the user
-            if (empty($currentUser)) {
-                // This is a new user. let him register
-                writeAuthLog("Registering new user", 2);
-
-                if (!empty($esc_identity)) {
-                    ImbaUserContext::setNeedToRegister(true);
-                    ImbaUserContext::setOpenIdUrl($esc_identity);
-                }
-            } elseif ($currentUser->getRole() == 0) {
-                // This user is banned
-                writeAuthLog($currentUser->getName() . " is banned but tried to login", 1);
-                throw new Exception("You are Banned!");
-            } elseif ($currentUser->getRole() != null) {
-                // This user is allowed to log in
-                $tmpMsg = writeAuthLog($currentUser->getNickname() . " logged in", 1);
-
-                // Setup all login stuff
-                ImbaUserContext::setLoggedIn(true);
-                ImbaUserContext::setOpenIdUrl($esc_identity);
-                ImbaUserContext::setUserRole($currentUser->getRole());
-                ImbaUserContext::setUserId($currentUser->getId());
-
-                setcookie("ImbaSsoLastLoginName", "", (time() - 3600));
-                setcookie("ImbaSsoLastLoginName", $currentUser->getNickname(), (time() + (60 * 60 * 24 * 30)));
-
-
-                $managerUser->setMeOnline();
-                ImbaUserContext::setImbaErrorMessage("Du bist angemeldet als " . $currentUser->getNickname());
-            }
+            // Check and if sucessful, log the user in
+            checkAndLogin($currentUser, $esc_identity);
 
             // redirect to where we come from
             $myDomain = $authRequest->getDomain();
@@ -319,7 +369,7 @@ if ($_GET["logout"] == true || $_POST["logout"] == true) {
     ImbaUserContext::setWaitingForVerify("");
     /**
      * we are logged in! everithing is ok, we have a running session
-     * and we have a party here
+     * and we are going to have a party here
      * - set cookie with logged in openid for autofill login box
      * - redirect back to page
      */
