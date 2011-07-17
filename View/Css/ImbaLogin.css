@@ -146,9 +146,17 @@ body {
 }
 
 /* IMBAMenu */
+
+/*
+    fixed menu backup
 .ui-menu { width: 183px; position: absolute; }
 .ui-menu .ui-icon { float: right; }
 #menu { position: absolute; right: 2px; top: 90px; }
+*/
+
+.ui-menu { width: 183px; position: absolute; }
+.ui-menu .ui-icon { float: right; }
+/* #menu { position: absolute; right: 2px; top: 90px; } */
 
 /* IMBAdmin Content */
 #imbaContentNav {

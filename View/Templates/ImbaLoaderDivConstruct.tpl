@@ -28,7 +28,10 @@
             </form>
         </div>
         <div style='clear: both;' ></div>
+        <div id='imbaMenu' style='height: 30px; width: 183px;'></div>
+        <div style='clear: both;' ></div>
         <div id='imbaUsersOnline' ></div>
+        <div style='clear: both;' ></div>
         <div id='imbaOpenMessaging' class='ui-icon ui-icon-comment'>Open Messaging</div>
         <div id='imbaGotMessage' class='ui-icon ui-icon-mail-closed' title='Open Messaging' >M</div>
     </div>

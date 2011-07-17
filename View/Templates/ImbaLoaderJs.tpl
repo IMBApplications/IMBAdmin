@@ -36,7 +36,7 @@ include imba javascript files
 fill our imbaAdminContainerWorld container with ImbaIndex.tpl
 
 *}
-imbaHtmlContent = "<div id='imbaAdminContainerWorld'><div id='imbaMenu'></div>{include file="ImbaLoaderDivConstruct.tpl"}</div>";
+imbaHtmlContent = "<div id='imbaAdminContainerWorld'>{include file="ImbaLoaderDivConstruct.tpl"}</div>";
 {*
 
 and inject it into the page
