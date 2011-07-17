@@ -36,31 +36,56 @@ class AjaxRegistration extends AjaxBase {
         /**
          * Set tabs
          */
-        $navigation->addElement("viewRegisterStartPage", "Registration", "Hier kannst du dich registrieren.");
+        $navigation->addElement("viewRegisterForm", "Registration", "Hier kannst du dich registrieren.");
+        $navigation->addElement("viewResetPassword", "Passwort zur&uuml;cksetzen", "Hier kannst du dein Passwort zur&uuml;cksetzen.");
+        $navigation->addElement("viewAbout", "&Uuml;ber | About", "Wer sind wir und was ist das hier.");
         return $navigation;
+    }
+
+    /**
+     * Checks the submitted password
+     * @param type $password 
+     */
+    public function checkPassword($params) {
+        $return = ImbaSharedFunctions::checkPassword($params->password);
+        if ($return === true) {
+            echo "Ok";
+        } else {
+            echo $return;
+        }
+    }
+
+    /**
+     * views the About page
+     */
+    public function viewAbout() {
+        ImbaConstants::loadSettings();
+
+        $this->smarty->display('IMBAdminModules/RegisterAbout.tpl');
+    }
+
+    /**
+     * views the reset password page
+     */
+    public function viewResetPassword() {
+        ImbaConstants::loadSettings();
+
+        $this->smarty->display('IMBAdminModules/RegisterResetPassword.tpl');
     }
 
     /**
      * views the Registration start page
      */
-    public function viewRegisterStartPage() {
-        if (ImbaUserContext::getNeedToRegister()) {
-            // Registration step 1 done
-            ImbaConstants::loadSettings();
-            $this->smarty->assign('openid', ImbaUserContext::getOpenIdUrl());
+    public function viewRegisterForm() {
+        ImbaConstants::loadSettings();
+        ImbaUserContext::setNeedToRegister(true);
 
+        $_SESSION["IUC_captchaState"] = "unchecked";
 
-            $_SESSION["IUC_captchaState"] = "unchecked";
-
-            $this->smarty->assign('authPath', ImbaConstants::$WEB_AUTH_PROXY_PATH);
-            $this->smarty->assign('indexPath', ImbaConstants::$WEB_ENTRY_INDEX_FILE);
-            $this->smarty->assign('publicKey', ImbaConstants::$SETTINGS["CAPTCHA_PUBLIC_KEY"]);
-            $this->smarty->display('IMBAdminModules/RegisterForm.tpl');
-        } else {
-            // User gets the welcome screen with the openid input field
-            $this->smarty->assign('registerurl', ImbaConstants::$WEB_AUTH_PROXY_PATH);
-            $this->smarty->display('IMBAdminModules/RegisterWelcome.tpl');
-        }
+        $this->smarty->assign('authPath', ImbaConstants::$WEB_AUTH_MAIN_PATH);
+        $this->smarty->assign('indexPath', ImbaConstants::$WEB_ENTRY_INDEX_FILE);
+        $this->smarty->assign('publicKey', ImbaConstants::$SETTINGS["CAPTCHA_PUBLIC_KEY"]);
+        $this->smarty->display('IMBAdminModules/RegisterForm.tpl');
     }
 
     /**
@@ -84,14 +109,21 @@ class AjaxRegistration extends AjaxBase {
             $tmpOpenid = ImbaUserContext::getOpenIdUrl();
             if ($resp->is_valid) {
                 // Check if all fields have content
+                $pwCheck = ImbaSharedFunctions::checkPassword($params->password);
+
                 if (
                         (!empty($params->birthday)) &&
-                        (!empty($tmpOpenid)) &&
                         (!empty($params->firstname)) &&
                         (!empty($params->lastname)) &&
                         (!empty($params->sex)) &&
                         (!empty($params->nickname)) &&
+                        (!empty($params->password)) &&
                         (!empty($params->email))) {
+                    
+                    if ($pwCheck !== true) {
+                        echo $pwCheck;
+                        exit();
+                    }
 
                     $birthdate = explode(".", $params->birthday);
 
@@ -104,6 +136,7 @@ class AjaxRegistration extends AjaxBase {
                     $newUser->setSex(trim($params->sex));
                     $newUser->setNickname(trim($params->nickname));
                     $newUser->setEmail(trim($params->email));
+                    $newUser->setPassword(trim(md5($params->password)));
                     $newUser->setBirthday($birthdate[0]);
                     $newUser->setBirthmonth($birthdate[1]);
                     $newUser->setBirthyear($birthdate[2]);
@@ -115,7 +148,7 @@ class AjaxRegistration extends AjaxBase {
                     echo "Ok";
                 } else {
                     // Something strange happend. Try to kick the user out of all sessions
-                    header("location: " . ImbaConstants::$WEB_AUTH_PROXY_PATH . "?logout=true");
+                    echo "You did not fill out all the needed fields!";
                 }
             } else {
                 # set the error code so that we can display it
@@ -134,7 +167,7 @@ class AjaxRegistration extends AjaxBase {
             $_SESSION["IUC_captchaState"] = "ok";
         } else {
             // Something strange happend. Try to kick the user out of all sessions
-            header("location: " . ImbaConstants::$WEB_AUTH_PROXY_PATH . "?logout=true");
+            echo "Strange Error: ImbaUserContext::getNeedToRegister() is not set, but it should be.";
         }
     }
 

@@ -1,6 +1,6 @@
 <script type="text/javascript">
     $(document).ready(function() {
-        // User submits the ImbaAjaxUsersViewprofileForm
+        // User submits the ImbaAjaxUsersViewprofileUserprofileForm
         $("#ImbaAjaxAdminGameDetailFormSubmit").button();
         $("#ImbaAjaxAdminGameDetailFormSubmit").click(function(){
             // submit the change

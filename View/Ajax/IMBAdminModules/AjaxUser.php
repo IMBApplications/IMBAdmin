@@ -10,33 +10,33 @@ class AjaxUser extends AjaxBase {
     }
 
     public function getContentManager() {
-        // create the contentManager to be filled with informations about this module
+// create the contentManager to be filled with informations about this module
         $contentManager = new ImbaContentManager();
 
-        // set required informations: name, classname and the comment for the module
+// set required informations: name, classname and the comment for the module
         $contentManager->setName("Mitglieder");
         $contentManager->setClassname(get_class($this));
         $contentManager->setComment("Hier kannst du dich &uuml;ber Mitglieder informieren sowie das eigene Profil editiert werden.");
 
-        // set access conditions
-        // users logged in must be able to access this module
+// set access conditions
+// users logged in must be able to access this module
         $contentManager->setShowLoggedIn(true);
-        // users not logged in must not be able to access this module
+// users not logged in must not be able to access this module
         $contentManager->setShowLoggedOff(false);
-        
-        // set required user role level to get access
-        // nearly all users are able to access this module
+
+// set required user role level to get access
+// nearly all users are able to access this module
         $contentManager->setMinUserRole(1);
 
-        
-        // add elements
-        // element for user overview 
+
+// add elements
+// element for user overview 
         $contentManager->addElement("viewUsers", "Mitglieder &Uuml;bersicht", "Hier kannst du alles &uuml;ber unsere anderen Mitglieder erfahren.");
-        // element for editing user's profile
+// element for editing user's profile
         $contentManager->addElement("viewEditMyProfile", "Mein Profil Editieren", "Hier kannst du dein Profil editieren.");
-        // element for editing user's game participations
+// element for editing user's game participations
         $contentManager->addElement("viewMyGames", "Meine Spiele Editieren", "Hier kannst du deine Spiele editieren.");
-        // element to view user's profile
+// element to view user's profile
         $contentManager->addElement("viewmyprofile", "Mein Profil Ansehen", "Hier kannst du dein Profil so ancheuen.");
 
         return $contentManager;
@@ -52,15 +52,15 @@ class AjaxUser extends AjaxBase {
         $msgCountMax = -1;
 
         foreach ($users as $user) {
-            //Ich finde das unlogin, cernu
-            //if (date("d-m-Y") == date("d-m-Y", $user->getLastonline())) {
-            //show all users which were onilne within tle last 36 houres
+//Ich finde das unlogin, cernu
+//if (date("d-m-Y") == date("d-m-Y", $user->getLastonline())) {
+//show all users which were onilne within tle last 36 houres
             if ($user->getLastonline() > (time() - (60 * 60 * 24 * 3))) {
-                // Setting the color, depending on time
-                // < 5 min => lime
-                // < 10min => orange
-                // < 30min => yellow
-                // default => white
+// Setting the color, depending on time
+// < 5 min => lime
+// < 10min => orange
+// < 30min => yellow
+// default => white
                 $timediff = date("U") - $user->getLastonline();
 
                 if ($timediff <= (5 * 60)) {
@@ -162,11 +162,11 @@ class AjaxUser extends AjaxBase {
      * Generate visual representation to view all users.
      */
     public function viewUsers() {
-        // get all users (without the actual user itself)
+// get all users (without the actual user itself)
         $users = $this->managerUser->selectAllUserButme(ImbaUserContext::getOpenIdUrl());
 
         $smarty_users = array();
-        // copy and convert the user object into the smarty formattation
+// copy and convert the user object into the smarty formattation
         foreach ($users as $user) {
             array_push($smarty_users, array(
                 'id' => $user->getId(),
@@ -279,7 +279,7 @@ class AjaxUser extends AjaxBase {
      */
     public function updateMyProfile($params) {
         $user = new ImbaUser();
-        $user = $this->managerUser->selectById($params->id);
+        $user = $this->managerUser->selectById(ImbaUserContext::getUserId());
         $user->setMotto($params->motto);
         $user->setUsertitle($params->usertitle);
         $user->setAvatar($params->avatar);
@@ -295,6 +295,39 @@ class AjaxUser extends AjaxBase {
     }
 
     /**
+     * Update my Password
+     */
+    public function updateMyPassword($params) {
+        $user = new ImbaUser();
+        $user = $this->managerUser->selectById(ImbaUserContext::getUserId());
+
+        if ((!empty($params->oldPassword)) && (!empty($params->newPassword1)) && (!empty($params->newPassword2))) {
+            if (md5($params->oldPassword) == $user->getPassword()) {
+                //old password is ok
+                if ($params->newPassword1 == $params->newPassword2) {
+                    $newPassword = trim($params->newPassword1);
+                    //new passwords are the same
+                    //check password for strengts
+                    $checkResult = ImbaSharedFunctions::checkPassword($newPassword);
+                    if ($checkResult === true) {
+                        $user->setPassword(md5($newPassword));
+                        $this->managerUser->update($user);
+                        echo "Ok";
+                    } else {
+                        echo $checkResult;
+                    }
+                } else {
+                    echo "The new passwords do not match.";
+                }
+            } else {
+                echo "Wrong old password submited.";
+            }
+        } else {
+            echo "Please fill out all the fields.";
+        }
+    }
+
+    /**
      * Views my games
      */
     public function viewMyGames() {
@@ -303,7 +336,7 @@ class AjaxUser extends AjaxBase {
 
         $this->smarty_games = array();
         foreach ($games as $game) {
-            // fetch the games
+// fetch the games
             $selected = "false";
             foreach ($user->getGames() as $usrGame) {
                 if ($usrGame != null) {
@@ -313,7 +346,7 @@ class AjaxUser extends AjaxBase {
                 }
             }
 
-            // fetch all available properties
+// fetch all available properties
             $properties = array();
             foreach ($game->getProperties() as $property) {
                 array_push($properties, array(
@@ -322,7 +355,7 @@ class AjaxUser extends AjaxBase {
                 ));
             }
 
-            // fetch all properties with value
+// fetch all properties with value
             $propertyValues = array();
             foreach ($user->getGamesPropertyValues() as $property) {
                 if ($property != null) {

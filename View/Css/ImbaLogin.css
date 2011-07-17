@@ -13,7 +13,9 @@ body {
 #imbaMessagesDialog textarea,
 #imbaSsoLoginBorder input[type=text],
 #imbaSsoLoginBorder input[type=password],
-#imbaSsoLoginBorder textarea {
+#imbaSsoLoginBorder textarea,
+#ImbaAjaxUsersViewprofilePasswordForm input[type=password],
+#imbaSsoRegisterForm input[type=password]{
     background-color: #222222;
     border: 1px solid #999999;
     color: #FFFFFF;

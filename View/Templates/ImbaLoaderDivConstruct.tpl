@@ -15,16 +15,16 @@
                 <input id='imbaSsoPassword' name='password' type='password' size='6' />
                 <input id='imbaSsoOpenIdLoginReferer' name='imbaSsoOpenIdLoginReferer' value='' type='hidden' />
                 <br />
-                <!-- <span id='imbaSsoOpenIdSubmit'>Login / Registrieren</span> -->
-                <input id='imbaSsoOpenIdSubmit' type='submit' value='Login / Registrieren' />
+                <span id='imbaSsoOpenIdSubmit'>Login / Registrieren</span>
+                <!-- <input id='imbaSsoOpenIdSubmit' type='submit' value='Login / Registrieren' /> -->
             </form>
             <form id='imbaSsoLogoutForm' action='{$thrustRoot}{$authPath}' method='post'>
                 <span id='imbaSsoShowNickname' onclick='loadImbaAdminModule(\"User\", \"editmyprofile\");'></span>
                 <input id='imbaSsoOpenIdLogoutReferer' name='imbaSsoOpenIdLogoutReferer' value='' type='hidden' />
                 <input name='logout' value='true' type='hidden' />
                 <br />
-                <!-- <span id='imbaSsoOpenIdSubmitLogout'>Logout</span> -->
-                <input id='imbaSsoOpenIdSubmitLogout' type='submit' value='Logout' />
+                <span id='imbaSsoOpenIdSubmitLogout'>Logout</span>
+                <!-- <input id='imbaSsoOpenIdSubmitLogout' type='submit' value='Logout' /> -->
             </form>
         </div>
         <div style='clear: both;' ></div>

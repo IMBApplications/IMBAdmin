@@ -263,6 +263,27 @@ class ImbaSharedFunctions {
     }
 
     /**
+     * Check a password for its safety
+     * returns true if suceeded or error message
+     */
+    public static function checkPassword($newPassword) {
+        //strength test
+        if (strlen($newPassword) > 7) {
+            if (preg_match("#[0-9]+#", $newPassword)) {
+                if (preg_match("#[a-z]+#", $newPassword)) {
+                    return true;
+                } else {
+                    return "The password must contain at least one letter.";
+                }
+            } else {
+                return "The password must contain at least one number.";
+            }
+        } else {
+            return "The password is to short.";
+        }
+    }
+
+    /**
      * Function for temporary log writing (debug)
      */
     public static function writeToLog($message) {

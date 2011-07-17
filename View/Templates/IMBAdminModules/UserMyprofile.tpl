@@ -1,8 +1,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
-        // User submits the ImbaAjaxUsersViewprofileForm
-        $("#ImbaAjaxUsersViewprofileFormSubmit").button();
-        $("#ImbaAjaxUsersViewprofileFormSubmit").click(function(){
+        // User submits the ImbaAjaxUsersViewprofileUserprofileForm
+        $("#ImbaAjaxUsersViewprofileUserprofileFormSubmit").button();
+        $("#ImbaAjaxUsersViewprofileUserprofileFormSubmit").click(function(){
             // submit the change
             $.post(ajaxEntry, {
                 secSession: phpSessionID,
@@ -10,7 +10,6 @@
                 submodule: "IMBAdminModules",
                 ajaxmethod: "updateMyProfile",
                 params: JSON.stringify({
-                    "id" : "{$userid}", 
                     "motto" : $("#myProfileMotto").val(),
                     "usertitle" :$("#myProfileUsertitle").val(),
                     "avatar" : $("#myProfileAvatar").val(),
@@ -33,9 +32,36 @@
             // TODO: Refresh from Database?
             return false;
         });
+        
+        // User submits the ImbaAjaxUsersViewprofileUserprofileForm
+        $("#ImbaAjaxUsersViewprofilePasswordFormSubmit").button();
+        $("#ImbaAjaxUsersViewprofilePasswordFormSubmit").click(function(){
+            // submit the change
+            $.post(ajaxEntry, {
+                secSession: phpSessionID,
+                module: "AjaxUser",
+                submodule: "IMBAdminModules",
+                ajaxmethod: "updateMyPassword",
+                params: JSON.stringify({
+                    "oldPassword" : $("#myOldPassword").val(),
+                    "newPassword1" : $("#myNewPassword1").val(),
+                    "newPassword2" : $("#myNewPassword2").val(),
+                })
+            }, function(response){
+                if (response != "Ok"){
+                    // $.jGrowl('Daten wurden nicht gespeichert!', { header: 'Error' });
+                    $.jGrowl(response, { header: 'Error' });
+                } else {
+                    $.jGrowl('Passwort wurde ge&auml;ndert!', { header: 'Erfolg' });
+                }
+            });
+            // TODO: Refresh from Database?
+            return false;
+        });
     } );   
 </script>
-<form id="ImbaAjaxUsersViewprofileForm" action="post">
+<h2>Profil Informationen</h2>
+<form id="ImbaAjaxUsersViewprofileUserprofileForm" action="post">
     <table class="ImbaAjaxBlindTable" style="cellspacing: 1px;">
         <tbody>
             <tr>
@@ -92,8 +118,31 @@
         </tr>
         <tr>
             <td>&nbsp;</td>
-            <td colspan="2"><input id="ImbaAjaxUsersViewprofileFormSubmit" type="submit" value="Speichern" /></td>
+            <td colspan="2"><input id="ImbaAjaxUsersViewprofileUserprofileFormSubmit" type="submit" value="Speichern" /></td>
         </tr>
+        </tbody>
+    </table>
+</form>
+<h2>Passwort &auml;ndern</h2>
+<form id="ImbaAjaxUsersViewprofilePasswordForm" action="post">
+    <table class="ImbaAjaxBlindTable" style="cellspacing: 1px;">
+        <tbody>
+            <tr>
+                <td>Altes Passwort:</td>
+                <td><input id="myOldPassword" type="password" name="oldPassword" value="" /></td>
+            </tr>
+            <tr>
+                <td>Neues Passwort:</td>
+                <td><input id="myNewPassword1" type="password" name="newPassword1" value="" /></td>
+            </tr>
+            <tr>
+                <td>Wiederholen:</td>
+                <td><input id="myNewPassword2" type="password" name="newPassword1" value="" /></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="2"><input id="ImbaAjaxUsersViewprofilePasswordFormSubmit" type="submit" value="&Auml;ndern" /></td>
+            </tr>
         </tbody>
     </table>
 </form>

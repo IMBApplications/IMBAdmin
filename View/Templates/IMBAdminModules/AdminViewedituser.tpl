@@ -8,9 +8,9 @@
             changeMonth: true,
             changeYear: true });
         
-        // User submits the ImbaAjaxUsersViewprofileForm
-        $("#ImbaAjaxUsersViewprofileFormSubmit").button();
-        $("#ImbaAjaxUsersViewprofileFormSubmit").click(function(){
+        // User submits the ImbaAjaxUsersViewprofileUserprofileForm
+        $("#ImbaAjaxUsersViewprofileUserprofileFormSubmit").button();
+        $("#ImbaAjaxUsersViewprofileUserprofileFormSubmit").click(function(){
             // submit the change
             // hier fehlt noch einiges
             $.post(ajaxEntry, {
@@ -56,7 +56,7 @@
         loadImbaAdminTabContent(data);
     }
 </script>
-<form id="ImbaAjaxUsersViewprofileForm" action="post">
+<form id="ImbaAjaxUsersViewprofileUserprofileForm" action="post">
     <table class="ImbaAjaxBlindTable" style="cellspacing: 1px;">
         <tbody>
             <tr>
@@ -124,7 +124,7 @@
         </tr>
         <tr>
             <td>&nbsp;</td>
-            <td colspan="2"><input id="ImbaAjaxUsersViewprofileFormSubmit" type="submit" value="Speichern" /></td>
+            <td colspan="2"><input id="ImbaAjaxUsersViewprofileUserprofileFormSubmit" type="submit" value="Speichern" /></td>
         </tr>
         </tbody>
     </table>

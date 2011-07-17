@@ -29,17 +29,16 @@ $(document).ready(function() {
 
     $("#imbaSsoOpenIdSubmit").button();
     $("#imbaSsoOpenIdSubmit").click(function () {
-        if (($("#imbaSsoOpenId").val() == "") && ($("#imbaSsoNickname").val() == "")) {
-            /* if ($("#imbaSsoOpenId").val() == "") { */
-            loadImbaAdminDefaultModule();
-            return true;
-        } else {
+        if (($("#imbaSsoPassword").val() != "") && ($("#imbaSsoNickname").val() != "")) {
             hideMenu();
             $.jGrowl('Betrete das System...', {
                 header: 'Knock, Knock, Neo!'
             });
             $("#imbaSsoOpenIdLoginReferer").attr('value', tmpURL2);
             $("#imbaSsoLoginForm").submit();
+            return true;
+        } else {
+            loadImbaAdminDefaultModule();
             return true;
         }
     });
@@ -326,7 +325,7 @@ function loadImbaPortal(portalId) {
             var currentPortal = $.parseJSON(response);
             document.title = currentPortal.name;
 
-            if (portalId != null) {
+            if ((portalId != null) && (portalId != -1)) {
                 $.jGrowl('<img src="' + currentPortal.icon + '" style="width: 24px; height: 24px; vertical-align: middle; padding: 3px;" /> <big>' + currentPortal.name + '</big>', {
                     life: 350,
                     header: 'Portal geladen:<br /><br />'
