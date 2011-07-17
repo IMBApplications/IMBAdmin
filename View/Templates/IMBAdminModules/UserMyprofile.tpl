@@ -1,40 +1,41 @@
 <script type="text/javascript">
     $(document).ready(function() {
-        // User submits the ImbaAjaxUsersViewprofileUserprofileForm
+        $("#ImbaAjaxUsersViewprofilePasswordFormSubmit").button();
         $("#ImbaAjaxUsersViewprofileUserprofileFormSubmit").button();
-        $("#ImbaAjaxUsersViewprofileUserprofileFormSubmit").click(function(){
-            // submit the change
-            $.post(ajaxEntry, {
-                secSession: phpSessionID,
-                module: "AjaxUser",
-                submodule: "IMBAdminModules",
-                ajaxmethod: "updateMyProfile",
-                params: JSON.stringify({
-                    "motto" : $("#myProfileMotto").val(),
-                    "usertitle" :$("#myProfileUsertitle").val(),
-                    "avatar" : $("#myProfileAvatar").val(),
-                    "website" : $("#myProfileWebsite").val(),
-                    "nickname" : $("#myProfileNickname").val(),
-                    "email" : $("#myProfileEmail").val(),
-                    "skye" : $("#myProfileSkype").val(),
-                    "icq" : $("#myProfileIcq").val(),
-                    "msn" : $("#myProfileMsn").val(),
-                    "signature" : $("#myProfileSignature").val()
-                })
-            }, function(response){
-                if (response != "Ok"){
-                    // $.jGrowl('Daten wurden nicht gespeichert!', { header: 'Error' });
-                    $.jGrowl(response, { header: 'Error' });
-                } else {
-                    $.jGrowl('Daten wurden gespeichert!', { header: 'Erfolg' });
-                }
-            });
-            // TODO: Refresh from Database?
-            return false;
+
+        // User submits the ImbaAjaxUsersViewprofileUserprofileForm
+        $("#ImbaAjaxUsersViewprofileUserprofileForm").validate({
+            submitHandler: function(form) {
+                // submit the change
+                $.post(ajaxEntry, {
+                    secSession: phpSessionID,
+                    module: "AjaxUser",
+                    submodule: "IMBAdminModules",
+                    ajaxmethod: "updateMyProfile",
+                    params: JSON.stringify({
+                        "motto" : $("#myProfileMotto").val(),
+                        "usertitle" :$("#myProfileUsertitle").val(),
+                        "avatar" : $("#myProfileAvatar").val(),
+                        "website" : $("#myProfileWebsite").val(),
+                        "nickname" : $("#myProfileNickname").val(),
+                        "email" : $("#myProfileEmail").val(),
+                        "skye" : $("#myProfileSkype").val(),
+                        "icq" : $("#myProfileIcq").val(),
+                        "msn" : $("#myProfileMsn").val(),
+                        "signature" : $("#myProfileSignature").val()
+                    })
+                }, function(response){
+                    if (response != "Ok"){
+                        $.jGrowl(response, { header: 'Error' });
+                    } else {
+                        $.jGrowl('Daten wurden gespeichert!', { header: 'Erfolg' });
+                    }
+                });
+                return false;
+            }
         });
         
         // User submits the ImbaAjaxUsersViewprofileUserprofileForm
-        $("#ImbaAjaxUsersViewprofilePasswordFormSubmit").button();
         $("#ImbaAjaxUsersViewprofilePasswordFormSubmit").click(function(){
             // submit the change
             $.post(ajaxEntry, {
@@ -49,19 +50,17 @@
                 })
             }, function(response){
                 if (response != "Ok"){
-                    // $.jGrowl('Daten wurden nicht gespeichert!', { header: 'Error' });
                     $.jGrowl(response, { header: 'Error' });
                 } else {
                     $.jGrowl('Passwort wurde ge&auml;ndert!', { header: 'Erfolg' });
                 }
             });
-            // TODO: Refresh from Database?
             return false;
         });
     } );   
 </script>
 <h2>Profil Informationen</h2>
-<form id="ImbaAjaxUsersViewprofileUserprofileForm" action="post">
+<form id="ImbaAjaxUsersViewprofileUserprofileForm" action="" method="post" class='cmxform'>
     <table class="ImbaAjaxBlindTable" style="cellspacing: 1px;">
         <tbody>
             <tr>
@@ -71,8 +70,8 @@
         <td>
             <input id="myProfileMotto" type="text" name="motto" value="{$motto}" />
         </td>
-        <td rowspan="8">
-            <ul>
+        <td rowspan="10" style="vertical-align: top;">
+            <ul style="width: 200px;">
                 <li><i>Um deinen Namen das Geschlecht oder dein Geburtstag zu &auml;ndern, kontaktiere bitte einen Administrator.</i></li>
                 <li><i>Die Emailadresse wird ausschliesslich gebraucht um mit dir Kontakt aufzunehmen.</i></li>
                 <li><i>Dein Nachname wird f&uuml;r alle anderen auf einen Buchstaben gek&uuml;rzt ({$firstname} {$shortlastname}).</i></li>
@@ -94,11 +93,11 @@
         </tr>
         <tr>
             <td>Nickname:</td>
-            <td><input id="myProfileNickname" type="text" name="nickname" value="{$nickname}" /></td>
+            <td><input id="myProfileNickname" type="text" name="nickname" value="{$nickname}" title=" <<<" class="required" minlength="3" /></td>
         </tr>
         <tr>
             <td>Email:</td>
-            <td><input id="myProfileEmail" type="text" name="email" value="{$email}" /></td>
+            <td><input id="myProfileEmail" type="text" name="email" value="{$email}"  title=" <<<" class="email" /></td>
         </tr>
         <tr>
             <td>Skype:</td>
@@ -114,7 +113,7 @@
         </tr>
         <tr>
             <td>Signatur:</td>
-            <td colspan="2"><textarea id="myProfileSignature" name="signature" rows="4" cols="50">{$signature}</textarea></td>
+            <td><textarea id="myProfileSignature" name="signature" rows="4" cols="50">{$signature}</textarea></td>
         </tr>
         <tr>
             <td>&nbsp;</td>

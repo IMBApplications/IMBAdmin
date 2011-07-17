@@ -11,6 +11,11 @@
         $("#ImbaAjaxCheckCaptcha").button();
         $("#ImbaAjaxCancleCaptchaShowhelp").button();
         $("#ImbaAjaxStep2").button();
+        $("#imbaSsoRegisterForm").validate({
+            submitHandler: function(form) {
+                step2();
+            }
+        });
         
     });
     
@@ -114,9 +119,9 @@
         <td style="text-align: right;"><a id="ImbaAjaxCancleRegistration" href="javascript:void(0)" onclick="javascript: cancleRegistration();">Abbrechen</a></td>
     </tr>
 </table>
-<hr />
 <div id="ImbaRegisterForm">
-    <form id='imbaSsoRegisterForm' action='' method='post'>
+    <form id='imbaSsoRegisterForm' action='' class='cmxform' method='post'>
+
         <!--    <table class="ImbaAjaxBlindTable" style="cellspacing: 1px;"> -->
 
         <b>Bitte f&uuml;lle folgende Felder wahrheitsgetreu aus.</b><br />
@@ -124,15 +129,15 @@
         <table class="ImbaAjaxBlindTable" style="width: 100%; overflow: auto;">
             <tr>
                 <td>Vorname:</td>
-                <td><input id="regFirstname" class="regField" type="text" name="forename" title="Hans"></td>
+                <td><input id="regFirstname" type="text" name="forename" title="* Muss ausgef&uuml;llt werden" class="required" minlength="3" /></td>
             </tr>
             <tr>
                 <td>Nachname:</td>
-                <td><input id="regLastname" class="regField" type="text" name="surname" title="Muster"></td>
+                <td><input id="regLastname" type="text" name="surname" title="* Muss ausgef&uuml;llt werden"  class="required" minlength="3" /></td>
             </tr>
             <tr>
                 <td>Geburtsdatum:</td>
-                <td><input id="regBirthday" class="regField" type="text" name="birthdate" /></td>
+                <td><input id="regBirthday" class="regField" type="text" title="* Muss ausgef&uuml;llt werden" name="birthdate" /></td>
             </tr>
             <tr>
                 <td>Geschlecht</td>
@@ -141,31 +146,31 @@
             </tr>
             <tr>
                 <td>Nickname:</td>
-                <td><input id="regNickname" class="regField" type="text" name="nickname" title="Wir als unter anderem als Namen im Forum angezeigt."></td>
+                <td><input id="regNickname" type="text" name="nickname" title="* Muss ausgef&uuml;llt werden" class="required" minlength="3"></td>
             </tr>
             <tr>
                 <td>Email:</td>
-                <td><input id="regEmail" class="regField" type="text" name="email" title="Du weisst hoffentlich wie eine Emailadresse aussieht!"></td>
+                <td><input id="regEmail"  class="required email" type="text" name="email" title="* Muss ausgef&uuml;llt werden"></td>
             </tr>
             <tr>
                 <td>Passwort:</td>
-                <td><input id="regPassword1" class="regField" type="password" name="password1" title=""></td>
+                <td><input id="regPassword1" type="password" name="password1"  title="* Muss ausgef&uuml;llt werden" class="required" minlength="8"></td>
             </tr>
             <tr>
                 <td>Nocheinmal:</td>
-                <td><input id="regPassword2" class="regField" type="password" name="password2" title=""></td>
+                <td><input id="regPassword2" type="password" name="password2"  title="* Muss ausgef&uuml;llt werden" class="required" minlength="8"></td>
             </tr>
         </table>
         <br />
         <b>Die Community Regeln:</b><br />
-        <textarea id="regRules" class="regRules" name="regRules" readonly="readonly" style="border:0px; width: 100%; overflow: auto;" rows="10">{fetch file='View/Templates/IMBAdminModules/RegisterCommunityRules.tpl'}</textarea>
+        <textarea id="regRules" class="regRules" name="regRules" readonly="readonly" style="border:0px; width: 100%; overflow: auto;" rows="9">{fetch file='View/Templates/IMBAdminModules/RegisterCommunityRules.tpl'}</textarea>
+        <table class="ImbaAjaxBlindTable" style="width: 100%; overflow: auto;">
+            <tr>
+                <td><input id="regCheckrules" onClick="javascript:$('regRules').style.border = '0px';" class="regField" type="checkbox" class="required" name="rulesaccepted" style="width:16px;" title="*"> Ich habe die allgemeinen Community Regeln gelesen und werde mich an sie halten.</td>
+                <td style="text-align: right;"><input id="ImbaAjaxStep2" type="submit" value="Weiter" /></td>
+            </tr>
+        </table>
     </form>
-    <table class="ImbaAjaxBlindTable" style="width: 100%; overflow: auto;">
-        <tr>
-            <td><input id="regCheckrules" onClick="javascript:$('regRules').style.border = '0px';" class="regField" type="checkbox" name="rulesaccepted" style="width:16px;"> Ich habe die allgemeinen Community Regeln gelesen und werde mich an sie halten.</td>
-            <td style="text-align: right;"><a id="ImbaAjaxStep2" href="javascript:void(0)" onclick="javascript: step2();">Weiter</a></td>
-        </tr>
-    </table>
 </div>
 <div id="ImbaReCaptchaContainer" style="display: none;">
     <b>Bitte beweise, dass du aus Fleisch und Blut bist.</b><br />

@@ -38,7 +38,7 @@ class AjaxRegistration extends AjaxBase {
          */
         $navigation->addElement("viewRegisterForm", "Registration", "Hier kannst du dich registrieren.");
         $navigation->addElement("viewResetPassword", "Passwort zur&uuml;cksetzen", "Hier kannst du dein Passwort zur&uuml;cksetzen.");
-        $navigation->addElement("viewAbout", "&Uuml;ber | About", "Wer sind wir und was ist das hier.");
+        $navigation->addElement("viewAbout", "&Uuml;ber uns | About", "Wer sind wir und was ist das hier.");
         return $navigation;
     }
 
