@@ -6,13 +6,14 @@
 
 *}{strip}<div id='imbaSsoLoginBorder' class='ui-widget-content ui-corner-all'>
     <div id='imbaSsoLogin'>
+        <img id='imbaSsoNavigationImage' src='{$thrustRoot}Images/nav.png' alt='Navigation' title='Navigation' />
         <img id='imbaSsoLogoImage' src='{$thrustRoot}Images/noicon.png' alt='Guild Logo' title='Show/Hide Menu' />
         <div id='imbaSsoLoginInner'>
             <form id='imbaSsoLoginForm' action='{$thrustRoot}{$authPath}' method='post'>
                 <input id='imbaSsoOpenId' name='openid' type='hidden' />
                 <input name='authMethod' type='hidden' value='password' />
-                <input id='imbaSsoNickname' name='nickname' type='text' size='6' />
-                <input id='imbaSsoPassword' name='password' type='password' size='6' />
+                <input id='imbaSsoNickname' name='nickname' type='text' />
+                <input id='imbaSsoPassword' name='password' type='password' style='display: none;' />
                 <input id='imbaSsoOpenIdLoginReferer' name='imbaSsoOpenIdLoginReferer' value='' type='hidden' />
                 <br />
                 <span id='imbaSsoOpenIdSubmit'>Login / Registrieren</span>
@@ -53,5 +54,8 @@
     <div id='imbaContentNav' style='height: 98%; overflow: auto;'>
         <ul></ul>
     </div>
+</div>
+<div id='imbaPasswordPrompt' title='Passwort eingeben:' />
+    <input id='imbaPasswordPromptInput' type='password' name='imbaPasswordPromptInput' />
 </div>
 {/strip}

@@ -21,22 +21,60 @@ $(document).ready(function() {
         async: true
     });
 
-    var tmpURL = window.location.toString().split("/");
-    var tmpURL2 = "";
-    for (var i=0; i<(tmpURL.length-1); i++) {
-        tmpURL2 += tmpURL[i] + "/";
-    }
+   
+    $("#imbaSsoNickname").keydown(function(event) {
+        if (event.keyCode == "13") {
+            event.preventDefault();
+            if ($("#imbaSsoNickname").val() != "") {
+                /*  make magic password prompt here  */
+                //FIME: if password field is filled out, submit directly
+                if ($("#imbaSsoPassword").val() == "") {
+                    askForPassword();
+                } else {
+                    $("#imbaSsoLoginForm").submit();
+                }
+            } else {
+                loadImbaAdminDefaultModule();
+            }
+            return false;
+        }
+    });
+    
+    $("#imbaPasswordPromptInput").keydown(function(event) {
+        if (event.keyCode == "13") {
+            event.preventDefault();
+            submitForPassword();
+        }
+    });
+    
+    $("#imbaPasswordPrompt").dialog({
+        autoOpen: false,
+        modal: true,
+        buttons:       
+        {
+            "Login": function() {
+                submitForPassword();
+            }
+            ,
+            "Abbrechen": function() {
+                $(this).dialog("close");
+                showMenu();
+            }
+        }       
+        
+    });
 
     $("#imbaSsoOpenIdSubmit").button();
     $("#imbaSsoOpenIdSubmit").click(function () {
-        if (($("#imbaSsoPassword").val() != "") && ($("#imbaSsoNickname").val() != "")) {
-            hideMenu();
-            $.jGrowl('Betrete das System...', {
-                header: 'Knock, Knock, Neo!'
-            });
-            $("#imbaSsoOpenIdLoginReferer").attr('value', tmpURL2);
-            $("#imbaSsoLoginForm").submit();
-            return true;
+        if ($("#imbaSsoNickname").val() != "") {
+            /*  make magic password prompt here  */
+            //FIME: if password field is filled out, submit directly
+            if ($("#imbaSsoPassword").val() == "") {
+                askForPassword();
+            } else {
+                $("#imbaSsoLoginForm").submit();
+            }
+            return false;
         } else {
             loadImbaAdminDefaultModule();
             return true;
@@ -44,6 +82,12 @@ $(document).ready(function() {
     });
     $("#imbaSsoOpenIdSubmitLogout").button();
     $("#imbaSsoOpenIdSubmitLogout").click(function () {
+        var tmpURL = window.location.toString().split("/");
+        var tmpURL2 = "";
+        for (var i=0; i<(tmpURL.length-1); i++) {
+            tmpURL2 += tmpURL[i] + "/";
+        }
+    
         hideMenu();
         $.jGrowl('Verlasse das System...', {
             header: 'Knock, Knock, Neo!'
@@ -57,12 +101,9 @@ $(document).ready(function() {
     // setting old openid
     var oldOpenId = unescape(decodeURIComponent(readCookie("ImbaSsoLastLoginName")));
     if (oldOpenId != null && oldOpenId != "null" && oldOpenId != ""){
-        $("#imbaSsoOpenId").val(oldOpenId);
         $("#imbaSsoNickname").val(oldOpenId);
-        $("#imbaSsoPassword").focus();
-    } else {
-        $("#imbaSsoNickname").focus();
-    }
+    } 
+    $("#imbaSsoNickname").focus();
 
     // Checking if user is online
     $.post(ajaxEntry, {
@@ -103,8 +144,8 @@ $(document).ready(function() {
 
 
     /*
-     * ImbAdmin Window Tabs Module
-     */
+         * ImbAdmin Window Tabs Module
+         */
     // Setting up the content of the Dialog as tabs
     $("#imbaContentNav").tabs().bind("tabsselect", function(event, ui) {
         var tmpModuleTabId = "";
@@ -125,8 +166,8 @@ $(document).ready(function() {
     });
 
     /*
-     * ImbaGame Window Tabs Module
-     */
+         * ImbaGame Window Tabs Module
+         */
     // Setting up the content of the Dialog as tabs
     $("#imbaGameNav").tabs().bind("tabsselect", function(event, ui) {
         var tmpGameTabId = "";
@@ -149,8 +190,8 @@ $(document).ready(function() {
     });
 
     /**
-     * Setting up the Dialog for the ImbaAdmin
-     */
+         * Setting up the Dialog for the ImbaAdmin
+         */
     $("#imbaContentDialog").dialog({
         autoOpen: false
     })
@@ -178,8 +219,8 @@ $(document).ready(function() {
 });
 
 /**
- * refreshing the users online tag cloud
- */
+     * refreshing the users online tag cloud
+     */
 function refreshUsersOnline(){
     if (isUserLoggedIn){
         $.post(ajaxEntry, {
@@ -213,8 +254,8 @@ function refreshUsersOnline(){
 }
 
 /**
- * Sets the user loggedin
- */
+     * Sets the user loggedin
+     */
 function setLoggedIn(isLoggedIn){
     if (isLoggedIn){
         $("#imbaSsoLoginForm").hide();
@@ -230,8 +271,8 @@ function setLoggedIn(isLoggedIn){
 }
 
 /**
- * Sets the system in error state
- */
+     * Sets the system in error state
+     */
 function checkReturn(returnData){
     if (imbaJsDebug == 'false') {
         if (returnData.substring(0,6) == "Error:") {
@@ -270,8 +311,8 @@ function checkReturn(returnData){
     }
 }
 /**
- * Shows the Menu and stuff around
- */
+     * Shows the Menu and stuff around
+     */
 function showMenu() {
     // run the effect
     $("#imbaMenu").show("slide", {
@@ -290,8 +331,8 @@ function showMenu() {
 }
 
 /**
- * Hids the Menu and stuff around
- */
+     * Hids the Menu and stuff around
+     */
 function hideMenu() {
     // run the effect
     $("#imbaMenu").hide("slide", {
@@ -310,8 +351,8 @@ function hideMenu() {
 }
 
 /**
- * Sets the current portal
- */
+     * Sets the current portal
+     */
 function loadImbaPortal(portalId) {
     $.post(ajaxEntry, {
         secSession: phpSessionID,
@@ -393,4 +434,34 @@ function loadImbaPortal(portalId) {
             }
         }
     });
+}
+
+/**
+     * Load jquery dialog for password and hide menu
+     */
+function askForPassword() {
+    hideMenu();
+    $("#imbaPasswordPrompt").dialog("open");
+    $("#imbaPasswordPromptInput").focus();
+}
+
+/**
+     * Submit the login form
+     */
+function submitForPassword() {
+    var tmpURL = window.location.toString().split("/");
+    var tmpURL2 = "";
+    for (var i=0; i<(tmpURL.length-1); i++) {
+        tmpURL2 += tmpURL[i] + "/";
+    }
+    
+    $("#imbaSsoPassword").val($("#imbaPasswordPromptInput").val());
+                            
+    $.jGrowl('Betrete das System...', {
+        header: 'Knock, Knock, Neo!'
+    });
+    $("#imbaSsoOpenIdLoginReferer").attr('value', tmpURL2);
+    $("#imbaSsoLoginForm").submit();
+                
+    $(this).dialog("close");
 }

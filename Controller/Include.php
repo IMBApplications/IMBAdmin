@@ -23,4 +23,6 @@ require_once("Controller/ImbaManagerPortal.php");
 require_once("Controller/ImbaManagerPortalEntry.php");
 require_once("Controller/ImbaManagerUser.php");
 require_once("Controller/ImbaManagerUserRole.php");
+require_once("Controller/ImbaAuthBase.php");
+require_once("Controller/ImbaAuthPassword.php");
 ?>

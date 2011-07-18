@@ -294,6 +294,23 @@ class ImbaManagerUser extends ImbaManagerBase {
         return new ImbaUser();
     }
 
+    /**
+     * Select a user by strtolower(Nickname)
+     */
+    public function selectByNickname($nickname) {
+        // Only fetch Users with role <> banned
+        $query = "SELECT id, nickname FROM %s Where Role <> 0 And lower(nickname) = '%s';";
+
+        $this->database->query($query, array(ImbaConstants::$DATABASE_TABLES_SYS_USER_PROFILES, strtolower($nickname)));
+
+        $user = null;
+        while ($row = $this->database->fetchRow()) {
+            $user = $this->selectById($row["id"]);
+        }
+
+        return $user;
+    }
+
 }
 
 ?>
