@@ -36,12 +36,17 @@ class AjaxWelcome extends AjaxBase {
         /**
          * Set tabs
          */
-        $navigation->addElement("viewWelcome", "&Uuml;bersicht der Module", "Hier siehst du eine einfache &Uml;bersicht der Module.");
+        $navigation->addElement("viewHome", "Home", "Hier siehst du eine einfache &Uml;bersicht der Module.");
+        $navigation->addElement("viewUsermap", "Karte", "Hier siehst du eine Karte, von wo sich die User einloggen.");
         $navigation->addElement("viewWelcomeIndexed", "Indexierte &Uuml;bersicht", "Hier siehst du eine komplette &Uml;bersicht der Module.");
         return $navigation;
     }
 
-    public function viewWelcome() {
+    public function viewUsermap () {
+         $this->smarty->display('IMBAdminModules/WelcomeViewUsermap.tpl');
+  }
+    
+    public function viewHome() {
         $myself = $this->managerUser->selectMyself();
         $allUsers = $this->managerUser->selectAllUser();
         $smartyPortlets = array();
@@ -141,7 +146,7 @@ class AjaxWelcome extends AjaxBase {
         /**
          * Display the site
          */
-        $this->smarty->display('IMBAdminModules/WelcomeOverview.tpl');
+        $this->smarty->display('IMBAdminModules/WelcomeViewHome.tpl');
     }
 
     /**
