@@ -53,6 +53,7 @@ class AjaxWelcome extends AjaxBase {
         $this->smarty->assign('nickname', $myself->getNickname());
         $this->smarty->assign("today", date("d") . "." . date("m") . " " . date("Y"));
         $this->smarty->assign("thrustRoot", urlencode(ImbaSharedFunctions::getSiteDomainUrl()));
+        $this->smarty->assign("niceDomain", urldecode(ImbaSharedFunctions::getSiteDomainUrl()));
         /*
          * TODO: Portlets to be done:
          * $events
