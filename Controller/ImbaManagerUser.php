@@ -80,6 +80,7 @@ class ImbaManagerUser extends ImbaManagerBase {
                 $user->setMotto($row["motto"]);
                 $user->setAccurate($row["accurate"]);
                 $user->setLastonline($row["lastonline"]);
+                $user->setLastip($row["lastip"]);
                 $user->setRole($row["role"]);
                 array_push($result, $user);
             }
@@ -279,10 +280,11 @@ class ImbaManagerUser extends ImbaManagerBase {
         if (ImbaUserContext::getLoggedIn() &&
                 ImbaUserContext::getUserLastOnline() < (time() - 10)) {
             ImbaUserContext::setUserLastOnline();
-            $query = "UPDATE %s SET lastonline='%s' WHERE id='%s';";
+            $query = "UPDATE %s SET lastonline='%s', lastip='%s' WHERE id='%s';";
             $this->database->query($query, array(
                 ImbaConstants::$DATABASE_TABLES_SYS_USER_PROFILES,
                 ImbaUserContext::getUserLastOnline(),
+                ImbaSharedFunctions::getIP(),
                 ImbaUserContext::getUserId()));
         }
     }

@@ -48,6 +48,7 @@ class AjaxMaintenance extends AjaxBase {
      * view settings
      */
     public function viewSettings() {
+        $this->managerUser->setMeOnline();
         $managerDatabase = ImbaManagerDatabase::getInstance();
         $settings = array();
         $managerDatabase->query("SELECT * FROM %s;", array(ImbaConstants::$DATABASE_TABLES_SYS_SETTINGS));
@@ -63,6 +64,7 @@ class AjaxMaintenance extends AjaxBase {
      * @param type $params ({"name":"abc", "value":"abc"})
      */
     public function addSetting($params) {
+        $this->managerUser->setMeOnline();
         $managerDatabase = ImbaManagerDatabase::getInstance();
         $managerDatabase->query("INSERT INTO %s SET name='%s', value='%s';", array(ImbaConstants::$DATABASE_TABLES_SYS_SETTINGS, $params->name, $params->value));
     }
@@ -72,6 +74,7 @@ class AjaxMaintenance extends AjaxBase {
      * @param type $params ({"name":"abc", "value":"abc"})
      */
     public function updateSetting($params) {
+        $this->managerUser->setMeOnline();
         $managerDatabase = ImbaManagerDatabase::getInstance();
         $managerDatabase->query("UPDATE %s SET value='%s' WHERE name='%s';", array(ImbaConstants::$DATABASE_TABLES_SYS_SETTINGS, $_POST["value"], $params->name));
         echo $_POST["value"];
@@ -82,6 +85,7 @@ class AjaxMaintenance extends AjaxBase {
      * @param type $params ({"name":"abc"})
      */
     public function deleteSetting($params) {
+        $this->managerUser->setMeOnline();
         $managerDatabase = ImbaManagerDatabase::getInstance();
         $managerDatabase->query("DELETE FROM %s WHERE name='%s';", array(ImbaConstants::$DATABASE_TABLES_SYS_SETTINGS, $params->name));
     }
@@ -90,6 +94,7 @@ class AjaxMaintenance extends AjaxBase {
      * Views the maintenance
      */
     public function viewMaintenance() {
+        $this->managerUser->setMeOnline();
         $maintenenceJobs = array();
         $dbJobs = array();
         $userJobs = array();
@@ -119,6 +124,7 @@ class AjaxMaintenance extends AjaxBase {
      * @param type $params ({"jobHandle":"abc"})
      */
     public function runMaintenanceJob($params) {
+        $this->managerUser->setMeOnline();
         $jobHandle = $params->jobHandle;
 
         $log = $this->managerLog->getNew();
@@ -298,6 +304,7 @@ class AjaxMaintenance extends AjaxBase {
      * views the statistics
      */
     public function viewStatistics() {
+        $this->managerUser->setMeOnline();
         $this->smarty->assign('users', count($this->managerUser->selectAllUser()));
         $this->smarty->assign('userroles', count($this->managerRole->selectAll()));
 
@@ -321,6 +328,7 @@ class AjaxMaintenance extends AjaxBase {
      * views the logs
      */
     public function viewLogs() {
+        $this->managerUser->setMeOnline();
         $logs = $this->managerLog->selectAll();
 
         $this->smarty_logs = array();
@@ -360,6 +368,7 @@ class AjaxMaintenance extends AjaxBase {
      * @param type $params ({"logid":"1"})
      */
     public function viewLogDetail($params) {
+        $this->managerUser->setMeOnline();
         /**
          * Get log entry
          */

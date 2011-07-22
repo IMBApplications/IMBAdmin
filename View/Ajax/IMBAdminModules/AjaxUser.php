@@ -46,6 +46,7 @@ class AjaxUser extends AjaxBase {
      * Gets a list of online users as JSON
      */
     public function loadUsersOnline() {
+        $this->managerUser->setMeOnline();
         $users = $this->managerUser->selectAllUserButme(ImbaUserContext::getOpenIdUrl());
         $result = array();
         $msgCountMin = -1;
@@ -107,6 +108,7 @@ class AjaxUser extends AjaxBase {
      * Gets a list of users as JSON
      */
     public function loadUserList() {
+        $this->managerUser->setMeOnline();
         $users = $this->managerUser->selectAllUserButme(ImbaUserContext::getOpenIdUrl());
         $result = array();
         foreach ($users as $user) {
@@ -121,6 +123,7 @@ class AjaxUser extends AjaxBase {
      * @param type $param ({"startwith":"ABC"})
      */
     public function loadUsersStartwith($param) {
+        $this->managerUser->setMeOnline();
         $startwith = $param->startwith;
         if (trim($startwith) != "") {
             $users = $this->managerUser->selectAllUserStartWith($startwith);
@@ -137,6 +140,7 @@ class AjaxUser extends AjaxBase {
      * Checks if current user is logged in, or needs to register
      */
     public function getCurrentUserStatus() {
+        $this->managerUser->setMeOnline();
         if (ImbaUserContext::getLoggedIn()) {
             echo $this->managerUser->selectMyself()->getNickname();
         } elseif (ImbaUserContext::getNeedToRegister()) {
@@ -150,6 +154,7 @@ class AjaxUser extends AjaxBase {
      * Return currently logged in User
      */
     public function returnMyself() {
+        $this->managerUser->setMeOnline();
         $user = $this->managerUser->selectMyself();
         if ($user != null) {
             echo json_encode(array("id" => $user->getId(), "openid" => $user->getOpenId(), "name" => $user->getNickname()));
@@ -162,6 +167,7 @@ class AjaxUser extends AjaxBase {
      * Generate visual representation to view all users.
      */
     public function viewUsers() {
+        $this->managerUser->setMeOnline();
 // get all users (without the actual user itself)
         $users = $this->managerUser->selectAllUserButme(ImbaUserContext::getOpenIdUrl());
 
@@ -182,6 +188,7 @@ class AjaxUser extends AjaxBase {
     }
 
     public function viewMyProfile() {
+        $this->managerUser->setMeOnline();
         $params->id = ImbaUserContext::getUserId();
         $this->viewUserProfile($params);
     }
@@ -191,6 +198,7 @@ class AjaxUser extends AjaxBase {
      * @param type $param ({"id":"1"})
      */
     public function viewUserProfile($params) {
+        $this->managerUser->setMeOnline();
         $user = $this->managerUser->selectById($params->id);
 
         $this->smarty->assign('nickname', $user->getNickname());
@@ -230,6 +238,7 @@ class AjaxUser extends AjaxBase {
      * Views the edit my profile
      */
     public function viewEditMyProfile() {
+        $this->managerUser->setMeOnline();
         $user = $this->managerUser->selectById(ImbaUserContext::getUserId());
 
         $this->smarty->assign('userid', $user->getId());
@@ -278,6 +287,7 @@ class AjaxUser extends AjaxBase {
      *  "id":"1"})
      */
     public function updateMyProfile($params) {
+        $this->managerUser->setMeOnline();
         $user = new ImbaUser();
         $user = $this->managerUser->selectById(ImbaUserContext::getUserId());
         $user->setMotto($params->motto);
@@ -298,6 +308,7 @@ class AjaxUser extends AjaxBase {
      * Update my Password
      */
     public function updateMyPassword($params) {
+        $this->managerUser->setMeOnline();
         $user = new ImbaUser();
         $user = $this->managerUser->selectById(ImbaUserContext::getUserId());
 
@@ -331,6 +342,7 @@ class AjaxUser extends AjaxBase {
      * Views my games
      */
     public function viewMyGames() {
+        $this->managerUser->setMeOnline();
         $user = $this->managerUser->selectById(ImbaUserContext::getUserId());
         $games = $this->managerGame->selectAll();
 
@@ -386,6 +398,7 @@ class AjaxUser extends AjaxBase {
      * @param type $params ({"gamesIPlay":[{"gameid":"1", "checked":"true|false"}]})
      */
     public function updateMyGames($params) {
+        $this->managerUser->setMeOnline();
         $user = new ImbaUser();
         $user = $this->managerUser->selectById(ImbaUserContext::getUserId());
         $user->setGames(array());
@@ -405,6 +418,7 @@ class AjaxUser extends AjaxBase {
      * @param type $params ({"propertyid":"1", "propertyvalue":"abc"})
      */
     public function addPropertyToMyGames($params) {
+        $this->managerUser->setMeOnline();
         $user = new ImbaUser();
         $user = $this->managerUser->selectById(ImbaUserContext::getUserId());
 

@@ -42,11 +42,13 @@ class AjaxWelcome extends AjaxBase {
         return $navigation;
     }
 
-    public function viewUsermap () {
-         $this->smarty->display('IMBAdminModules/WelcomeViewUsermap.tpl');
-  }
-    
+    public function viewUsermap() {
+        $this->managerUser->setMeOnline();
+        $this->smarty->display('IMBAdminModules/WelcomeViewUsermap.tpl');
+    }
+
     public function viewHome() {
+        $this->managerUser->setMeOnline();
         $myself = $this->managerUser->selectMyself();
         $allUsers = $this->managerUser->selectAllUser();
         $smartyPortlets = array();
@@ -154,6 +156,7 @@ class AjaxWelcome extends AjaxBase {
      * views the Welcome indexed
      */
     public function viewWelcomeIndexed() {
+        $this->managerUser->setMeOnline();
         $navigations = AjaxBase::getModulesNavigation("IMBAdminModules");
         $topNavigation = array();
 

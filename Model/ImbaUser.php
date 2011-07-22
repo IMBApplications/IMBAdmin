@@ -29,6 +29,7 @@ class ImbaUser extends ImbaBase {
     protected $accurate = null;
     protected $role = null;
     protected $lastonline = null;
+    protected $lastip = null;
     protected $games = array();
     protected $gamesPropertyValues = array();
 
@@ -208,6 +209,14 @@ class ImbaUser extends ImbaBase {
 
     public function setLastonline($lastonline) {
         $this->lastonline = $lastonline;
+    }
+
+    public function getLastip() {
+        return $this->lastip;
+    }
+
+    public function setLastip($lastip) {
+        $this->lastip = $lastip;
     }
 
     public function getGames() {

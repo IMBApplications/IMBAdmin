@@ -55,6 +55,7 @@ class AjaxAdministration extends AjaxBase {
      * gets the portal overview
      */
     public function viewPortalOverview() {
+        $this->managerUser->setMeOnline();
         $smartyPortals = array();
         foreach ($this->managerPortal->selectAll() as $portal) {
             array_push($smartyPortals, array(
@@ -73,6 +74,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({"icon":"iconurl", "name":"Name", "comment":"Comment"})
      */
     public function addPortal($params) {
+        $this->managerUser->setMeOnline();
         $icon = $params->icon;
         $name = $params->name;
         $comment = $params->comment;
@@ -92,6 +94,7 @@ class AjaxAdministration extends AjaxBase {
       "portalmodules": ["mod1", "mod2", "mod3"]})
      */
     public function updatePortal($params) {
+        $this->managerUser->setMeOnline();
         $portalid = $params->portalid;
         $icon = $params->icon;
         $icon = $params->icon;
@@ -131,6 +134,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({"portalid":"1"})
      */
     public function deletePortal($params) {
+        $this->managerUser->setMeOnline();
         $portalid = $params->portalid;
         $this->managerPortal->delete($portalid);
         echo "Ok";
@@ -141,6 +145,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({"portalid":"1"})
      */
     public function viewPortalDetail($params) {
+        $this->managerUser->setMeOnline();
         $portalid = $params->portalid;
         $portal = $this->managerPortal->selectById($portalid);
 
@@ -208,6 +213,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({"portalid":"1", "alias": "alias"})
      */
     public function deletePortalAlias($params) {
+        $this->managerUser->setMeOnline();
         $this->managerPortal->deleteAlias($params->portalid, $params->alias);
         echo "Ok";
     }
@@ -217,6 +223,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({"portalid":"1", "alias": "alias"})
      */
     public function addPortalAlias($params) {
+        $this->managerUser->setMeOnline();
         $this->managerPortal->addAlias($params->portalid, $params->alias);
         echo "Ok";
     }
@@ -225,6 +232,7 @@ class AjaxAdministration extends AjaxBase {
      * view portal entries
      */
     public function viewPortalEntries() {
+        $this->managerUser->setMeOnline();
         $portalEntries = $this->managerPortalEntry->selectAll();
         $this->smartyPortalEntries = array();
 
@@ -250,6 +258,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({"handle":"abc", "name":"abc", "target":"abc", "url":"abc", "comment":"abc", "loggedin":"abc", "role":"abc" })
      */
     public function addPortalEntry($params) {
+        $this->managerUser->setMeOnline();
         $handle = $params->handle;
         $name = $params->name;
         $target = $params->target;
@@ -276,6 +285,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({"portalentryid":"1", "portalentrycolumn":"abc", "value":"abc"})
      */
     public function updatePortalEntry($params) {
+        $this->managerUser->setMeOnline();
         $portalentryid = $params->portalentryid;
         $portalentrycolumn = $params->portalentrycolumn;
         $value = $_POST["value"];
@@ -325,6 +335,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({"portalentryid":"1"})
      */
     public function deletePortalEntry($params) {
+        $this->managerUser->setMeOnline();
         $portalentryid = $params->portalentryid;
         $this->managerPortalEntry->delete($portalentryid);
         echo "Ok";
@@ -334,6 +345,7 @@ class AjaxAdministration extends AjaxBase {
      * view roles
      */
     public function viewRoles() {
+        $this->managerUser->setMeOnline();
         $roles = $this->managerRole->selectAll();
 
         $this->smarty_roles = array();
@@ -357,6 +369,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({"handle":"abc", "role":"1", "name":"abc", "smf":"1", "wordpress":"abc", "icon":"abc"})
      */
     public function addRole($params) {
+                $this->managerUser->setMeOnline();
         $handle = $params->handle;
         $role = $params->role;
         $name = $params->name;
@@ -380,6 +393,7 @@ class AjaxAdministration extends AjaxBase {
      * and a $_POST["value"]
      */
     public function updateRole($params) {
+        $this->managerUser->setMeOnline();
         $roleid = $params->roleid;
         $rolecolumn = $params->rolecolumn;
         $value = $_POST["value"];
@@ -424,6 +438,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({"roleid":"1"})
      */
     public function deleteRole($params) {
+        $this->managerUser->setMeOnline();
         $roleid = $params->roleid;
         $this->managerRole->delete($roleid);
     }
@@ -432,6 +447,7 @@ class AjaxAdministration extends AjaxBase {
      * View all games
      */
     public function viewGames() {
+        $this->managerUser->setMeOnline();
         $games = $this->managerGame->selectAll();
 
         $this->smarty_categories = array();
@@ -455,6 +471,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({"gameid":"1"})
      */
     public function viewGameDetail($params) {
+        $this->managerUser->setMeOnline();
         $gameid = $params->gameid;
 
         $game = $this->managerGame->selectById($gameid);
@@ -500,6 +517,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({"gameid":"1", "property":"abc"})
      */
     public function addGameProperty($params) {
+        $this->managerUser->setMeOnline();
         $gameid = $params->gameid;
         $propertyName = $params->property;
 
@@ -515,6 +533,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({"gamepropertyid":"1"})
      */
     public function deleteGameProperty($params) {
+        $this->managerUser->setMeOnline();
         $gamepropertyid = $params->gamepropertyid;
 
         $this->managerGameProperty->delete($gamepropertyid);
@@ -526,6 +545,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({ "name":"abc", "icon":"abc", "comment":"abc", "url":"abc", "forumlink":"abc", "gamecategories:["1","2","3","4"]"})
      */
     public function addGame($params) {
+        $this->managerUser->setMeOnline();
         $name = $params->name;
         $icon = $params->icon;
         $comment = $params->comment;
@@ -547,6 +567,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({"gameid":"1", "name":"abc", "icon":"abc", "comment":"abc", "url":"abc", "forumlink":"abc", "gamecategories":"["1","2","3","4"]"})
      */
     public function updateGame($params) {
+        $this->managerUser->setMeOnline();
         $gameid = $params->gameid;
         $name = $params->name;
         $icon = $params->icon;
@@ -576,6 +597,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({"gameid":"1"})
      */
     public function deleteGame($params) {
+        $this->managerUser->setMeOnline();
         $gameid = $params->gameid;
 
         $this->managerGame->delete($gameid);
@@ -585,6 +607,7 @@ class AjaxAdministration extends AjaxBase {
      * views game catergory
      */
     public function viewGameCategory() {
+        $this->managerUser->setMeOnline();
         $categories = $this->managerGameCategory->selectAll();
 
         $this->smarty_categories = array();
@@ -603,6 +626,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({"name":"1"})
      */
     public function addGameCategory($params) {
+        $this->managerUser->setMeOnline();
         $name = $params->name;
 
         $category = $this->managerGameCategory->getNew();
@@ -615,6 +639,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({"categoryid":"1", "categorycolumn":"abc", "value":"abc"})
      */
     public function updateGameCategory($params) {
+        $this->managerUser->setMeOnline();
         $categoryid = $params->categoryid;
         $categorycolumn = $params->categorycolumn;
         $value = $_POST["value"];
@@ -639,6 +664,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({"categoryid":"1"})
      */
     public function deleteGameCategory($params) {
+        $this->managerUser->setMeOnline();
         $categoryid = $params->categoryid;
 
         $this->managerGameCategory->delete($categoryid);
@@ -648,6 +674,7 @@ class AjaxAdministration extends AjaxBase {
      * views users
      */
     public function viewUsers() {
+        $this->managerUser->setMeOnline();
         $users = $this->managerUser->selectAllUser(ImbaUserContext::getOpenIdUrl());
 
         $this->smarty_users = array();
@@ -669,6 +696,7 @@ class AjaxAdministration extends AjaxBase {
      * @param type $params ({"userid":"1"})
      */
     public function viewUserDetail($params) {
+        $this->managerUser->setMeOnline();
         $user = $this->managerUser->selectById($params->userid);
 
         $this->smarty->assign('userid', $user->getId());
@@ -716,6 +744,7 @@ class AjaxAdministration extends AjaxBase {
      *  "id":"1"})
      */
     public function updateUser($params) {
+        $this->managerUser->setMeOnline();
         $user = new ImbaUser();
         $user = $this->managerUser->selectById($params->id);
         $user->setSex($params->sex);
