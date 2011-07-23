@@ -1,3 +1,24 @@
+<pre>
+latMin: {$latMin}
+latMax: {$latMax}
+
+lonMin: {$lonMin}
+lonMax: {$lonMax}
+
+latCenter: {$latCenter}
+lonCenter: {$lonCenter}
+
+</pre>
+{foreach $locations as $location}
+    <b>{$location.name}</b> [lat: {$location.lat}, lon: {$location.lon}]:<br />
+    <div style="color: {$location.color};">({$location.count}) {$location.userstr}</div><br />
+{/foreach}
+
+
+
+{*
+
+
 <!-- <script type="text/javascript" charset="utf-8">google.load("maps","2.x");</script> -->
 <!-- <script src="https://maps.googleapis.com/maps/api/js?v=3&sensor=true" type="text/javascript"></script> -->
 <script type="text/javascript">
@@ -10,8 +31,8 @@
             console.log(2);
             var myOptions = {
                 zoom: 8
-            //    center: latlng,
-            //    mapTypeId: google.maps.MapTypeId.ROADMAP
+                //    center: latlng,
+                //    mapTypeId: google.maps.MapTypeId.ROADMAP
             };
             var map = new google.maps.Map(document.getElementById("userMap"), myOptions);
        
@@ -34,3 +55,4 @@ MAP API Key: ABQIAAAAoQTlyGjpddJMRStim8sqRhS-FT1JS65wtMkQxe7iDJyuhifRuBSPdRuPdH7
 <div id="userMap"></div>
 <!-- <div id="mapMessage"style="display:none;">Test text.</div> -->
 <!-- <ul id="list"></ul> -->
+*}

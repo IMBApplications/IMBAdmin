@@ -5,8 +5,21 @@
  */
 class AjaxWelcome extends AjaxBase {
 
+    private $tips = array();
+
     public function __construct() {
         parent::__construct();
+        //FIXME: This is temporary code! should this be in the database?
+        array_push($this->tips, "Strg + H macht den IMBAdmin unsichtbar.");
+        array_push($this->tips, "Don't stand in the fire!");
+        array_push($this->tips, "Klicke den Lichtbrunnen!");
+        array_push($this->tips, "<a href='http://www.youtube.com/watch?v=QH2-TGUlwu4' target='_top'>&Uuml;berraschung!</a>");
+        array_push($this->tips, "Minecraft Rockt!");
+        array_push($this->tips, "Han shot first!");
+        array_push($this->tips, "");
+        array_push($this->tips, "");
+        array_push($this->tips, "");
+        array_push($this->tips, "");
     }
 
     public function getContentManager() {
@@ -42,8 +55,106 @@ class AjaxWelcome extends AjaxBase {
         return $navigation;
     }
 
+    /**
+     * return online color for the timestamp
+     * @param type $timestamp 
+     */
+    private function genColor($timestamp) {
+        if ($timestamp > (time() - 300)) {
+            return "green";
+        } elseif ($timestamp > (time() - 600)) {
+            return "white";
+        } elseif ($timestamp > (time() - 1200)) {
+            return "yellow";
+        } else {
+            return "grey";
+        }
+    }
+
+    /**
+     * viewUsermap
+     */
     public function viewUsermap() {
         $this->managerUser->setMeOnline();
+
+        $myUsers = array();
+        $allUsers = $this->managerUser->selectAllUser();
+
+        /**
+         * Get location infos trough GeoIP
+         */
+        include("Libs/GeoIP/GeoIP.php");
+        $lats = array();
+        $lons = array();
+        $geoIpFilename = "/usr/local/share/GeoIP/GeoIPCity.dat";
+        if (file_exists($geoIpFilename)) {
+            $gi = geoip_open($geoIpFilename, GEOIP_STANDARD);
+
+            foreach ($allUsers as $user) {
+                $lastip = $user->getLastip();
+
+                if (!empty($lastip)) {
+                    $record = geoip_record_by_addr($gi, $lastip);
+
+                    if ((!empty($record->latitude)) && (!empty($record->longitude))) {
+                        if (!empty($record->city)) {
+                            $location = $record->city . " (" . $record->country_code . ")";
+                        } else {
+                            $location = "" . $record->country_name;
+                        }
+
+                        array_push($myUsers, array(
+                            "user" => $user->getNickname(),
+                            "lastonline" => $user->getLastonline(),
+                            "name" => $location,
+                            "lat" => $record->latitude,
+                            "lon" => $record->longitude
+                        ));
+
+                        array_push($lats, $record->latitude);
+                        array_push($lons, $record->longitude);
+                    }
+                }
+            }
+            geoip_close($gi);
+
+            natsort($lats);
+            $latMin = current($lats);
+            $latMax = end($lats);
+            
+            natsort($lons);
+            $lonMin = current($lons);
+            $lonMax = end($lons);
+            
+            $this->smarty->assign("latMin", $latMin);
+            $this->smarty->assign("latMax", $latMax);
+            $this->smarty->assign("lonMin", $lonMin);
+            $this->smarty->assign("lonMax", $lonMax);
+
+            $this->smarty->assign("latCenter", ($latMax + $latMin) / 2);
+            $this->smarty->assign("lonCenter", ($lonMax + $lonMin) / 2);
+
+            $userList = "";
+            foreach ($myUsers as $user) {
+                $key = hash("crc32", $user["lat"] . $user["lon"]);
+                if (empty($userList[$key]["name"])) {
+                    $userList[$key]["name"] = $user["name"];
+                    $userList[$key]["lat"] = $user["lat"];
+                    $userList[$key]["lon"] = $user["lon"];
+                    $userList[$key]["userstr"] = $user["user"];
+                    $userList[$key]["lastonline"] = $user["lastonline"];
+                    $userList[$key]["count"] = 1;
+                } else {
+                    $userList[$key]["userstr"] .= ", " . $user["user"];
+                    $userList[$key]["count"]++;
+                    if ($user["lastonline"] > $userList[$key]["lastonline"])
+                        $userList[$key]["lastonline"] = $user["lastonline"];
+                }
+                $userList[$key]["color"] = $this->genColor($user["lastonline"]);
+            }
+
+            $this->smarty->assign('locations', $userList);
+        }
         $this->smarty->display('IMBAdminModules/WelcomeViewUsermap.tpl');
     }
 
