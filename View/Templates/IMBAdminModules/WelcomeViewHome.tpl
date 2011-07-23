@@ -48,15 +48,20 @@
         <b>Hallo {$nickname}.</b><br />
         <i>Du befindest dich auf {$niceDomain}.</i><br />
         <i>Heute ist der {$today} um <span class="jclock"></span></i>.<br />
+        <br />
+        <ul>
+            {foreach $navs as $nav}
+            <li>
+                <a href="javascript:void();"  onclick="javascript: loadImbaAdminModule('{$nav.module}');" title="{$nav.comment}">{$nav.name}</a>
+            </li>
+            {/foreach}
+        </ul>
     </div>
     <div class="imbaTitle" style="float: left; with: 230px;">
         <ul id="imbaPortlet" style="list-style-type: none; text-indent: 0px;">
-            {foreach $navs as $nav}
-            <li>
-                &nbsp;<a href="javascript:void();"  onclick="javascript: loadImbaAdminModule('{$nav.module}');" title="{$nav.comment}">{$nav.name}</a>
-            </li>
-            {/foreach}
-            <li><br /></li>
+            <i>&#8222; {$tip} &#8221;</i>
+            <br />
+            <br />
             <li>
                 <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
             <g:plusone></g:plusone><br />

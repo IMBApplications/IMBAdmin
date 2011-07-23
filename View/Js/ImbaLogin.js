@@ -21,7 +21,6 @@ $(document).ready(function() {
         async: true
     });
 
-   
     $("#imbaSsoNickname").keydown(function(event) {
         if (event.keyCode == "13") {
             event.preventDefault();
@@ -465,3 +464,26 @@ function submitForPassword() {
                 
     $(this).dialog("close");
 }
+
+
+/**
+ * Fetch key presses
+ */
+/*
+$(document).keypress(function(e) {
+    switch (e.keyCode) {
+        case 81:
+            console.log("q");
+            
+            if ($(document).keydown()) {
+                switch (e.keyCode) {
+                    case 18:
+                        console.log("alt");
+                        break;
+                }
+            };
+           
+            break;
+    }
+});
+*/
