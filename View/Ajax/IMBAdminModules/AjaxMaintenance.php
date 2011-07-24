@@ -101,6 +101,7 @@ class AjaxMaintenance extends AjaxBase {
         $debugJobs = array();
 
         array_push($maintenenceJobs, array('handle' => 'clearLog', 'name' => 'Clear System Messages'));
+        array_push($maintenenceJobs, array('handle' => 'clearSmartyCache', 'name' => 'Clear Smarty Cache'));
         array_push($maintenenceJobs, array('handle' => 'findUnusedRoles', 'name' => 'Analyze User Roles'));
         array_push($maintenenceJobs, array('handle' => 'showSettings', 'name' => 'Show the $SETTINGS array'));
         array_push($maintenenceJobs, array('handle' => 'showProxyLogs', 'name' => 'Show Proxy Logs'));
@@ -111,6 +112,7 @@ class AjaxMaintenance extends AjaxBase {
         array_push($userJobs, array('handle' => 'fakeUsersOnline', 'name' => 'Fake some Users online status'));
         array_push($userJobs, array('handle' => 'kickAllOffline', 'name' => 'Kick all Users offline'));
         array_push($debugJobs, array('handle' => 'toggleDebug', 'name' => 'Toggle Debug'));
+        array_push($debugJobs, array('handle' => 'sendTestmail', 'name' => 'Send Test Email'));
 
         $this->smarty->assign('maintenanceJobs', $maintenenceJobs);
         $this->smarty->assign('dbJobs', $dbJobs);
@@ -198,6 +200,14 @@ class AjaxMaintenance extends AjaxBase {
 
                 $this->smarty->assign('name', 'Clear System Messages');
                 $this->smarty->assign('message', 'Messages cleared!<br />');
+                break;
+
+            case "clearSmartyCache":
+                $this->managerLog = ImbaManagerLog::getInstance();
+                $this->smarty->clearAllCache(1);
+                
+                $this->smarty->assign('name', 'Clear Smarty Cache');
+                $this->smarty->assign('message', 'Cache cleared!<br />');
                 break;
 
             case "showDatabaseBackups":
@@ -291,6 +301,12 @@ class AjaxMaintenance extends AjaxBase {
 
                 $this->smarty->assign('name', 'Toggle Session Debug');
                 $this->smarty->assign('message', "Debug is now set to: " . ImbaUserContext::getDebug() . "<br />Please reload page!");
+                break;
+
+            case "sendTestmail":
+                ImbaSharedFunctions::sendEmail("aegnor@mittelerde.ch", "Test Email", "This is the message body.");
+                $this->smarty->assign('name', 'Send Test mail');
+                $this->smarty->assign('message', "mail sent");
                 break;
 
             default:

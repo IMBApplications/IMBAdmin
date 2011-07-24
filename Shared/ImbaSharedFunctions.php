@@ -284,6 +284,32 @@ class ImbaSharedFunctions {
     }
 
     /**
+     * Function for creating random strings
+     */
+    function getRandomString($length = 8) {
+        $validCharacters = "abcdefghijklmnopqrstuxyvwzABCDEFGHIJKLMNOPQRSTUXYVWZ";
+        $validCharNumber = strlen($validCharacters);
+        $result = "";
+        for ($i = 0; $i < $length; $i++) {
+            $index = mt_rand(0, $validCharNumber - 1);
+            $result .= $validCharacters[$index];
+        }
+        return $result;
+    }
+
+    /**
+     * Send test email to administrator email
+     */
+    function sendEmail($target, $subject, $text) {
+        $header = 'From: ' . ImbaConstants::$SETTINGS["ADMIN_EMAIL_NAME"] . 
+                '<' . ImbaConstants::$SETTINGS["ADMIN_EMAIL"] . '>' . "\r\n" .
+                'Reply-To: webmaster@example.com' . "\r\n" .
+                'X-Mailer: PHP/' . phpversion();
+
+        mail($target, $subject, $text, $header);
+    }
+
+    /**
      * Function for temporary log writing (debug)
      */
     public static function writeToLog($message) {
@@ -308,20 +334,6 @@ class ImbaSharedFunctions {
             fwrite($fh, $stringData);
             fclose($fh);
         }
-    }
-
-    /**
-     * Function for creating random strings
-     */
-    function getRandomString($length = 8) {
-        $validCharacters = "abcdefghijklmnopqrstuxyvwzABCDEFGHIJKLMNOPQRSTUXYVWZ";
-        $validCharNumber = strlen($validCharacters);
-        $result = "";
-        for ($i = 0; $i < $length; $i++) {
-            $index = mt_rand(0, $validCharNumber - 1);
-            $result .= $validCharacters[$index];
-        }
-        return $result;
     }
 
     /* import from functions.inc.php ! BIG
