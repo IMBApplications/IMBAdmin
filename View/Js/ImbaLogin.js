@@ -20,7 +20,7 @@ $(document).ready(function() {
     $.ajaxSetup({
         async: true
     });
-
+    
     $("#imbaSsoNickname").keydown(function(event) {
         if (event.keyCode == "13") {
             event.preventDefault();
@@ -119,7 +119,7 @@ $(document).ready(function() {
                 setLoggedIn(false);
             } else {
                 setLoggedIn(true);
-                $("#imbaSsoShowNickname").html('Hallo ' + response);
+                $("#imbaSsoShowNickname").html('Hi ' + response);
 
                 // Firsttime show users online
                 refreshUsersOnline();
@@ -140,7 +140,6 @@ $(document).ready(function() {
 
         return false;
     });
-
 
     /*
          * ImbAdmin Window Tabs Module
@@ -165,8 +164,8 @@ $(document).ready(function() {
     });
 
     /*
-         * ImbaGame Window Tabs Module
-         */
+     * ImbaGame Window Tabs Module
+     */
     // Setting up the content of the Dialog as tabs
     $("#imbaGameNav").tabs().bind("tabsselect", function(event, ui) {
         var tmpGameTabId = "";
@@ -199,7 +198,7 @@ $(document).ready(function() {
 
     // Load current active Portal
     loadImbaPortal(-1);
-
+    
     //Display potential Error Message
     if (imbaAuthReferer.length > 0) {
         $("#imbaSsoLoginInner").hide();
@@ -309,45 +308,6 @@ function checkReturn(returnData){
         return false;
     }
 }
-/**
-     * Shows the Menu and stuff around
-     */
-function showMenu() {
-    // run the effect
-    $("#imbaMenu").show("slide", {
-        direction: "right"
-    });
-
-    if (isSystemInErrorState == false) {
-        $("#imbaSsoLoginInner").show("slide", {
-            direction: "right"
-        });
-
-        $("#imbaUsersOnline").show("slide", {
-            direction: "up"
-        });
-    }
-}
-
-/**
-     * Hids the Menu and stuff around
-     */
-function hideMenu() {
-    // run the effect
-    $("#imbaMenu").hide("slide", {
-        direction: "right"
-    });
-
-    if (isSystemInErrorState == false) {
-        $("#imbaSsoLoginInner").hide("slide", {
-            direction: "right"
-        });
-
-        $("#imbaUsersOnline").hide("slide", {
-            direction: "up"
-        });
-    }
-}
 
 /**
      * Sets the current portal
@@ -366,60 +326,27 @@ function loadImbaPortal(portalId) {
             document.title = currentPortal.name;
 
             if ((portalId != null) && (portalId != -1)) {
-                $.jGrowl('<img src="' + currentPortal.icon + '" style="width: 24px; height: 24px; vertical-align: middle; padding: 3px;" /> <big>' + currentPortal.name + '</big>', {
-                    life: 350,
-                    header: 'Portal geladen:<br /><br />'
-                });
+                $.jGrowl('<img src="' + currentPortal.icon + 
+                    '" style="width: 24px; height: 24px; vertical-align: middle; padding: 3px;" /> <big>' + 
+                    currentPortal.name + '</big>', {
+                        life: 350,
+                        header: 'Portal geladen:<br /><br />'
+                    });
             }
             // Set Portal Image
             $("#imbaSsoLogoImage").attr('src', currentPortal.icon);
 
             // Set Menu Content
-            $("#imbaMenu").html(currentPortal.navigation);
-
-            $.widget("ui.nestedmenu", {
-                _init: function() {
-                    var self = this;
-                    this.active = this.element;
-
-                    // hide submenus and create indicator icons
-                    this.element.find("ul").hide().prev("a").prepend('<span class="ui-icon ui-icon-carat-1-w"></span>');
-
-                    this.element.find("ul").andSelf().menu({
-                        // disable built-in key handling
-                        input: $(),
-                        select: this.options.select,
-                        focus: function(event, ui) {
-                            self.active = ui.item.parent();
-                            self.activeItem = ui.item;
-                            ui.item.parent().find("ul").hide();
-                            var nested = $(">ul", ui.item);
-                            if (nested.length && /^mouse/.test(event.originalEvent.type)) {
-                                self._open(nested);
-                            }
-                        }
-                    })
-                },
-
-                _open: function(submenu) {
-                    submenu.show().css({
-                        top: 2,
-                        right: 188
-                    }).position({
-                        my: "left top",
-                        at: "left top",
-                        of: this.parent
-                    });
-                }
-            });
-
-            $("#menu").nestedmenu().show();
-            $("#menu").hover(function(){
-                // nothing
-                }, function() {
-                    $(this).find("li").children("ul").hide();
-                });
-
+            $("#imbaMenu").html(currentPortal.navigation); 
+            
+            renderImbaMenu();
+            
+            //show or hide the message indicators
+            if (isUserLoggedIn) {
+                $("#imbaMessagingControl").show();
+            } else {
+                $("#imbaMessagingControl").hide();
+            }
 
             // Send auth post
             if (isUserLoggedIn) {

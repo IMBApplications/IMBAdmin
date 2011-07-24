@@ -48,12 +48,15 @@ class ImbaManagerNavigation extends ImbaManagerBase {
      * Creates the Navigation for a portal
      */
     public function getNavigationForPortal(ImbaPortal $portal) {
-        $return = "<ul id='menu'>";
-        $return .= "<li><a href='#'>Navigation</a><ul>";
+        $return = "<ul id='imbaMenuUl' class='topnav'>";
         $return .= $this->renderPortalNavigation($portal);
         $return .= $this->renderImbaAdminNavigation();
         $return .= $this->renderPortalChooser();
-        $return .= "</li></ul></ul>";
+        $return .= "<li><div id='imbaMessagingControl' style='width: 50px;'>" .
+                    "<div id='imbaOpenMessaging' class='ui-icon ui-icon-comment' title='Open Messaging' style='float:right; margin-top:6px; margin-right: 3px;'></div>" .
+                    "<div id='imbaGotMessage' class='ui-icon ui-icon-mail-closed' title='Open New Messae'style='float:right; margin-top:6px; margin-right: 3px;'></div>" .
+                    "</div></li>";
+        $return .= "</ul>";
         return $return;
     }
 
@@ -101,7 +104,7 @@ class ImbaManagerNavigation extends ImbaManagerBase {
         $return = "<li>";
         $return .= "<a id='imbaMenuImbAdmin' href='javascript:void(0)' onclick='javascript: loadImbaAdminDefaultModule();' title='";
         $return .= ImbaConstants::$WEB_IMBADMIN_BUTTON_COMMENT . "'>" . ImbaConstants::$WEB_IMBADMIN_BUTTON_NAME . "</a>";
-        $return .= "<ul>";
+        $return .= "<ul class='subnav'>";
         $contentNav = new ImbaContentManager();
 
         foreach ($navigations as $navigation) {
@@ -120,7 +123,6 @@ class ImbaManagerNavigation extends ImbaManagerBase {
         }
         $return .= "</ul>";
         $return .= "</li>";
-        //return "<div id='imbaNavigationImbaAdmin'>" . $return . "</div>";
         return $return;
     }
 
@@ -128,56 +130,15 @@ class ImbaManagerNavigation extends ImbaManagerBase {
 
     }
 
-    /*
-      public function renderImbaGameNavigation() {
-      throw new Exception("See renderImbaAdminNavigation to know how i should work!");
-
-      $return = "<li>";
-      $return .= "<a id='imbaMenuImbaGame' href='javascript:void(0)' onclick='javascript: loadImbaGameDefaultGame();' title='";
-      $return .= ImbaConstants::$WEB_IMBAGAME_BUTTON_COMMENT . "'>" . ImbaConstants::$WEB_IMBAGAME_BUTTON_NAME . "</a>";
-      $return .= "<ul class='subnav'>";
-      $contentNav = new ImbaContentManager();
-      if ($handle = opendir('View/Ajax/IMBAdminGames/')) {
-      $identifiers = array();
-      while (false !== ($file = readdir($handle))) {
-      if (strrpos($file, ".Navigation.php") > 0) {
-      include 'View/Ajax/IMBAdminGames/' . $file;
-      if (ImbaUserContext::getUserRole() >= $Navigation->getMinUserRole()) {
-      $showMe = false;
-      if (ImbaUserContext::getLoggedIn() && $Navigation->getShowLoggedIn()) {
-      $showMe = true;
-      } elseif ((!ImbaUserContext::getLoggedIn()) && $Navigation->getShowLoggedOff()) {
-      $showMe = true;
-      }
-
-      if ($showMe) {
-      $modIdentifier = trim(str_replace(".Navigation.php", "", $file));
-      $return .= "<li><a href='javascript:void(0)' onclick='javascript: loadImbaGame(\\\"" . $modIdentifier . "\\\");' title='" . $Navigation->getComment($nav) . "'>" . $Navigation->getName($nav) . "</a></li>";
-      array_push($identifiers, $modIdentifier);
-      $Navigation = null;
-      }
-      }
-      }
-      }
-      closedir($handle);
-      }
-
-      $return .= "</ul>";
-      $return .= "</li>";
-      return "<div id='imbaNavigationImbaGame'>" . $return . "</div>";
-      }
-     */
-
     /**
      * Render the Portal Chooser Dropdown
      */
     protected function renderPortalChooser() {
         $managerPortal = ImbaManagerPortal::getInstance();
 
-        $return = "<li>"; //<div id='imbaNavigationPortalChooser'>";
-        //$return .= "<a id='imbaMenuImbaPortal' href='javascript:void(0)' onclick='javascript: loadImbaPortal(-1);' title='Portal Zur&uuml;cksetzen'>Portal</a>";
-        $return .= "<a id='imbaMenuImbaPortal' title='Portale'>Portal</a>";
-        $return .= "<ul>";
+        $return = "<li>";
+        $return .= "<a id='imbaMenuImbaPortal' href='javascript:void(0)' onclick='javascript: loadImbaPortal(-1);' title='Portal Zur&uuml;cksetzen'>Portal</a>";
+        $return .= "<ul class='subnav'>";
         foreach ($managerPortal->selectAll() as $portal) {
             $return .= "<li style='vertical-align: middle;'><a href='javascript:void(0)' onclick='javascript: loadImbaPortal(" . $portal->getId() . ");' title='" . $portal->getComment() . "'>";
             $return .= "<img src='" . ImbaSharedFunctions::fixWebPath($portal->getIcon()) . "' width='24px' height='24px' /> " . $portal->getName();
@@ -185,7 +146,6 @@ class ImbaManagerNavigation extends ImbaManagerBase {
         }
         $return .= "</ul>";
         $return .= "</li>";
-        //$result .= "</div>";
 
         return $return;
     }

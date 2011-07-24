@@ -96,3 +96,47 @@ jQuery.fn.dataTableExt.oSort['title-string-desc'] = function(a,b) {
     var y = b.match(/title="(.*?)"/)[1].toLowerCase();
     return ((x < y) ?  1 : ((x > y) ? -1 : 0));
 };
+
+/**
+     * Shows the Menu and stuff around
+     */
+function showMenu() {
+    // run the effect
+    /*
+    $("#imbaMenu").show("slide", {
+        direction: "up"
+    });
+    */
+
+    if (isSystemInErrorState == false) {
+        $("#imbaSsoLoginInner").show("slide", {
+            direction: "right"
+        });
+
+        $("#imbaUsersOnline").show("slide", {
+            direction: "up"
+        });
+    }
+}
+
+/**
+     * Hids the Menu and stuff around
+     */
+function hideMenu() {
+    // run the effect
+    /*
+    $("#imbaMenu").hide("slide", {
+        direction: "up"
+    });
+    */
+
+    if (isSystemInErrorState == false) {
+        $("#imbaSsoLoginInner").hide("slide", {
+            direction: "right"
+        });
+
+        $("#imbaUsersOnline").hide("slide", {
+            direction: "up"
+        });
+    }
+}

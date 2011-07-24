@@ -4,9 +4,10 @@
     Attention! You can NOT use " without escaping them with \"
     use ' instead.
 
-*}{strip}<div id='imbaSsoLoginBorder' class='ui-widget-content ui-corner-all'>
+*}{strip}
+    <div id='imbaMenu' class='ui-widget-content ui-corner-all'></div>
+    <div id='imbaSsoLoginBorder' class='ui-widget-content ui-corner-all'>
     <div id='imbaSsoLogin'>
-        <img id='imbaSsoNavigationImage' src='{$thrustRoot}Images/nav.png' alt='Navigation' title='Navigation' />
         <img id='imbaSsoLogoImage' src='{$thrustRoot}Images/noicon.png' alt='Guild Logo' title='Show/Hide Menu' />
         <div id='imbaSsoLoginInner'>
             <form id='imbaSsoLoginForm' action='{$thrustRoot}{$authPath}' method='post'>
@@ -29,12 +30,7 @@
             </form>
         </div>
         <div style='clear: both;' ></div>
-        <div id='imbaMenu' style='height: 30px; width: 183px;'></div>
-        <div style='clear: both;' ></div>
         <div id='imbaUsersOnline' ></div>
-        <div style='clear: both;' ></div>
-        <div id='imbaOpenMessaging' class='ui-icon ui-icon-comment'>Open Messaging</div>
-        <div id='imbaGotMessage' class='ui-icon ui-icon-mail-closed' title='Open Messaging' >M</div>
     </div>
 </div>
 <div id='imbaMessagesDialog' title='IMBA Messaging' style='padding: 3px;'>

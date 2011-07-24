@@ -1,3 +1,4 @@
+{strip}
 <html>
     <head>
         <link type='text/css' href='{$thrustRoot}ImbaLoader.php?load=css' rel='Stylesheet' />
@@ -27,3 +28,4 @@
         </div>
     </body>
 </html>
+{/strip}

@@ -1,0 +1,19 @@
+/* IMBAdmin Messaging */
+
+#imbaMessages {
+}
+
+#imbaGotMessage{
+    float: right;
+    cursor: pointer;
+}
+
+#imbaMessages li .ui-icon-close {
+    float: left;
+    cursor: pointer;
+}
+
+#imbaOpenMessaging {
+    float: right;
+    cursor: pointer;
+}

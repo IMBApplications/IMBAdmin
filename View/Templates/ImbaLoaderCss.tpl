@@ -1,3 +1,4 @@
+{strip}
 {*
 
     include static css files
@@ -14,5 +15,10 @@ For ui-darkness (hooha style)
     include imba css files
 
 *}
+{fetch file='View/Css/ImbaBase.css'}
 {fetch file='View/Css/ImbaLogin.css'}
+{fetch file='View/Css/ImbaDataTable.css'}
 {fetch file='View/Css/ImbaAdmin.css'}
+{fetch file='View/Css/ImbaMessaging.css'}
+{fetch file='View/Css/ImbaMenu.css'}
+{/strip}

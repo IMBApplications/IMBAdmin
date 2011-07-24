@@ -16,10 +16,6 @@ class AjaxWelcome extends AjaxBase {
         array_push($this->tips, "<a href='http://www.youtube.com/watch?v=QH2-TGUlwu4' target='_top'>&Uuml;berraschung!</a>");
         array_push($this->tips, "Minecraft Rockt!");
         array_push($this->tips, "Han shot first!");
-        array_push($this->tips, "");
-        array_push($this->tips, "");
-        array_push($this->tips, "");
-        array_push($this->tips, "");
     }
 
     public function getContentManager() {

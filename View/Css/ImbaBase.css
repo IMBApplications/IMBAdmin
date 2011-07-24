@@ -1,0 +1,32 @@
+/* ImbaLogin.css */
+
+body {
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 11px !important;
+    line-height: normal;
+}
+
+
+/* IMBAdmin error message */
+#ImbaErrorMsg {
+    color: red;
+}
+
+#jGrowl {
+    position: fixed;
+    top: 1px;
+    left: 1px;
+    width: 200px;
+}
+
+.imbaFont {
+    line-height: normal !important;
+    font-size: 0.8em;
+}
+
+
+/* jQuery Fixes */
+.ui-state-error {
+    background: transparent !important;
+    border: 0px !important;
+}
