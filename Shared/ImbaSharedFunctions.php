@@ -302,8 +302,8 @@ class ImbaSharedFunctions {
      */
     function sendEmail($target, $subject, $text) {
         $header = 'From: ' . ImbaConstants::$SETTINGS["ADMIN_EMAIL_NAME"] . 
-                '<' . ImbaConstants::$SETTINGS["ADMIN_EMAIL"] . '>' . "\r\n" .
-                'Reply-To: webmaster@example.com' . "\r\n" .
+                ' <' . ImbaConstants::$SETTINGS["ADMIN_EMAIL"] . '>' . "\r\n" .
+                'Reply-To: ' . ImbaConstants::$SETTINGS["ADMIN_EMAIL_NAME"] . "\r\n" .
                 'X-Mailer: PHP/' . phpversion();
 
         mail($target, $subject, $text, $header);
