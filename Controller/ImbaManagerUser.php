@@ -24,11 +24,11 @@ class ImbaManagerUser extends ImbaManagerBase {
     /**
      * Ich bin potthaesslich und muesste myOpenid aus dem array entfernen
      */
-    public function selectAllUserButme($myOpenid) {
+    public function selectAllUserButme($myUserId) {
         $result = array();
 
         foreach ($this->selectAllUser()as $user) {
-            if ($user->getOpenId() != $myOpenid)
+            if ($user->getId() != $myUserId)
                 array_push($result, $user);
         }
         return $result;

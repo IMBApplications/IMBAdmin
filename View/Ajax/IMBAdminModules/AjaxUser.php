@@ -47,7 +47,7 @@ class AjaxUser extends AjaxBase {
      */
     public function loadUsersOnline() {
         $this->managerUser->setMeOnline();
-        $users = $this->managerUser->selectAllUserButme(ImbaUserContext::getOpenIdUrl());
+        $users = $this->managerUser->selectAllUserButme(ImbaUserContext::getUserId());
         $result = array();
         $msgCountMin = -1;
         $msgCountMax = -1;
@@ -109,7 +109,7 @@ class AjaxUser extends AjaxBase {
      */
     public function loadUserList() {
         $this->managerUser->setMeOnline();
-        $users = $this->managerUser->selectAllUserButme(ImbaUserContext::getOpenIdUrl());
+        $users = $this->managerUser->selectAllUserButme(ImbaUserContext::getUserId());
         $result = array();
         foreach ($users as $user) {
             array_push($result, array("name" => $user->getNickname(), "openid" => $user->getOpenId(), "lastonline" => $user->getLastonline()));
@@ -434,5 +434,4 @@ class AjaxUser extends AjaxBase {
     }
 
 }
-
 ?>

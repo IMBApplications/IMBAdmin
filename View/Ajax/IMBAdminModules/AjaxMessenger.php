@@ -275,7 +275,7 @@ class AjaxMessenger extends AjaxBase {
      */
     public function viewMessageOverview() {
         $newList = array();
-        foreach ($this->managerUser->selectAllUserButme(ImbaUserContext::getOpenIdUrl()) as $user) {
+        foreach ($this->managerUser->selectAllUserButme(ImbaUserContext::getUserId()) as $user) {
             $timestamp = $this->managerMessage->selectLastMessageTimestamp($user->getOpenId());
             array_push($newList, array("timestamp" => $timestamp, "id" => $user->getId()));
         }
