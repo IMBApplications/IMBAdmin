@@ -303,7 +303,7 @@ class ImbaSharedFunctions {
     function sendEmail($target, $subject, $text) {
         ImbaConstants::loadSettings();
         $header = 'MIME-Version: 1.0' . "\r\n";
-        $header .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $header .= 'Content-type: text/plain; charset=iso-8859-1' . "\r\n";
         $header .= 'From: ' . ImbaConstants::$SETTINGS["ADMIN_EMAIL_NAME"];
         $header .= ' <' . ImbaConstants::$SETTINGS["ADMIN_EMAIL"] . '>' . "\r\n";
         $header .= 'X-Mailer: PHP/' . phpversion();

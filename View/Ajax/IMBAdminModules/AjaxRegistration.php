@@ -69,8 +69,26 @@ class AjaxRegistration extends AjaxBase {
      */
     public function viewResetPassword() {
         ImbaConstants::loadSettings();
+        $this->smarty->assign('email', ImbaConstants::$SETTINGS["ADMIN_EMAIL"]);
 
         $this->smarty->display('IMBAdminModules/RegisterResetPassword.tpl');
+    }
+
+    /**
+     * Checks the user input and resets the password if correct
+     */
+    public function resetPassword() {
+        // $_REQUEST["userToken"]; user name or email
+        // $_REQUEST["userDate"]; birthdate
+        
+        // search for the user with the birthday
+        
+        // check if the input matches the email or the name
+            // reset the password to a random string and sent it per email to the user
+        // else
+            // echo "No user found";
+
+        echo "Not yet implemented: " . $_REQUEST["userToken"] . " | " . $_REQUEST["userDate"];
     }
 
     /**
@@ -119,7 +137,7 @@ class AjaxRegistration extends AjaxBase {
                         (!empty($params->nickname)) &&
                         (!empty($params->password)) &&
                         (!empty($params->email))) {
-                    
+
                     if ($pwCheck !== true) {
                         echo $pwCheck;
                         exit();

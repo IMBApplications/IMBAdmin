@@ -5,7 +5,8 @@
         $("#regBirthday").datepicker({ 
             dateFormat: 'dd.mm.yy', 
             changeMonth: true,
-            changeYear: true });
+            changeYear: true
+        });
         
         $("#ImbaAjaxCancleRegistration").button();
         $("#ImbaAjaxCheckCaptcha").button();
