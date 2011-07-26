@@ -34,8 +34,8 @@ newScript.html = 'google.load(\"jquery\", \"1.6.2\");google.load(\"jqueryui\", \
 headID.appendChild(newScript);
 *}
 
-{fetch file='Libs/jQuery/js/jquery-1.5.2.min.js'}
-{fetch file='Libs/jquery-ui/ui/minified/jquery-ui.min.js'}
+{fetch file='Libs/jQuery/js/jquery-1.5.1.min.js'}
+{fetch file='Libs/jQuery/js/jquery-ui-1.8.14.custom.min.js'}
 
 {fetch file='Libs/DataTables/media/js/jquery.dataTables.min.js'}
 {fetch file='Libs/jquery_jeditable/jquery.jeditable.js'}
