@@ -15,6 +15,15 @@ session_start();
 // Logout has highest prio
 if ($_REQUEST["logout"] == true) {
     ImbaAuthBase::logout();
+} elseif (!empty($_REQUEST["unlock"])) {
+    /*
+    $this->manageruser
+
+    if ($_REQUEST["key"]) {
+        
+    }
+    */
+    exit();
 } elseif (!ImbaUserContext::getLoggedIn()) {
     // We are NOT logged in
     // Save our referer to session if there is none safed till now
@@ -38,7 +47,7 @@ if ($_REQUEST["logout"] == true) {
             $tmp = new ImbaAuthPassword();
             $tmp->process();
             break;
-        
+
         default:
             // Send the User to the registration page
             if (empty($_SERVER['HTTP_REFERER'])) {

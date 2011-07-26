@@ -194,7 +194,7 @@ class AjaxRegistration extends AjaxBase {
                     ImbaSharedFunctions::sendEmail($params->email, $_SERVER['HTTP_HOST'] . " Registrierung (LockKey)", "Hallo " . $params->nickname . "\r\n\r\n" .
                             "Du hast dich auf " . $_SERVER['HTTP_HOST'] . " registriert. Um die Registrierung\r\n" .
                             "abzuschliessen, rufe bitte folgende Website auf:\r\n" .
-                            "blabla/ImbaAuth.php?" . $lockKey . "\r\n\r\n" .
+                            "/ImbaAuth.php?unlock=true?key=" . $lockKey . "\r\n\r\n" .
                             "Freundliche Gruesse\r\n" . ImbaConstants::$SETTINGS["ADMIN_EMAIL_NAME"] . "\r\n"
                     );
 
