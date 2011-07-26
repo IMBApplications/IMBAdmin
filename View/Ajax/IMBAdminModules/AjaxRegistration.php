@@ -109,7 +109,7 @@ class AjaxRegistration extends AjaxBase {
                     "Dein neues Passwort ist: " . $newPw . "\r\n\r\n" .
                     "Freundliche Gruesse\r\n" . ImbaConstants::$SETTINGS["ADMIN_EMAIL_NAME"] . "\r\n"
             );
-            
+
             echo "Ok";
         } else {
             echo "No user found.";
@@ -185,6 +185,18 @@ class AjaxRegistration extends AjaxBase {
                     $newUser->setBirthyear($birthdate[2]);
                     $newUser->setOpenId($tmpOpenid);
                     $newUser->setRole(ImbaConstants::$CONTEXT_NEW_USER_ROLE);
+
+                    //generate random lock key
+                    $lockKey = ImbaSharedFunctions::getRandomString(32);
+                    $newUser->setLockkey($lockKey);
+                    $newUser->setLocked(1);
+
+                    ImbaSharedFunctions::sendEmail($params->email, $_SERVER['HTTP_HOST'] . " Registrierung (LockKey)", "Hallo " . $params->nickname . "\r\n\r\n" .
+                            "Du hast dich auf " . $_SERVER['HTTP_HOST'] . " registriert. Um die Registrierung\r\n" .
+                            "abzuschliessen, rufe bitte folgende Website auf:\r\n" .
+                            "blabla/ImbaAuth.php?" . $lockKey . "\r\n\r\n" .
+                            "Freundliche Gruesse\r\n" . ImbaConstants::$SETTINGS["ADMIN_EMAIL_NAME"] . "\r\n"
+                    );
 
                     // Save the new user
                     $this->managerUser->insert($newUser);

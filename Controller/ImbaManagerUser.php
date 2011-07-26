@@ -82,6 +82,9 @@ class ImbaManagerUser extends ImbaManagerBase {
                 $user->setLastonline($row["lastonline"]);
                 $user->setLastip($row["lastip"]);
                 $user->setRole($row["role"]);
+                $user->setLockkey($row["lockkey"]);
+                $user->setGplus($row["gplus"]);
+                $user->setLocked($row["locked"]);
                 array_push($result, $user);
             }
 
@@ -126,8 +129,8 @@ class ImbaManagerUser extends ImbaManagerBase {
      */
     public function insert(ImbaUser $user) {
         $query = "INSERT INTO %s ";
-        $query .= "(openid, nickname, password, email, surname, forename, dob, mob, yob, sex, icq, msn, skype, usertitle, avatar, signature, website, motto, accurate, role) VALUES ";
-        $query .= "('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')";
+        $query .= "(openid, nickname, password, email, surname, forename, dob, mob, yob, sex, icq, msn, skype, usertitle, avatar, signature, website, motto, accurate, role, lockkey, gplus, locked) VALUES ";
+        $query .= "('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')";
         $this->database->query($query, array(
             ImbaConstants::$DATABASE_TABLES_SYS_USER_PROFILES,
             $user->getOpenId(),
@@ -149,7 +152,10 @@ class ImbaManagerUser extends ImbaManagerBase {
             $user->getWebsite(),
             $user->getMotto(),
             $user->getAccurate(),
-            $user->getRole()
+            $user->getRole(),
+            $user->getLockkey(),
+            $user->getGplus(),
+            $user->getLocked()
         ));
 
         $this->setManagerCache(null);
@@ -160,7 +166,7 @@ class ImbaManagerUser extends ImbaManagerBase {
      */
     public function update(ImbaUser $user) {
         $query = "UPDATE %s SET ";
-        $query .= "nickname = '%s', password = '%s', email = '%s', surname = '%s', forename = '%s', dob = '%s', mob = '%s', yob = '%s', sex = '%s', icq = '%s', msn = '%s', skype = '%s', usertitle = '%s', avatar = '%s', signature = '%s', website = '%s', motto = '%s', accurate = '%s', role = '%s' ";
+        $query .= "nickname = '%s', password = '%s', email = '%s', surname = '%s', forename = '%s', dob = '%s', mob = '%s', yob = '%s', sex = '%s', icq = '%s', msn = '%s', skype = '%s', usertitle = '%s', avatar = '%s', signature = '%s', website = '%s', motto = '%s', accurate = '%s', role = '%s', lockkey = '%s', gplus = '%s', locked = '%s' ";
         $query .= "WHERE id = '%s'";
 
         $this->database->query($query, array(
@@ -184,6 +190,9 @@ class ImbaManagerUser extends ImbaManagerBase {
             $user->getMotto(),
             $user->getAccurate(),
             $user->getRole(),
+            $user->getLockkey(),
+            $user->getGplus(),
+            $user->getLocked(),
             $user->getId()
         ));
 

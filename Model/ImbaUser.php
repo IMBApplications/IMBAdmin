@@ -12,6 +12,7 @@ class ImbaUser extends ImbaBase {
     protected $nickname = null;
     protected $password = null;
     protected $email = null;
+    protected $lockkey = null;
     protected $firstname = null;
     protected $lastname = null;
     protected $birthday = null;
@@ -21,7 +22,9 @@ class ImbaUser extends ImbaBase {
     protected $icq = null;
     protected $msn = null;
     protected $skype = null;
+    protected $gplus = null;
     protected $usertitle = null;
+    protected $locked = null;
     protected $avatar = null;
     protected $signature = null;
     protected $website = null;
@@ -61,6 +64,14 @@ class ImbaUser extends ImbaBase {
 
     public function setPassword($password) {
         $this->password = $password;
+    }
+
+    public function getLocked() {
+        return $this->locked;
+    }
+
+    public function setLocked($locked) {
+        $this->locked = $locked;
     }
 
     public function getEmail() {
@@ -256,6 +267,22 @@ class ImbaUser extends ImbaBase {
 
     public function setGamesPropertyValues($gamesPropertyValues) {
         $this->gamesPropertyValues = $gamesPropertyValues;
+    }
+
+    public function getLockkey() {
+        return $this->lockkey;
+    }
+
+    public function setLockkey($lockkey) {
+        $this->lockkey = $lockkey;
+    }
+
+    public function getGplus() {
+        return $this->gplus;
+    }
+
+    public function setGplus($gplus) {
+        $this->gplus = $gplus;
     }
 
 }

@@ -80,10 +80,14 @@ abstract class ImbaAuthBase {
                 ImbaUserContext::setNeedToRegister(true);
                 ImbaUserContext::setOpenIdUrl($openid);
             }
+        } elseif ($currentUser->getLocked() == 1) {
+            // This user is locked
+            $this->writeAuthLog($currentUser->getName() . " is locked but tried to login", 1);
+            throw new Exception("Your account is Locked!");
         } elseif ($currentUser->getRole() == 0) {
             // This user is banned
             $this->writeAuthLog($currentUser->getName() . " is banned but tried to login", 1);
-            throw new Exception("You are Banned!");
+            throw new Exception("Your account is Banned!");
         } elseif ($currentUser->getRole() != null) {
             // This user is allowed to log in
             $tmpMsg = $this->writeAuthLog($currentUser->getNickname() . " logged in", 1);
