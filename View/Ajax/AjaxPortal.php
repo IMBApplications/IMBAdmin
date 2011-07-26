@@ -56,7 +56,7 @@ class AjaxPortal extends AjaxBase {
         //get currently active portal and send the data back
         echo json_encode(
                 array(
-                    "name" => htmlspecialchars_decode($portal->getName()),
+                    "titlename" => htmlspecialchars_decode($portal->getName()),
                     "htmlname" => $portal->getName(),
                     "icon" => ImbaSharedFunctions::fixWebPath($portal->getIcon()),
                     "navigation" => $this->managerNavigation->getNavigationForPortal($portal),
