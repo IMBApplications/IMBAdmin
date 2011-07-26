@@ -198,7 +198,7 @@ class AjaxRegistration extends AjaxBase {
                     $this->smarty->assign("nickname", $params->nickname);
                     $this->smarty->assign("adminemailname", ImbaConstants::$SETTINGS["ADMIN_EMAIL_NAME"]);
 
-                    $body = $this->smarty->display("Email/Registration.tpl");
+                    $body = $this->smarty->fetch("Email/Registration.tpl");
 
                     ImbaSharedFunctions::sendEmail($params->email, $_SERVER['HTTP_HOST'] . " Registrierung", $body);
 
