@@ -110,7 +110,9 @@ class AjaxRegistration extends AjaxBase {
 
             // reset the password to a random string and sent it per email to the user
 
-
+            $myUser->setPassword(trim(md5($newPw)));
+            $this->managerUser->update($myUser);
+            
             echo "Ok";
         } else {
             echo "No user found.";

@@ -161,7 +161,7 @@ class ImbaManagerUser extends ImbaManagerBase {
     public function update(ImbaUser $user) {
         $query = "UPDATE %s SET ";
         $query .= "nickname = '%s', password = '%s', email = '%s', surname = '%s', forename = '%s', dob = '%s', mob = '%s', yob = '%s', sex = '%s', icq = '%s', msn = '%s', skype = '%s', usertitle = '%s', avatar = '%s', signature = '%s', website = '%s', motto = '%s', accurate = '%s', role = '%s' ";
-        $query .= "WHERE openid = '%s'";
+        $query .= "WHERE id = '%s'";
 
         $this->database->query($query, array(
             ImbaConstants::$DATABASE_TABLES_SYS_USER_PROFILES,
@@ -184,7 +184,7 @@ class ImbaManagerUser extends ImbaManagerBase {
             $user->getMotto(),
             $user->getAccurate(),
             $user->getRole(),
-            $user->getOpenId()
+            $user->getId()
         ));
 
         // Games updaten
