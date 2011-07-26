@@ -103,10 +103,10 @@ class AjaxRegistration extends AjaxBase {
 
             ImbaSharedFunctions::sendEmail(
                     $myUser->getEmail(),
-                    "Passwort Reset",
-                        "Hallo " . $myUser->getNickname() . "\r\n\r\n",
-                        "Du oder sonst jemand hat dein Passwort zurueckgesetzt.\r\n",
-                        "Dein neues Passwort ist: " . $newPw . "\r\n\r\n",
+                    "Passwort Reset" .
+                        "Hallo " . $myUser->getNickname() . "\r\n\r\n" .
+                        "Du oder sonst jemand hat dein Passwort zurueckgesetzt.\r\n" .
+                        "Dein neues Passwort ist: " . $newPw . "\r\n\r\n" .
                         "Freundliche Gruesse\r\n" . ImbaConstants::$SETTINGS["ADMIN_EMAIL_NAME"] . "\r\n"
                     );
 
