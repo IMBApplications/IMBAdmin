@@ -323,7 +323,7 @@ function loadImbaPortal(portalId) {
     }, function (response){
         if (checkReturn(response) == false) {
             var currentPortal = $.parseJSON(response);
-            document.name = currentPortal.titlename;
+            document.title = currentPortal.titlename;
 
             if ((portalId != null) && (portalId != -1)) {
                 $.jGrowl('<img src="' + currentPortal.icon + 
