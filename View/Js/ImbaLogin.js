@@ -328,7 +328,7 @@ function loadImbaPortal(portalId) {
             if ((portalId != null) && (portalId != -1)) {
                 $.jGrowl('<img src="' + currentPortal.icon + 
                     '" style="width: 24px; height: 24px; vertical-align: middle; padding: 3px;" /> <big>' + 
-                    currentPortal.name + '</big>', {
+                    currentPortal.htmlname + '</big>', {
                         life: 350,
                         header: 'Portal geladen:<br /><br />'
                     });
