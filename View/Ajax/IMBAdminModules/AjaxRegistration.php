@@ -108,7 +108,7 @@ class AjaxRegistration extends AjaxBase {
             $this->smarty->assign("nickname", $myUser->getNickname());
             $this->smarty->assign("adminemailname", ImbaConstants::$SETTINGS["ADMIN_EMAIL_NAME"]);
 
-            $body = $this->smarty->display("Email/AccountLock.tpl");
+            $body = $this->smarty->fetch("Email/AccountLock.tpl");
 
             ImbaSharedFunctions::sendEmail($myUser->getEmail(), $_SERVER[HTTP_HOST] . " Passwort Reset", $body);
 
