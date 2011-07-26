@@ -77,18 +77,46 @@ class AjaxRegistration extends AjaxBase {
     /**
      * Checks the user input and resets the password if correct
      */
-    public function resetPassword() {
-        // $_REQUEST["userToken"]; user name or email
-        // $_REQUEST["userDate"]; birthdate
-        
-        // search for the user with the birthday
-        
-        // check if the input matches the email or the name
-            // reset the password to a random string and sent it per email to the user
-        // else
-            // echo "No user found";
+    public function resetPassword($params) {
+        ImbaConstants::loadSettings();
 
-        echo "Not yet implemented: " . $_REQUEST["userToken"] . " | " . $_REQUEST["userDate"];
+        $bd = explode(".", $params->date);
+        $users = $this->managerUser->selectAllUser();
+        $userFound = false;
+
+        // search for the user with the birthday
+        foreach ($users as $user) {
+            if (($user->getBirthday() == $bd[0]) &&
+                    ($user->getBirthmonth() == $bd[1]) &&
+                    ($user->getBirthyear() == $bd[2]) &&
+                    (strtolower($user->getFirstname()) == strtolower(trim($params->name1))) &&
+                    (strtolower($user->getLastname()) == strtolower(trim($params->name2)))) {
+                // user found
+                $userFound = $user->getId();
+            }
+        }
+
+        if ($userFound) {
+            $myUser = $this->managerUser->selectById($userFound);
+            
+            $newPw = ImbaSharedFunctions::getRandomString(8);
+
+            ImbaSharedFunctions::sendEmail(
+                    $myUser->getEmail(),
+                    "Passwort Reset",
+                        "Hallo " . $myUser->getNickname() . "\r\n\r\n",
+                        "Du oder sonst jemand hat dein Passwort zurueckgesetzt.\r\n",
+                        "Dein neues Passwort ist: " . $newPw . "\r\n\r\n",
+                        "Freundliche Gruesse\r\n" . ImbaConstants::$SETTINGS["ADMIN_EMAIL_NAME"] . "\r\n"
+                    );
+
+            // reset the password to a random string and sent it per email to the user
+
+
+            echo "Ok";
+        } else {
+            echo "No user found.";
+        }
     }
 
     /**

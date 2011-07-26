@@ -8,15 +8,18 @@
         
         $("#pwResetButton").button();
         $("#pwResetButton").click(function() {
-            if (($("#pwResetDate").val() != "") && ($("#pwResetUserToken").val() != "")) {
+            if (($("#pwResetDate").val() != "") && 
+                ($("#pwResetName1").val() != "") && 
+                ($("#pwResetName2").val() != "")) {
                 $.post(ajaxEntry, {
                     secSession: phpSessionID,
                     module: "AjaxRegistration",
                     submodule: "IMBAdminModules",
                     ajaxmethod: "resetPassword",
                     params: JSON.stringify({
-                        "userDate" : $("#pwResetDate").val(),
-                        "userToken" : $("#pwResetToken").val()
+                        "date" : $("#pwResetDate").val(),
+                        "name1" : $("#pwResetName1").val(),
+                        "name2" : $("#pwResetName2").val()
                     })
                 }, function(response){
                     if (response != "Ok"){
@@ -34,13 +37,24 @@
     });
 </script>
 <h2>Reset Password</h2>
+Falls du die folgenden Felder richtig ausf&uuml;llst,<br />
+erh&auml;lst du auf deine Emailadresse ein neues Kennwort zugeschickt.<br />
+<br />
 <table>
     <tr>
         <td>
-            Nickname oder Email
+            Vornahme
         </td>
         <td>
-            <input type="text" id="pwResetToken" />
+            <input type="text" id="pwResetName1" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Nachnahme
+        </td>
+        <td>
+            <input type="text" id="pwResetName2" />
         </td>
     </tr>
     <tr>
@@ -48,7 +62,7 @@
             Geburtsdatum
         </td>
         <td>
-            <div id="pwResetDate"></div>
+            <input type="text" id="pwResetDate" />
         </td>
     </tr>
     <tr>
