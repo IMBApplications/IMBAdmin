@@ -103,12 +103,14 @@ class AjaxRegistration extends AjaxBase {
             $myUser->setPassword(md5($newPw));
             $this->managerUser->update($myUser);
 
-            ImbaSharedFunctions::sendEmail(
-                    $myUser->getEmail(), $_SERVER[HTTP_HOST] . " Passwort Reset", "Hallo " . $myUser->getNickname() . "\r\n\r\n" .
-                    "Irgendjemand hat dein Passwort zurueckgesetzt.\r\n" .
-                    "Dein neues Passwort ist: " . $newPw . "\r\n\r\n" .
-                    "Freundliche Gruesse\r\n" . ImbaConstants::$SETTINGS["ADMIN_EMAIL_NAME"] . "\r\n"
-            );
+            $this->smarty->assign("url", ImbaSharedFunctions::getSiteDomainUrl());
+            $this->smarty->assign("newPw", $newPw);
+            $this->smarty->assign("nickname", $myUser->getNickname());
+            $this->smarty->assign("adminemailname", ImbaConstants::$SETTINGS["ADMIN_EMAIL_NAME"]);
+
+            $body = $this->smarty->display("Email/AccountLock.tpl");
+
+            ImbaSharedFunctions::sendEmail($myUser->getEmail(), $_SERVER[HTTP_HOST] . " Passwort Reset", $body);
 
             echo "Ok";
         } else {
@@ -191,12 +193,14 @@ class AjaxRegistration extends AjaxBase {
                     $newUser->setLockkey($lockKey);
                     $newUser->setLocked(1);
 
-                    ImbaSharedFunctions::sendEmail($params->email, $_SERVER['HTTP_HOST'] . " Registrierung (LockKey)", "Hallo " . $params->nickname . "\r\n\r\n" .
-                            "Du hast dich auf " . $_SERVER['HTTP_HOST'] . " registriert. Um die Registrierung\r\n" .
-                            "abzuschliessen, rufe bitte folgende Website auf:\r\n" .
-                            "/ImbaAuth.php?unlock=true?key=" . $lockKey . "\r\n\r\n" .
-                            "Freundliche Gruesse\r\n" . ImbaConstants::$SETTINGS["ADMIN_EMAIL_NAME"] . "\r\n"
-                    );
+                    $this->smarty->assign("url", ImbaSharedFunctions::getSiteDomainUrl());
+                    $this->smarty->assign("key", $lockKey);
+                    $this->smarty->assign("nickname", $params->nickname);
+                    $this->smarty->assign("adminemailname", ImbaConstants::$SETTINGS["ADMIN_EMAIL_NAME"]);
+
+                    $body = $this->smarty->display("Email/Registration.tpl");
+
+                    ImbaSharedFunctions::sendEmail($params->email, $_SERVER['HTTP_HOST'] . " Registrierung", $body);
 
                     // Save the new user
                     $this->managerUser->insert($newUser);
