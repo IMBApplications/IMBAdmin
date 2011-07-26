@@ -97,21 +97,18 @@ class AjaxRegistration extends AjaxBase {
         }
 
         if ($userFound) {
+            $newPw = ImbaSharedFunctions::getRandomString(8);
             $myUser = $this->managerUser->selectById($userFound);
 
-            $newPw = ImbaSharedFunctions::getRandomString(8);
+            $myUser->setPassword(md5($newPw));
+            $this->managerUser->update($myUser);
 
             ImbaSharedFunctions::sendEmail(
-                    $myUser->getEmail(), "Passwort Reset", "Hallo " . $myUser->getNickname() . "\r\n\r\n" .
-                    "Du oder sonst jemand hat dein Passwort zurueckgesetzt.\r\n" .
+                    $myUser->getEmail(), $_SERVER[HTTP_HOST] . " Passwort Reset", "Hallo " . $myUser->getNickname() . "\r\n\r\n" .
+                    "Irgendjemand hat dein Passwort zurueckgesetzt.\r\n" .
                     "Dein neues Passwort ist: " . $newPw . "\r\n\r\n" .
                     "Freundliche Gruesse\r\n" . ImbaConstants::$SETTINGS["ADMIN_EMAIL_NAME"] . "\r\n"
             );
-
-            // reset the password to a random string and sent it per email to the user
-
-            $myUser->setPassword(trim(md5($newPw)));
-            $this->managerUser->update($myUser);
             
             echo "Ok";
         } else {
