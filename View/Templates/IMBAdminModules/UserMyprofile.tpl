@@ -19,6 +19,7 @@
                         "website" : $("#myProfileWebsite").val(),
                         "nickname" : $("#myProfileNickname").val(),
                         "email" : $("#myProfileEmail").val(),
+                        "gplus" : $("#myProfileGplus").val(),
                         "skye" : $("#myProfileSkype").val(),
                         "icq" : $("#myProfileIcq").val(),
                         "msn" : $("#myProfileMsn").val(),
@@ -98,6 +99,10 @@
         <tr>
             <td>Email:</td>
             <td><input id="myProfileEmail" type="text" name="email" value="{$email}"  title=" <<<" class="email" /></td>
+        </tr>
+        <tr>
+            <td>Google Plus:</td>
+            <td><input id="myProfileGplus" type="text" name="gplus" value="{$gplus}" /></td>
         </tr>
         <tr>
             <td>Skype:</td>

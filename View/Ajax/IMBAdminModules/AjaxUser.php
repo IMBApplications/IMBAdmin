@@ -214,6 +214,7 @@ class AjaxUser extends AjaxBase {
         $this->smarty->assign('motto', $user->getMotto());
         $this->smarty->assign('avatar', $user->getAvatar());
         $this->smarty->assign('openid', $user->getOpenid());
+        $this->smarty->assign('gplus', $user->getGplus());
         $this->smarty->assign('usertitle', $user->getUsertitle());
         $this->smarty->assign('signature', $user->getSignature());
         $this->smarty->assign('lastonline', ImbaSharedFunctions::getNiceAge($user->getLastonline()));
@@ -259,6 +260,7 @@ class AjaxUser extends AjaxBase {
         $this->smarty->assign('avatar', $user->getAvatar());
         $this->smarty->assign('signature', $user->getSignature());
         $this->smarty->assign('openid', $user->getOpenid());
+        $this->smarty->assign('gplus', $user->getGplus());
         $this->smarty->assign('lastonline', ImbaSharedFunctions::getNiceAge($user->getLastonline()));
 
         if (strtolower($user->getSex()) == "m") {
@@ -299,6 +301,7 @@ class AjaxUser extends AjaxBase {
         $user->setSkype($params->skype);
         $user->setIcq($params->icq);
         $user->setMsn($params->msn);
+        $user->setGplus($params->gplus);
         $user->setSignature($params->signature);
         $this->managerUser->update($user);
         echo "Ok";

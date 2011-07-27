@@ -57,6 +57,9 @@
         {if $skype != ""}
         <tr><td>Skype:</td><td><a href="skype:{$skype}?call">{$skype}</a></td></tr>
         {/if}
+        {if $gplus != ""}
+        <tr><td>Google Plus:</td><td>{$gplus}</td></tr>
+        {/if}
         {if $website != ""}
         <tr><td>Webseite:</td><td><a href="{$website}" target="_blank">{$website}</a></td></tr>
         {/if}
