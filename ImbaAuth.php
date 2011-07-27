@@ -23,7 +23,8 @@ if ($_REQUEST["logout"] == true) {
         
     }
     */
-    $msg = $this->writeAuthLog("Account unlock with key: " . $_REQUEST["key"]);
+    $key = $_REQUEST["key"];
+    $msg = $this->writeAuthLog("Account unlock with key: " . $key);
     $this->redirectTo(__LINE__, ImbaSharedFunctions::getTrustRoot(), $msg);
     exit();
 } elseif (!ImbaUserContext::getLoggedIn()) {
