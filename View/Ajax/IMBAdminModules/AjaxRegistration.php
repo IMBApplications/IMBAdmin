@@ -194,7 +194,7 @@ class AjaxRegistration extends AjaxBase {
                     $newUser->setLocked(1);
 
                     $this->smarty->assign("url", ImbaSharedFunctions::getSiteDomainUrl());
-                    $this->smarty->assign("key", $lockKey);
+                    $this->smarty->assign("lockKey", $lockKey);
                     $this->smarty->assign("nickname", $params->nickname);
                     $this->smarty->assign("adminemailname", ImbaConstants::$SETTINGS["ADMIN_EMAIL_NAME"]);
 
