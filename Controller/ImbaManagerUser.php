@@ -130,7 +130,7 @@ class ImbaManagerUser extends ImbaManagerBase {
     public function insert(ImbaUser $user) {
         $query = "INSERT INTO %s ";
         $query .= "(openid, nickname, password, email, surname, forename, dob, mob, yob, sex, icq, msn, skype, usertitle, avatar, signature, website, motto, accurate, role, lockkey, gplus, locked) VALUES ";
-        $query .= "('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')";
+        $query .= "('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')";
         $this->database->query($query, array(
             ImbaConstants::$DATABASE_TABLES_SYS_USER_PROFILES,
             $user->getOpenId(),
