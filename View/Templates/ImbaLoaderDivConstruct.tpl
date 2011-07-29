@@ -21,7 +21,7 @@
                 <!-- <input id='imbaSsoOpenIdSubmit' type='submit' value='Login / Registrieren' /> -->
             </form>
             <form id='imbaSsoLogoutForm' action='{$thrustRoot}{$authPath}' method='post'>
-                <span id='imbaSsoShowNickname' onclick='loadImbaAdminModule(\"User\", \"editmyprofile\");'></span>
+                <span id='imbaSsoShowNickname' onclick='loadImbaAdminModule(\"AjaxUser\", \"viewEditMyProfile\");'></span>
                 <input id='imbaSsoOpenIdLogoutReferer' name='imbaSsoOpenIdLogoutReferer' value='' type='hidden' />
                 <input name='logout' value='true' type='hidden' />
                 <br />

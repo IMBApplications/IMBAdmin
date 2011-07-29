@@ -26,6 +26,7 @@ switch ($_GET["load"]) {
             $useProxy = true;
         } else if (ImbaConstants::$WEB_FORCE_PROXY == 0) {
             if (($_SERVER['HTTP_REFERER'] != ImbaSharedFunctions::getTrustRoot())) {
+                //echo "/* " . $_SERVER['HTTP_REFERER'] . " -- " . ImbaSharedFunctions::getTrustRoot() . " */";
                 $useProxy = true;
             }
         }
@@ -74,6 +75,8 @@ switch ($_GET["load"]) {
             $tmpJsDebug = ImbaConstants::$SETTINGS['ENABLE_JS_DEBUG'];
         }
         $smarty->assign("jsDebug", $tmpJsDebug);
+        $smarty->assign("imbaModuleName", $_REQUEST["ImbaModuleName"]);
+        $smarty->assign("imbaModuleFunction", $_REQUEST["ImbaModuleFunction"]);
 
         $smarty->display('ImbaLoaderJs.tpl');
         break;

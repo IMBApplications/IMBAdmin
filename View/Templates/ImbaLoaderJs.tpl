@@ -9,6 +9,8 @@ var phpSessionID = '{$phpSessionID}';
 var imbaJsDebug = '{$jsDebug}';
 var imbaErrorMessage = '{$imbaErrorMessage}';
 var imbaAuthReferer = '{$imbaAuthReferer}';
+var loadModuleName = '{$imbaModuleName}';
+var loadModuleFunction = '{$imbaModuleFunction}';
 {*
 
 include library javascript files

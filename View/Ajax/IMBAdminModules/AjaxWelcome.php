@@ -46,7 +46,7 @@ class AjaxWelcome extends AjaxBase {
          * Set tabs
          */
         $navigation->addElement("viewHome", "Home", "Hier siehst du eine einfache &Uml;bersicht der Module.");
-        $navigation->addElement("viewUsermap", "Karte", "Hier siehst du eine Karte, von wo sich die User einloggen.");
+        //$navigation->addElement("viewUsermap", "Karte", "Hier siehst du eine Karte, von wo sich die User einloggen.");
         $navigation->addElement("viewWelcomeIndexed", "Indexierte &Uuml;bersicht", "Hier siehst du eine komplette &Uml;bersicht der Module.");
         return $navigation;
     }

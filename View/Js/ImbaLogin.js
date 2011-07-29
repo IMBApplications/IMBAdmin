@@ -142,8 +142,8 @@ $(document).ready(function() {
     });
 
     /*
-         * ImbAdmin Window Tabs Module
-         */
+     * ImbAdmin Window Tabs Module
+     */
     // Setting up the content of the Dialog as tabs
     $("#imbaContentNav").tabs().bind("tabsselect", function(event, ui) {
         var tmpModuleTabId = "";
@@ -214,6 +214,7 @@ $(document).ready(function() {
             life: 1000
         });
     }
+   
 });
 
 /**
@@ -249,6 +250,23 @@ function refreshUsersOnline(){
             });
         });
     }
+    
+    
+    //ImbAdmin Autoload support
+    // i iz not wurkin purrrrrrectly
+    if (loadModuleName.length > 0) {
+        tmpLoadModuleName = loadModuleName;
+        tmpLoadModuleFunction = loadModuleFunction;
+        loadModuleName = "";
+        loadModuleFunction = "";
+        console.log(tmpLoadModuleName + " yes! " + tmpLoadModuleFunction);
+        if (tmpLoadModuleFunction.length > 0) {
+            loadImbaAdminModule(tmpLoadModuleName, tmpLoadModuleFunction);
+        } else {
+            loadImbaAdminModule(tmpLoadModuleName);
+        }
+    }    
+    
 }
 
 /**

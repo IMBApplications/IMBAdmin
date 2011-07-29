@@ -1,8 +1,23 @@
-<!DOCTYPE HTML>
+<?php
+/*
+ * extended loader which is able to load imbadmin module
+ * if you wish to use this feature in your webpage, copy this phpcode before the 
+ * script integration ImbaLoader.php?load=js
+ */
+
+if (!empty($_REQUEST["ImbaModuleName"])) {
+    $imbaTo = "&ImbaModuleName=" . $_REQUEST["ImbaModuleName"];
+    if (!empty($_REQUEST["ImbaModuleFunction"])) {
+        $imbaTo .= "&ImbaModuleFunction=" . $_REQUEST["ImbaModuleFunction"];
+    }
+} else {
+    $imbaTo = "";
+}
+?><!DOCTYPE HTML>
 <html>
     <head>
         <link type="text/css" href="/IMBAdmin/ImbaLoader.php?load=css" rel="Stylesheet" />
-        <script type="text/javascript" src="/IMBAdmin/ImbaLoader.php?load=js"></script>
+        <script type="text/javascript" src="/IMBAdmin/ImbaLoader.php?load=js<?php echo $imbaTo; ?>"></script>
 
         <style type="text/css">
             body {

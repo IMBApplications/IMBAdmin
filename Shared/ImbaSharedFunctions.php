@@ -169,10 +169,18 @@ class ImbaSharedFunctions {
         //$authPath = ImbaConstants::$WEB_AUTH_MAIN_PATH;
         //$authPath .= "&imbaHash=" . $hash;
 
-        return ImbaSharedFunctions::getScheme() . "://" . str_replace("//", "/", sprintf("%s/%s/%s", $_SERVER['SERVER_NAME'], dirname($_SERVER['PHP_SELF']), $authPath));
+        return ImbaSharedFunctions::getMyWebPath() . str_replace("//", "/", $authPath);
+    }
+    
+    /**
+     *
+     * get MyRunningUrl
+     */
+    public function getMyWebPath() {
+        return ImbaSharedFunctions::getScheme() . "://" . str_replace("//", "/", sprintf("%s/%s/", $_SERVER['SERVER_NAME'], dirname($_SERVER['PHP_SELF'])));
     }
 
-    /**
+            /**
      *
      * get the trust root
      */
